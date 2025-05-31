@@ -1,4 +1,5 @@
 <template>
+  <OHeader @join="handleJoin" @login="handleLogin" />
   <router-view v-slot="{ Component }">
     <transition name="page" mode="out-in">
       <component :is="Component" />
@@ -8,18 +9,30 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import OHeader from '~/components/organisms/o-header/o-header.vue';
 
 export default defineComponent({
   name: 'App',
 
+  components: {
+    OHeader
+  },
+
   setup() {
-    function onInit() {
-      // Initialization logic will go here
-    }
+    const handleJoin = () => {
+      // TODO: Implement join functionality
+      console.log('Join clicked');
+    };
 
-    onInit();
+    const handleLogin = () => {
+      // TODO: Implement login functionality
+      console.log('Login clicked');
+    };
 
-    return {};
+    return {
+      handleJoin,
+      handleLogin
+    };
   }
 });
 </script>

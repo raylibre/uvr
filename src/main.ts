@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
+import { i18n } from './i18n';
 import './assets/main.css';
 
 // Import pages
@@ -35,8 +36,9 @@ const router = createRouter({
 // Create Vue app
 const app = createApp(App);
 
-// Use router
+// Use plugins
 app.use(router);
+app.use(i18n);
 
 // Mount app
 app.mount('#app'); 

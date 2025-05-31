@@ -1,0 +1,68 @@
+{
+  "common": {
+    "buttons": {
+      "submit": "Submit",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "viewDetails": "View Details",
+      "backToHome": "Back to Home",
+      "getInTouch": "Get in Touch",
+      "ourServices": "Our Services",
+      "join": "Join Us",
+      "login": "Login"
+    },
+    "navigation": {
+      "home": "Home",
+      "leadership": "Leadership",
+      "legalHelp": "Legal Help",
+      "prosthetics": "Prosthetics",
+      "familyToFamily": "Family to Family",
+      "ourActivities": "Our Activities",
+      "aboutUs": "About Us"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Our Work.",
+      "titleHighlight": "Your Vision Realized.",
+      "description": "At Mason, every project tells a story - a story of trust, innovation, and excellence. Through our commercial construction and infrastructure services, our portfolio reflects our commitment to quality."
+    },
+    "projects": {
+      "title": "Discover Our Completed Projects",
+      "description": "Every project we complete is a reflection of our commitment to quality, precision, and client satisfaction. Here are some of our recent successes."
+    },
+    "contact": {
+      "title": "Start Your Project With Us",
+      "description": "Let's bring your vision to life. Whether it's a new commercial building, bridge expansion project, or infrastructure development, we're here to help."
+    }
+  },
+  "form": {
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "subscribe": "Subscribe to our newsletter"
+    },
+    "placeholders": {
+      "name": "Enter your name",
+      "email": "Enter your email",
+      "subject": "Enter message subject",
+      "message": "Enter your message"
+    },
+    "validation": {
+      "required": "{field} is required",
+      "email": "Please enter a valid email",
+      "minLength": "{field} must be at least {min} characters"
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "404",
+      "message": "Oops! The page you're looking for doesn't exist."
+    },
+    "form": {
+      "submit": "An error occurred while submitting the form"
+    }
+  }
+} 
