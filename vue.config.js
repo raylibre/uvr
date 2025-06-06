@@ -1,5 +1,7 @@
-const { defineConfig } = require('@vue/cli-service')
+import { defineConfig } from '@vue/cli-service';
+import vue from '@vitejs/plugin-vue'
 
-module.exports = defineConfig({
-  transpileDependencies: true
-}) 
+export default defineConfig({
+  transpileDependencies: true,
+  plugins: [vue()]
+}); 

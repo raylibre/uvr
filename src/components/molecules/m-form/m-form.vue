@@ -1,18 +1,19 @@
 <template>
-  <Form
+  <VeeForm
+    v-slot="{ errors, meta }"
+    class="m-form"
     :validation-schema="schema"
     @submit="handleSubmit"
-    v-slot="{ errors, meta }"
   >
     <div :class="['space-y-6', { 'opacity-70 pointer-events-none': meta.pending }]">
       <slot :errors="errors" />
     </div>
-  </Form>
+  </VeeForm>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import { Form } from 'vee-validate';
+import { Form as VeeForm } from 'vee-validate';
 import type { ObjectSchema } from 'yup';
 import { useTimeoutFn } from '@vueuse/core';
 
@@ -20,12 +21,12 @@ export default defineComponent({
   name: 'MForm',
 
   components: {
-    Form
+    VeeForm
   },
 
   props: {
     schema: {
-      type: Object as PropType<ObjectSchema<any>>,
+      type: Object as PropType<ObjectSchema<unknown>>,
       required: true
     },
     submitDelay: {
@@ -39,7 +40,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { start: startTimeout } = useTimeoutFn(() => {}, props.submitDelay);
 
-    const handleSubmit = async (values: any, actions: any) => {
+    const handleSubmit = async (values: Record<string, unknown>, actions: { resetForm: () => void; setErrors: (errors: Record<string, string>) => void }) => {
       try {
         emit('submit', values);
         await startTimeout();

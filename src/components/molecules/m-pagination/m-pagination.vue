@@ -1,45 +1,45 @@
 <template>
-  <nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+  <nav class="m-pagination">
     <!-- Mobile view -->
-    <div class="flex flex-1 justify-between sm:hidden">
+    <div class="mobile-nav">
       <button
         :disabled="currentPage === 1"
+        class="nav-button nav-button--prev"
+        :class="{ 'is-disabled': currentPage === 1 }"
         @click="$emit('update:currentPage', currentPage - 1)"
-        class="pagination-item rounded-md"
-        :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
       >
         Previous
       </button>
       <button
         :disabled="currentPage === totalPages"
+        class="nav-button nav-button--next"
+        :class="{ 'is-disabled': currentPage === totalPages }"
         @click="$emit('update:currentPage', currentPage + 1)"
-        class="pagination-item rounded-md"
-        :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
       >
         Next
       </button>
     </div>
 
     <!-- Desktop view -->
-    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-      <div>
-        <p class="text-sm text-gray-700">
+    <div class="desktop-nav">
+      <div class="info">
+        <p class="info__text">
           Showing
-          <span class="font-medium">{{ startItem }}</span>
+          <span class="info__number">{{ startItem }}</span>
           to
-          <span class="font-medium">{{ endItem }}</span>
+          <span class="info__number">{{ endItem }}</span>
           of
-          <span class="font-medium">{{ totalItems }}</span>
+          <span class="info__number">{{ totalItems }}</span>
           results
         </p>
       </div>
-      <div>
-        <div class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+      <div class="pages">
+        <div class="pages__list">
           <button
             :disabled="currentPage === 1"
+            class="nav-button nav-button--prev"
+            :class="{ 'is-disabled': currentPage === 1 }"
             @click="$emit('update:currentPage', currentPage - 1)"
-            class="pagination-item rounded-l-md"
-            :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
           >
             Previous
           </button>
@@ -47,15 +47,15 @@
           <template v-for="page in displayedPages" :key="page">
             <button
               v-if="page !== '...'"
+              class="page-button"
+              :class="{ 'is-active': currentPage === page }"
               @click="$emit('update:currentPage', page)"
-              class="pagination-item"
-              :class="{ 'pagination-item-active': currentPage === page }"
             >
               {{ page }}
             </button>
             <span
               v-else
-              class="pagination-item cursor-default"
+              class="page-ellipsis"
             >
               ...
             </span>
@@ -63,9 +63,9 @@
 
           <button
             :disabled="currentPage === totalPages"
+            class="nav-button nav-button--next"
+            :class="{ 'is-disabled': currentPage === totalPages }"
             @click="$emit('update:currentPage', currentPage + 1)"
-            class="pagination-item rounded-r-md"
-            :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
           >
             Next
           </button>
@@ -140,4 +140,74 @@ export default defineComponent({
     };
   }
 });
-</script> 
+</script>
+
+<style lang="scss" scoped>
+.m-pagination {
+  @apply flex items-center justify-between border-t border-gray-200 px-4 sm:px-0;
+
+  // Mobile navigation
+  .mobile-nav {
+    @apply flex flex-1 justify-between sm:hidden;
+  }
+
+  // Desktop navigation
+  .desktop-nav {
+    @apply hidden sm:flex sm:flex-1 sm:items-center sm:justify-between;
+  }
+
+  // Info section
+  .info {
+    &__text {
+      @apply text-sm text-gray-700;
+    }
+
+    &__number {
+      @apply font-medium;
+    }
+  }
+
+  // Pages section
+  .pages {
+    &__list {
+      @apply isolate inline-flex -space-x-px rounded-md shadow-sm;
+    }
+  }
+
+  // Navigation buttons
+  .nav-button {
+    @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700
+           bg-white hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1
+           focus:ring-primary focus:border-primary;
+
+    &--prev {
+      @apply rounded-l-md;
+    }
+
+    &--next {
+      @apply rounded-r-md;
+    }
+
+    &.is-disabled {
+      @apply opacity-50 cursor-not-allowed;
+    }
+  }
+
+  // Page buttons
+  .page-button {
+    @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700
+           bg-white hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1
+           focus:ring-primary focus:border-primary;
+
+    &.is-active {
+      @apply z-10 bg-primary text-white hover:bg-primary-dark focus:z-20;
+    }
+  }
+
+  // Ellipsis
+  .page-ellipsis {
+    @apply relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700
+           bg-white cursor-default;
+  }
+}
+</style> 

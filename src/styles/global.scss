@@ -1,0 +1,18 @@
+// Import variables and utils
+@import './variables';
+
+// Global styles
+:root {
+  // Add any global CSS custom properties here
+}
+
+// Global utility classes
+.text-primary {
+  color: $color-primary;
+}
+
+.bg-primary {
+  background-color: $color-primary;
+}
+
+// Add more utility classes as needed 

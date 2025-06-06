@@ -1,79 +1,80 @@
 <template>
-  <header class="o-header fixed w-full top-0 z-50 bg-white shadow-sm">
-    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <!-- Logo -->
-          <div class="flex-shrink-0 flex items-center">
-            <RouterLink to="/" class="flex items-center">
-              <img src="../../../assets/images/logo.svg" alt="УВР" class="h-10 w-auto text-primary" />
-              <span class="ml-3 text-lg font-semibold text-gray-900">УВР</span>
-            </RouterLink>
-          </div>
+  <header class="o-header">
+    <nav class="nav">
+      <div class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+          <RouterLink :to="{ name: ROUTE_NAMES.HOME }" class="logo__link">
+            <img src="../../../assets/images/logo.svg" alt="УВР" class="logo__image" />
+            <span class="logo__text">УВР</span>
+          </RouterLink>
+        </div>
 
-          <!-- Desktop Navigation -->
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <RouterLink
-              v-for="item in menuItems"
-              :key="item.path"
-              :to="item.path"
-              class="nav-link inline-flex items-center px-1 pt-1 border-b-2"
-              :class="[
-                $route.path === item.path
-                  ? 'border-primary text-primary'
-                  : 'border-transparent hover:border-gray-300'
-              ]"
-            >
-              {{ t(item.title) }}
-            </RouterLink>
-          </div>
+        <!-- Desktop Navigation -->
+        <div class="nav-desktop">
+          <MHeaderNavButton
+            v-for="item in menuItems"
+            :key="item.name"
+            :to="{ name: item.name }"
+            :translation-key="item.title"
+          />
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center space-x-4">
+        <div class="actions">
           <AButton
             variant="outline"
             size="sm"
-            class="hidden sm:inline-flex"
-            @click="$emit('join')"
+            class="action-button action-button--join"
+            @click="handleJoin"
           >
-            {{ t('common.buttons.join') }}
+            {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
           </AButton>
           <AButton
             variant="primary"
             size="sm"
-            class="hidden sm:inline-flex"
-            @click="$emit('login')"
+            class="action-button action-button--login"
+            @click="handleLogin"
           >
-            {{ t('common.buttons.login') }}
+            {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
           </AButton>
 
           <!-- Mobile menu button -->
           <button
             type="button"
-            class="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+            class="mobile-menu-button"
             @click="toggleMobileMenu"
           >
-            <span class="sr-only">Open main menu</span>
+            <span class="mobile-menu-label">Open main menu</span>
             <svg
-              class="h-6 w-6"
-              :class="{ 'hidden': isMobileMenuOpen, 'block': !isMobileMenuOpen }"
+              class="mobile-menu-icon"
+              :class="{ 'is-hidden': isMobileMenuOpen }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
             <svg
-              class="h-6 w-6"
-              :class="{ 'block': isMobileMenuOpen, 'hidden': !isMobileMenuOpen }"
+              class="mobile-menu-icon"
+              :class="{ 'is-visible': isMobileMenuOpen }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -82,32 +83,26 @@
 
     <!-- Mobile menu -->
     <div
-      class="sm:hidden"
-      :class="{ 'block': isMobileMenuOpen, 'hidden': !isMobileMenuOpen }"
+      class="mobile-menu"
+      :class="{ 'is-open': isMobileMenuOpen }"
     >
-      <div class="pt-2 pb-3 space-y-1">
-        <RouterLink
+      <div class="mobile-menu__content">
+        <MHeaderNavButton
           v-for="item in menuItems"
-          :key="item.path"
-          :to="item.path"
-          class="nav-link block pl-3 pr-4 py-2 border-l-4"
-          :class="[
-            $route.path === item.path
-              ? 'border-primary text-primary bg-primary-50'
-              : 'border-transparent hover:bg-gray-50 hover:border-gray-300'
-          ]"
+          :key="item.name"
+          :to="{ name: item.name }"
+          :translation-key="item.title"
+          class="mobile"
           @click="closeMobileMenu"
-        >
-          {{ t(item.title) }}
-        </RouterLink>
+        />
 
-        <div class="pt-4 pb-3 border-t border-gray-200">
-          <div class="space-y-2 px-3">
-            <AButton variant="outline" block @click="$emit('join')">
-              {{ t('common.buttons.join') }}
+        <div class="mobile-menu__actions">
+          <div class="mobile-menu__buttons">
+            <AButton variant="outline" block @click="handleJoin">
+              {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
             </AButton>
-            <AButton variant="primary" block @click="$emit('login')">
-              {{ t('common.buttons.login') }}
+            <AButton variant="primary" block @click="handleLogin">
+              {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
             </AButton>
           </div>
         </div>
@@ -116,43 +111,34 @@
   </header>
 
   <!-- Spacer to prevent content from going under fixed header -->
-  <div class="h-16"></div>
+  <div class="spacer"/>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { RouterLink, useRoute } from 'vue-router';
 import AButton from '~/components/atoms/a-button/a-button.vue';
-
-interface MenuItem {
-  path: string;
-  title: string;
-}
+import { MENU_ITEMS } from '~/constants/navigation-constants';
+import { useTranslation } from '~/composables/use-translation';
+import { useEventBus } from '~/composables/use-event-bus';
+import { EVENTS } from '~/constants/event-bus-constants';
+import { ROUTE_NAMES } from '~/constants/router-constants';
+import MHeaderNavButton from '~/components/molecules/m-header-nav-button';
 
 export default defineComponent({
   name: 'OHeader',
 
   components: {
     AButton,
-    RouterLink
+    RouterLink,
+    MHeaderNavButton
   },
 
-  emits: ['join', 'login'],
-
   setup() {
-    const { t } = useI18n();
+    const { t, T_KEYS } = useTranslation();
     const route = useRoute();
+    const { BUS } = useEventBus();
     const isMobileMenuOpen = ref(false);
-
-    const menuItems: MenuItem[] = [
-      { path: '/leadership', title: 'common.navigation.leadership' },
-      { path: '/legal-help', title: 'common.navigation.legalHelp' },
-      { path: '/prosthetics', title: 'common.navigation.prosthetics' },
-      { path: '/family', title: 'common.navigation.familyToFamily' },
-      { path: '/activities', title: 'common.navigation.ourActivities' },
-      { path: '/about', title: 'common.navigation.aboutUs' }
-    ];
 
     const toggleMobileMenu = () => {
       isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -162,13 +148,25 @@ export default defineComponent({
       isMobileMenuOpen.value = false;
     };
 
+    const handleJoin = () => {
+      BUS.emit(EVENTS.OPEN_REGISTER_MODAL);
+    };
+
+    const handleLogin = () => {
+      BUS.emit(EVENTS.SHOW_LOGIN_MODAL);
+    };
+
     return {
       t,
+      T_KEYS,
       route,
-      menuItems,
+      menuItems: MENU_ITEMS,
       isMobileMenuOpen,
       toggleMobileMenu,
-      closeMobileMenu
+      closeMobileMenu,
+      handleJoin,
+      handleLogin,
+      ROUTE_NAMES
     };
   }
 });
@@ -176,7 +174,96 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .o-header {
+  @apply fixed w-full top-0 z-50 shadow-sm;
   backdrop-filter: blur(8px);
   background-color: rgba(255, 255, 255, 0.95);
+
+  // Navigation
+  .nav {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .header-container {
+    @apply flex items-center justify-between h-16;
+  }
+
+  // Logo
+  .logo {
+    @apply flex-shrink-0 flex items-center;
+
+    &__link {
+      @apply flex items-center;
+    }
+
+    &__image {
+      @apply h-10 w-auto text-primary;
+    }
+
+    &__text {
+      @apply ml-3 text-lg font-semibold text-gray-900;
+    }
+  }
+
+  // Desktop Navigation
+  .nav-desktop {
+    @apply hidden sm:ml-6 sm:flex sm:space-x-2;
+  }
+
+  // Action Buttons
+  .actions {
+    @apply flex items-center space-x-4;
+  }
+
+  .action-button {
+    @apply hidden sm:inline-flex;
+  }
+
+  // Mobile Menu Button
+  .mobile-menu-button {
+    @apply sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400
+           hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary;
+  }
+
+  .mobile-menu-label {
+    @apply sr-only;
+  }
+
+  .mobile-menu-icon {
+    @apply h-6 w-6;
+
+    &.is-hidden {
+      @apply hidden;
+    }
+
+    &.is-visible {
+      @apply block;
+    }
+  }
+
+  // Mobile Menu
+  .mobile-menu {
+    @apply sm:hidden hidden;
+
+    &.is-open {
+      @apply block;
+    }
+
+    &__content {
+      @apply px-2 pt-2 pb-3 space-y-1;
+    }
+
+    &__actions {
+      @apply pt-4 pb-3 border-t border-gray-200;
+    }
+
+    &__buttons {
+      @apply mt-3 space-y-2 px-2;
+    }
+  }
+
+  // Spacer
+  & + .spacer {
+    @apply h-16;
+  }
 }
 </style> 

@@ -1,54 +1,54 @@
 <template>
-  <div class="card-project group">
-    <div class="aspect-w-16 aspect-h-9 relative">
-      <div v-if="image" class="w-full h-full">
+  <div class="m-project-card">
+    <div class="media">
+      <div v-if="image" class="image-wrapper">
         <img
           :src="image"
           :alt="title"
-          class="object-cover w-full h-full"
+          class="image"
         />
       </div>
-      <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+      <div v-else class="placeholder">
         Project Image
       </div>
-      <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-        <a-button
+      <div class="overlay">
+        <AButton
           variant="primary"
-          class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-200"
+          class="details-button"
           @click="$emit('view-details')"
         >
           View Details
-        </a-button>
+        </AButton>
       </div>
     </div>
     
-    <div class="p-6">
-      <div class="flex items-start justify-between">
-        <div>
-          <h3 class="text-h5 font-heading font-bold text-gray-900">
+    <div class="content">
+      <div class="header">
+        <div class="info">
+          <h3 class="title">
             {{ title }}
           </h3>
-          <p class="mt-2 text-gray-600 line-clamp-2">
+          <p class="description">
             {{ description }}
           </p>
         </div>
-        <span class="tag tag-primary">
+        <span class="category">
           {{ category }}
         </span>
       </div>
 
-      <div class="mt-4 flex items-center justify-between text-sm">
-        <div class="flex items-center space-x-4">
-          <div class="flex items-center text-gray-500">
-            <span class="mr-2">Client:</span>
+      <div class="footer">
+        <div class="metadata">
+          <div class="metadata__item">
+            <span class="metadata__label">Client:</span>
             {{ client }}
           </div>
-          <div class="flex items-center text-gray-500">
-            <span class="mr-2">Duration:</span>
+          <div class="metadata__item">
+            <span class="metadata__label">Duration:</span>
             {{ duration }}
           </div>
         </div>
-        <div class="text-primary font-medium">
+        <div class="status">
           {{ status }}
         </div>
       </div>
@@ -100,4 +100,79 @@ export default defineComponent({
 
   emits: ['view-details']
 });
-</script> 
+</script>
+
+<style lang="scss" scoped>
+.m-project-card {
+  @apply group;
+
+  .media {
+    @apply aspect-w-16 aspect-h-9 relative;
+  }
+
+  .image-wrapper {
+    @apply w-full h-full;
+  }
+
+  .image {
+    @apply object-cover w-full h-full;
+  }
+
+  .placeholder {
+    @apply w-full h-full bg-gray-100 flex items-center justify-center text-gray-400;
+  }
+
+  .overlay {
+    @apply absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 
+           transition-opacity duration-200 flex items-center justify-center;
+  }
+
+  .details-button {
+    @apply transform translate-y-4 group-hover:translate-y-0 transition-transform duration-200;
+  }
+
+  .content {
+    @apply p-6;
+  }
+
+  .header {
+    @apply flex items-start justify-between;
+  }
+
+  .info {
+    @apply flex-grow;
+  }
+
+  .title {
+    @apply text-h5 font-heading font-bold text-gray-900;
+  }
+
+  .description {
+    @apply mt-2 text-gray-600 line-clamp-2;
+  }
+
+  .category {
+    @apply tag tag-primary;
+  }
+
+  .footer {
+    @apply mt-4 flex items-center justify-between text-sm;
+  }
+
+  .metadata {
+    @apply flex items-center space-x-4;
+
+    &__item {
+      @apply flex items-center text-gray-500;
+    }
+
+    &__label {
+      @apply mr-2;
+    }
+  }
+
+  .status {
+    @apply text-primary font-medium;
+  }
+}
+</style> 

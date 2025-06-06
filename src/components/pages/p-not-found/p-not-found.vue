@@ -1,32 +1,58 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full text-center">
-      <h1 class="text-display-1 font-heading font-bold text-gray-900 mb-4">
-        404
-      </h1>
-      <p class="text-xl text-gray-600 mb-8">
-        Oops! The page you're looking for doesn't exist.
-      </p>
-      <router-link to="/" class="btn btn-primary">
-        Back to Home
-      </router-link>
+  <div class="p-not-found">
+    <div class="content">
+      <h1>404</h1>
+      <p>{{ t(T_KEYS.COMMON.ERRORS.PAGE_NOT_FOUND) }}</p>
+      <RouterLink :to="{ name: ROUTE_NAMES.HOME }" class="home-link">
+        {{ t(T_KEYS.COMMON.BUTTONS.BACK_TO_HOME) }}
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useTitle } from '@vueuse/core';
+import { RouterLink } from 'vue-router';
+import { useTranslation } from '~/composables/use-translation';
+import { ROUTE_NAMES } from '~/constants/router-constants';
 
 export default defineComponent({
   name: 'PNotFound',
 
-  setup() {
-    useTitle('Page Not Found | Mason Construction');
+  components: {
+    RouterLink
+  },
 
-    return {};
+  setup() {
+    const { t, T_KEYS } = useTranslation();
+
+    return {
+      t,
+      T_KEYS,
+      ROUTE_NAMES
+    };
   }
 });
 </script>
 
-<style src="./p-not-found.scss" lang="scss" scoped></style> 
+<style lang="scss" scoped>
+.p-not-found {
+  @apply min-h-screen flex items-center justify-center bg-gray-100;
+
+  .content {
+    @apply text-center p-8;
+
+    h1 {
+      @apply text-6xl font-bold text-gray-800 mb-4;
+    }
+
+    p {
+      @apply text-xl text-gray-600 mb-8;
+    }
+
+    .home-link {
+      @apply text-primary hover:text-primary-dark font-medium;
+    }
+  }
+}
+</style> 

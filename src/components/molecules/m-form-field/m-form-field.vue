@@ -1,22 +1,22 @@
 <template>
-  <div>
+  <div class="m-form-field">
     <label
       v-if="label"
       :for="id"
-      class="form-label"
+      class="label"
     >
       {{ label }}
-      <span v-if="required" class="text-red-500">*</span>
+      <span v-if="required" class="label__required">*</span>
     </label>
     
-    <div class="relative">
+    <div class="field-wrapper">
       <Field
         :id="id"
+        v-slot="{ field, errorMessage, meta }"
         :name="name"
         :type="type"
         :placeholder="placeholder"
         :rules="rules"
-        v-slot="{ field, errorMessage, meta }"
       >
         <component
           :is="fieldComponent"
@@ -24,13 +24,11 @@
             ...field,
             ...$attrs
           }"
-          :class="[
-            'form-input',
-            {
-              'border-red-500 focus:border-red-500 focus:ring-red-500': errorMessage,
-              'border-green-500 focus:border-green-500 focus:ring-green-500': meta.valid && meta.touched
-            }
-          ]"
+          class="field"
+          :class="{
+            'has-error': errorMessage,
+            'is-valid': meta.valid && meta.touched
+          }"
           :placeholder="placeholder"
           :rows="rows"
           :disabled="disabled"
@@ -38,10 +36,10 @@
       </Field>
 
       <ErrorMessage
-        :name="name"
         v-slot="{ message }"
+        :name="name"
       >
-        <p class="mt-1 text-sm text-red-600">{{ message }}</p>
+        <p class="error">{{ message }}</p>
       </ErrorMessage>
     </div>
   </div>
@@ -112,4 +110,36 @@ export default defineComponent({
     };
   }
 });
-</script> 
+</script>
+
+<style lang="scss" scoped>
+.m-form-field {
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+
+    &__required {
+      @apply text-red-500;
+    }
+  }
+
+  .field-wrapper {
+    @apply relative;
+  }
+
+  .field {
+    @apply block w-full rounded-md border-gray-300 focus:border-primary focus:ring-primary sm:text-sm;
+
+    &.has-error {
+      @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+    }
+
+    &.is-valid {
+      @apply border-green-500 focus:border-green-500 focus:ring-green-500;
+    }
+  }
+
+  .error {
+    @apply mt-1 text-sm text-red-600;
+  }
+}
+</style> 

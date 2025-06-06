@@ -1,52 +1,53 @@
 <template>
-  <OHeader @join="handleJoin" @login="handleLogin" />
-  <router-view v-slot="{ Component }">
-    <transition name="page" mode="out-in">
-      <component :is="Component" />
-    </transition>
-  </router-view>
+  <div class="app">
+    <OHeader @join="handleJoin" @login="handleLogin" />
+    <router-view v-slot="{ Component }">
+      <transition name="page" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+
+    <OLoginModal />
+    <ORegisterModal />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import OHeader from '~/components/organisms/o-header/o-header.vue';
+import OLoginModal from '~/components/organisms/o-login-modal';
+import { useEventBus } from '~/composables/use-event-bus';
+import ORegisterModal from '~/components/organisms/o-register-modal/o-register-modal.vue';
 
 export default defineComponent({
   name: 'App',
 
   components: {
-    OHeader
+    ORegisterModal,
+    OLoginModal,
+    OHeader,
   },
 
   setup() {
+    const { BUS, EVENTS } = useEventBus();
     const handleJoin = () => {
       // TODO: Implement join functionality
       console.log('Join clicked');
     };
 
     const handleLogin = () => {
-      // TODO: Implement login functionality
-      console.log('Login clicked');
+      BUS.emit(EVENTS.SHOW_LOGIN_MODAL);
     };
 
     return {
       handleJoin,
-      handleLogin
+      handleLogin,
     };
-  }
+  },
 });
 </script>
 
 <style lang="scss">
-.app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.2s ease;
@@ -56,4 +57,4 @@ export default defineComponent({
 .page-leave-to {
   opacity: 0;
 }
-</style> 
+</style>

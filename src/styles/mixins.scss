@@ -1,0 +1,22 @@
+// Import variables and utils
+@import './variables';
+
+// Common mixins
+@mixin focus-ring {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($color-primary-rgb, 0.2);
+  }
+}
+
+@mixin error-state {
+  border-color: $color-red-500;
+  &:focus {
+    box-shadow: 0 0 0 2px rgba($color-red-500-rgb, 0.2);
+  }
+}
+
+@mixin disabled-state {
+  opacity: 0.5;
+  cursor: not-allowed;
+} 

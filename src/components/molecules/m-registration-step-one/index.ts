@@ -1,0 +1,1 @@
+export { default } from './m-registration-step-one.vue';
