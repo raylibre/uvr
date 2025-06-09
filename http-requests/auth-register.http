@@ -1,0 +1,29 @@
+### POST request to /auth-register
+POST https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/auth-register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+{
+  "email": "olena.shevchenko@example.com",
+  "phone": "+380671112233",
+  "password": "SecurePass123!",
+  "first_name": "Олена",
+  "last_name": "Шевченко",
+  "patronymic": "Василівна",
+  "date_of_birth": "1985-05-15",
+  "gender": "male",
+  "region": "kyiv",
+  "city": "Київ",
+  "how_heard_about_uvr": "Друзі",
+  "categories": ["active_veteran"],
+  "documents": {
+    "active_veteran": [{
+      "type": "veteran_certificate",
+      "file": "data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCg==",
+      "filename": "veteran_certificate.pdf"
+    }]
+  },
+  "motivation": "Бажаю долучитися до спільноти та підтримувати ветеранів.",
+  "privacy_consent": true,
+  "data_processing_consent": true
+}

@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? '',
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+    'Authorization': import.meta.env.SUPABASE_PUBLIC_ANON_KEY ?? ''
+  },
 });
 
 // Add request interceptor
