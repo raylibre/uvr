@@ -9,6 +9,8 @@ export const ROUTE_NAMES = {
   FAMILY: 'FAMILY',
   ACTIVITIES: 'ACTIVITIES',
   ABOUT: 'ABOUT',
+  PROGRAMS: 'PROGRAMS',
+  PROGRAM_DETAIL: 'PROGRAM_DETAIL',
   NOT_FOUND: 'NOT_FOUND'
 } as const;
 
@@ -20,6 +22,17 @@ export const ROUTES: RouteRecordRaw[] = [
     path: '/',
     name: ROUTE_NAMES.HOME,
     component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/programs',
+    name: ROUTE_NAMES.PROGRAMS,
+    component: () => import('~/pages/p-programs/p-programs.vue')
+  },
+  {
+    path: '/programs/:slug',
+    name: ROUTE_NAMES.PROGRAM_DETAIL,
+    component: () => import('~/pages/p-program-detail/p-program-detail.vue'),
+    props: true
   },
   {
     path: '/leadership',

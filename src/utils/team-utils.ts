@@ -46,7 +46,7 @@ export function generateImageCacheKey(teamMember: TeamMember): string {
 /**
  * Get cached image URL or return original
  */
-export function getCachedImageUrl(photoUrl: string | null, cacheKey: string): string | null {
+export function getCachedImageUrl(photoUrl: string | null): string | null {
   if (!photoUrl) return null;
   
   // Check if service worker is available and image is cached

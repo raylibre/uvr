@@ -1,40 +1,26 @@
 import type { HomePageData } from '~/interfaces/home';
 import { getTeamMembers } from './team-api-service';
+import { getPublicProjects } from './projects-api-service';
 import { transformTeamMembersToRepresentatives } from '~/utils/team-utils';
+import { transformPublicProjectsToPrograms, getFeaturedPublicProjects } from '~/utils/projects-utils';
 
 export async function getHomePageData(): Promise<HomePageData> {
   try {
-    // Fetch real team data
-    const teamMembers = await getTeamMembers();
+    // Fetch real team data and public projects
+    const [teamMembers, publicProjectsResponse] = await Promise.all([
+      getTeamMembers(),
+      getPublicProjects()
+    ]);
+    
     const representatives = transformTeamMembersToRepresentatives(teamMembers);
+    
+    // Get featured projects or all projects if no featured ones
+    const featuredProjects = getFeaturedPublicProjects(publicProjectsResponse.data.projects);
+    const projectsToShow = featuredProjects.length > 0 ? featuredProjects : publicProjectsResponse.data.projects.slice(0, 4);
+    const programs = transformPublicProjectsToPrograms(projectsToShow);
 
     return {
-      programs: [
-        {
-          id: 1,
-          title: 'Medical Support',
-          description: 'Access to medical care and rehabilitation services',
-          image: '/src/assets/images/programs/program1.jpg'
-        },
-        {
-          id: 2,
-          title: 'Mental Health',
-          description: 'Professional psychological support and counseling',
-          image: '/src/assets/images/programs/program2.jpg'
-        },
-        {
-          id: 3,
-          title: 'Career Development',
-          description: 'Job training and employment assistance',
-          image: '/src/assets/images/programs/program3.jpg'
-        },
-        {
-          id: 4,
-          title: 'Family Support',
-          description: 'Resources and assistance for veterans\' families',
-          image: '/src/assets/images/programs/program4.jpg'
-        }
-      ],
+      programs,
       representatives,
       newsItems: [
         {
