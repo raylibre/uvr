@@ -1,7 +1,7 @@
 <template>
   <div class="m-registration-step-two">
-    <h2 class="title">Personal Information</h2>
-    <p class="description">Please provide additional information about yourself.</p>
+    <h2 class="title">Demographics</h2>
+    <p class="description">Tell us about yourself.</p>
 
     <div class="form">
       <AFormDatepicker

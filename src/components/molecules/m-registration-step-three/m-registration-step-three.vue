@@ -1,7 +1,7 @@
 <template>
   <div class="m-registration-step-three" data-at="registration-step-three">
-    <h2 class="title">Contact Information</h2>
-    <p class="description">Please provide your address and emergency contact details.</p>
+    <h2 class="title">Emergency Info</h2>
+    <p class="description">Emergency contact information.</p>
 
     <div class="form">
       <AFormTextarea

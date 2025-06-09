@@ -1,7 +1,7 @@
 <template>
   <div class="m-registration-step-four" data-at="registration-step-four">
-    <h2 class="title">Notification Preferences</h2>
-    <p class="description">Choose how you'd like to receive notifications and updates.</p>
+    <h2 class="title">Notifications</h2>
+    <p class="description">Set your notification preferences.</p>
 
     <div class="form">
       <div class="notification-section">

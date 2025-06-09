@@ -1,7 +1,7 @@
 <template>
   <div class="m-registration-step-five" data-at="registration-step-five">
-    <h2 class="title">Review & Confirm</h2>
-    <p class="description">Please review your information and confirm to complete your registration.</p>
+    <h2 class="title">Confirmation</h2>
+    <p class="description">Review and confirm your details.</p>
 
     <div class="sections">
       <!-- Personal Information -->
