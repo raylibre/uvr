@@ -45,21 +45,4 @@ export interface ApiResponse<T = any> {
   message?: string;
   data?: T;
   errors?: Record<string, string[]>;
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface User {
-  id: number;
-  email: string;
-  name: string;
-  role: string;
-}
-
-export interface LoginResponse {
-  user: User;
-  token: string;
 } 

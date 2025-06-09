@@ -1,12 +1,12 @@
 import { computed } from 'vue';
 import { useEventBus } from './use-event-bus';
-import { useAuthStore } from './use-auth-store';
+import { useUserStore } from './use-user-store';
 import { useRegistrationData } from './use-registration-data';
 import { EVENTS } from '~/constants/event-bus-constants';
 import type { UserProfile } from '~/types/user.d';
 
 export const useRegistrationForm = () => {
-  const { register } = useAuthStore();
+  const { register } = useUserStore();
   const { BUS } = useEventBus();
   const {
     formData,

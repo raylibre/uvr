@@ -19,6 +19,7 @@
     "@vee-validate/rules": "^4.15.0",
     "@vueuse/core": "^10.7.0",
     "axios": "^1.9.0",
+    "flag-icon-css": "^4.1.7",
     "mitt": "^3.0.1",
     "vee-validate": "^4.15.0",
     "vue": "^3.3.11",

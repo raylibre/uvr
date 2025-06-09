@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import router from './router';
 import { i18n } from './i18n';
 import './assets/main.css';
-import './styles/global.scss';
-import router from './router';
 import '@fortawesome/fontawesome-free/css/all.css';
+import 'flag-icon-css/css/flag-icons.min.css';
 
 // Register service worker
 if ('serviceWorker' in navigator) {

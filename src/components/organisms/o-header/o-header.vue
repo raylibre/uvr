@@ -20,24 +20,61 @@
           />
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Action Buttons with Language Switcher -->
         <div class="actions">
-          <AButton
-            variant="outline"
-            size="sm"
-            class="action-button action-button--join"
-            @click="handleJoin"
-          >
-            {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
-          </AButton>
-          <AButton
-            variant="primary"
-            size="sm"
-            class="action-button action-button--login"
-            @click="handleLogin"
-          >
-            {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
-          </AButton>
+          <!-- Desktop Language Switcher -->
+          <OLangChangeBlock class="language-switcher" />
+          
+          <!-- Desktop Authentication Section -->
+          <div v-if="isAuthenticated" class="user-section">
+            <MUserDropdown />
+          </div>
+          <div v-else class="auth-buttons">
+            <AButton
+              variant="outline"
+              size="sm"
+              class="action-button action-button--join"
+              @click="handleJoin"
+            >
+              {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
+            </AButton>
+            <AButton
+              variant="primary"
+              size="sm"
+              class="action-button action-button--login"
+              @click="handleLogin"
+            >
+              {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
+            </AButton>
+          </div>
+
+          <!-- Compact Mobile Authentication Section -->
+          <div class="mobile-compact-actions">
+            <!-- Mobile Language Switcher -->
+            <OLangChangeBlock class="mobile-language-switcher" />
+            
+            <!-- Mobile User Section -->
+            <div v-if="isAuthenticated" class="mobile-user-section">
+              <MUserDropdown />
+            </div>
+            <div v-else class="mobile-auth-buttons">
+              <AButton
+                variant="outline"
+                size="sm"
+                @click="handleJoin"
+              >
+                {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
+              </AButton>
+              <AButton
+                variant="primary"
+                size="sm"
+                class="ml-2"
+                @click="handleLogin"
+              >
+                {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
+              </AButton>
+            </div>
+          </div>
 
           <!-- Mobile menu button -->
           <button
@@ -48,7 +85,10 @@
             <span class="mobile-menu-label">Open main menu</span>
             <svg
               class="mobile-menu-icon"
-              :class="{ 'is-hidden': isMobileMenuOpen }"
+              :class="{
+              'is-visible': !isMobileMenuOpen,
+              'is-hidden': isMobileMenuOpen
+            }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -63,7 +103,10 @@
             </svg>
             <svg
               class="mobile-menu-icon"
-              :class="{ 'is-visible': isMobileMenuOpen }"
+              :class="{
+              'is-visible': isMobileMenuOpen,
+              'is-hidden': !isMobileMenuOpen
+            }"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -97,13 +140,14 @@
         />
 
         <div class="mobile-menu__actions">
-          <div class="mobile-menu__buttons">
-            <AButton variant="outline" block @click="handleJoin">
-              {{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}
-            </AButton>
-            <AButton variant="primary" block @click="handleLogin">
-              {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
-            </AButton>
+          <!-- Mobile Language Switcher -->
+          <div class="mobile-menu__language">
+            <OLangChangeBlock />
+          </div>
+          
+          <!-- Mobile Authentication Section -->
+          <div v-if="isAuthenticated" class="mobile-menu__user">
+            <MUserDropdown />
           </div>
         </div>
       </div>
@@ -115,15 +159,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import AButton from '~/components/atoms/a-button/a-button.vue';
+import OLangChangeBlock from '~/components/organisms/o-lang-change-block';
 import { MENU_ITEMS } from '~/constants/navigation-constants';
 import { useTranslation } from '~/composables/use-translation';
+import { useLanguage } from '~/composables/use-language';
 import { useEventBus } from '~/composables/use-event-bus';
+import { useUserStore } from '~/composables/use-user-store';
 import { EVENTS } from '~/constants/event-bus-constants';
 import { ROUTE_NAMES } from '~/constants/router-constants';
 import MHeaderNavButton from '~/components/molecules/m-header-nav-button';
+import MUserDropdown from '~/components/molecules/m-user-dropdown';
 
 export default defineComponent({
   name: 'OHeader',
@@ -131,13 +179,17 @@ export default defineComponent({
   components: {
     AButton,
     RouterLink,
-    MHeaderNavButton
+    MHeaderNavButton,
+    OLangChangeBlock,
+    MUserDropdown
   },
 
   setup() {
     const { t, T_KEYS } = useTranslation();
+    const { initializeLanguage } = useLanguage();
     const route = useRoute();
     const { BUS } = useEventBus();
+    const { isAuthenticated, initialize } = useUserStore();
     const isMobileMenuOpen = ref(false);
 
     const toggleMobileMenu = () => {
@@ -156,12 +208,19 @@ export default defineComponent({
       BUS.emit(EVENTS.SHOW_LOGIN_MODAL as any);
     };
 
+    // Initialize language and user data on component mount
+    onMounted(() => {
+      initializeLanguage();
+      initialize();
+    });
+
     return {
       t,
       T_KEYS,
       route,
       menuItems: MENU_ITEMS,
       isMobileMenuOpen,
+      isAuthenticated,
       toggleMobileMenu,
       closeMobileMenu,
       handleJoin,
@@ -172,7 +231,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .o-header {
   @apply fixed w-full top-0 z-50 shadow-sm;
   backdrop-filter: blur(8px);
@@ -180,11 +239,11 @@ export default defineComponent({
 
   // Navigation
   .nav {
-    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .header-container {
-    @apply flex items-center justify-between h-16;
+    @apply flex items-center justify-between h-16 min-w-0;
   }
 
   // Logo
@@ -196,31 +255,60 @@ export default defineComponent({
     }
 
     &__image {
-      @apply h-10 w-auto text-primary;
+      @apply h-8 sm:h-10 w-auto text-primary;
     }
 
     &__text {
-      @apply ml-3 text-lg font-semibold text-gray-900;
+      @apply hidden sm:block ml-3 text-lg font-semibold text-gray-900;
     }
   }
 
   // Desktop Navigation
   .nav-desktop {
-    @apply hidden sm:ml-6 sm:flex sm:space-x-2;
+    @apply hidden lg:ml-6 lg:flex lg:space-x-2;
   }
 
-  // Action Buttons
+  // Action Buttons with Language Switcher
   .actions {
-    @apply flex items-center space-x-4;
+    @apply flex items-center space-x-2;
+
+    .language-switcher {
+      @apply hidden md:block;
+    }
+
+    .user-section {
+      @apply hidden md:block;
+    }
+
+    .auth-buttons {
+      @apply hidden md:flex md:space-x-2;
+    }
+
+    // Mobile compact actions for smaller screens
+    .mobile-compact-actions {
+      @apply flex md:hidden items-center space-x-2;
+
+      .mobile-language-switcher {
+        @apply block;
+      }
+
+      .mobile-user-section {
+        @apply block;
+      }
+
+      .mobile-auth-buttons {
+        @apply flex;
+      }
+    }
   }
 
   .action-button {
-    @apply hidden sm:inline-flex;
+    @apply inline-flex;
   }
 
   // Mobile Menu Button
   .mobile-menu-button {
-    @apply sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400
+    @apply lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400
            hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary;
   }
 
@@ -242,7 +330,7 @@ export default defineComponent({
 
   // Mobile Menu
   .mobile-menu {
-    @apply sm:hidden hidden;
+    @apply lg:hidden hidden;
 
     &.is-open {
       @apply block;
@@ -256,8 +344,20 @@ export default defineComponent({
       @apply pt-4 pb-3 border-t border-gray-200;
     }
 
+    &__language {
+      @apply px-2;
+    }
+
+    &__user {
+      @apply mt-4 px-2;
+    }
+
     &__buttons {
       @apply mt-3 space-y-2 px-2;
+
+      .button-row {
+        @apply flex space-x-2 space-y-0;
+      }
     }
   }
 
