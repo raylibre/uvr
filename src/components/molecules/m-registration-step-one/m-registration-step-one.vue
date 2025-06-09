@@ -11,7 +11,6 @@
           label="First Name"
           type="text"
           :required="true"
-          :error="errors.first_name"
           icon="fas fa-user"
         />
 
@@ -21,7 +20,6 @@
           label="Last Name"
           type="text"
           :required="true"
-          :error="errors.last_name"
           icon="fas fa-user"
         />
       </div>
@@ -31,7 +29,6 @@
         :id="'register-patronymic'"
         label="Patronymic (Optional)"
         type="text"
-        :error="errors.patronymic"
         icon="fas fa-user"
       />
 
@@ -41,7 +38,6 @@
         label="Email Address"
         type="email"
         :required="true"
-        :error="errors.email"
         icon="fas fa-envelope"
       />
 
@@ -51,7 +47,6 @@
         label="Phone Number"
         type="tel"
         :required="true"
-        :error="errors.phone"
         icon="fas fa-phone"
       />
 
@@ -62,7 +57,6 @@
           label="Password"
           type="password"
           :required="true"
-          :error="errors.password"
           icon="fas fa-lock"
         />
 
@@ -72,7 +66,6 @@
           label="Confirm Password"
           type="password"
           :required="true"
-          :error="errors.password_confirmation"
           icon="fas fa-lock"
         />
       </div>
@@ -82,26 +75,8 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { useField, useForm } from 'vee-validate';
-import * as yup from 'yup';
 import type { UserProfile } from '~/types/user';
 import AFormInput from '~/components/atoms/a-form-input';
-
-const validationSchema = yup.object({
-  first_name: yup.string().required('First name is required'),
-  last_name: yup.string().required('Last name is required'),
-  patronymic: yup.string(),
-  email: yup.string().required('Email is required').email('Invalid email format'),
-  phone: yup.string()
-    .required('Phone number is required')
-    .matches(/^\+?[\d\s-]{10,}$/, 'Invalid phone number format'),
-  password: yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters'),
-  password_confirmation: yup.string()
-    .required('Please confirm your password')
-    .oneOf([yup.ref('password')], 'Passwords must match')
-});
 
 export default defineComponent({
   name: 'MRegistrationStepOne',
@@ -114,50 +89,19 @@ export default defineComponent({
     modelValue: {
       type: Object as () => Partial<UserProfile>,
       required: true
-    },
-    errors: {
-      type: Object as () => Record<string, string>,
-      required: true
     }
   },
 
-  emits: ['update:modelValue', 'validate'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { handleSubmit, errors: validationErrors } = useForm({
-      validationSchema,
-      initialValues: props.modelValue
-    });
-
-    const { value: first_name } = useField('first_name');
-    const { value: last_name } = useField('last_name');
-    const { value: patronymic } = useField('patronymic');
-    const { value: email } = useField('email');
-    const { value: phone } = useField('phone');
-    const { value: password } = useField('password');
-    const { value: password_confirmation } = useField('password_confirmation');
-
     const formData = computed({
       get: () => props.modelValue,
       set: (value) => emit('update:modelValue', value)
     });
 
-    const validate = handleSubmit(async (values) => {
-      emit('update:modelValue', values);
-      return values;
-    });
-
     return {
-      formData,
-      validate,
-      errors: validationErrors,
-      first_name,
-      last_name,
-      patronymic,
-      email,
-      phone,
-      password,
-      password_confirmation
+      formData
     };
   }
 });

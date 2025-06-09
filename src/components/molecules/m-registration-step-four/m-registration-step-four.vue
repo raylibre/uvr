@@ -13,7 +13,6 @@
           <ASwitchToggle
             v-model="formData.notifications_enabled"
             :id="'register-notifications-enabled'"
-            :error="errors.notifications_enabled"
             data-at="notifications-main-toggle"
           />
         </div>
@@ -31,7 +30,6 @@
               v-model="formData.email_notifications"
               :id="'register-email-notifications'"
               :disabled="!formData.notifications_enabled"
-              :error="errors.email_notifications"
               data-at="notifications-email-toggle"
             />
           </div>
@@ -48,7 +46,6 @@
               v-model="formData.sms_notifications"
               :id="'register-sms-notifications'"
               :disabled="!formData.notifications_enabled"
-              :error="errors.sms_notifications"
               data-at="notifications-sms-toggle"
             />
           </div>
@@ -67,16 +64,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, watch } from 'vue';
-import { useField, useForm } from 'vee-validate';
-import * as yup from 'yup';
 import type { UserProfile } from '~/types/user';
 import ASwitchToggle from '~/components/atoms/a-switch-toggle';
-
-const validationSchema = yup.object({
-  notifications_enabled: yup.boolean(),
-  email_notifications: yup.boolean(),
-  sms_notifications: yup.boolean()
-});
 
 export default defineComponent({
   name: 'MRegistrationStepFour',
@@ -89,25 +78,12 @@ export default defineComponent({
     modelValue: {
       type: Object as () => Partial<UserProfile>,
       required: true
-    },
-    errors: {
-      type: Object as () => Record<string, string>,
-      required: true
     }
   },
 
-  emits: ['update:modelValue', 'validate'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { handleSubmit, errors: validationErrors } = useForm({
-      validationSchema,
-      initialValues: props.modelValue
-    });
-
-    const { value: notifications_enabled } = useField('notifications_enabled');
-    const { value: email_notifications } = useField('email_notifications');
-    const { value: sms_notifications } = useField('sms_notifications');
-
     const formData = computed({
       get: () => props.modelValue,
       set: (value) => emit('update:modelValue', value)
@@ -121,18 +97,8 @@ export default defineComponent({
       }
     });
 
-    const validate = handleSubmit(async (values) => {
-      emit('update:modelValue', values);
-      return values;
-    });
-
     return {
-      formData,
-      validate,
-      errors: validationErrors,
-      notifications_enabled,
-      email_notifications,
-      sms_notifications
+      formData
     };
   }
 });

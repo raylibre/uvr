@@ -21,7 +21,7 @@
       :name="icon"
       class="icon"
     />
-    <span class="content">
+    <span class="button-content">
       <slot />
     </span>
   </button>
@@ -74,7 +74,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .a-button {
   // Base styles
-  .content {
+  .button-content {
     @apply inline-block;
   }
 

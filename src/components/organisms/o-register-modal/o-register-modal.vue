@@ -1,10 +1,13 @@
 <template>
-  <OModal v-model="isOpen" class="o-register-modal">
+  <OModal
+    v-model="isOpen"
+    :fullScreen="true"
+    class="o-register-modal"
+  >
     <div class="layout">
       <!-- Left sidebar with steps -->
       <div class="sidebar">
         <div class="header">
-          <img src="../../../assets/images/logo.svg" alt="Logo" class="header__logo" />
           <h1 class="header__title">New Account</h1>
         </div>
 
@@ -43,38 +46,35 @@
         <div class="form">
           <component
             :is="currentStepComponent"
+            ref="currentStepRef"
             v-model="formData"
-            :errors="errors"
-            @validate="validateStep"
-            @update:model-value="updateFormData"
           />
         </div>
 
         <!-- Navigation buttons -->
         <div class="actions">
           <AButton
+            variant="outline"
+            class="action-button-back"
+            @click="handleCancelButtonClick"
+          >
+            Cancel
+          </AButton>
+          <AButton
             v-if="currentStep > 1"
             variant="outline"
-            @click="previousStep"
+            class="action-button-back"
+            @click="handleBackButtonClick"
           >
             Back
           </AButton>
-          <div class="actions__spacer"></div>
           <AButton
-            v-if="currentStep < totalSteps"
             variant="primary"
             :loading="isLoading"
-            @click="nextStep"
+            class="action-button-submit"
+            @click="handleSubmitButtonClick"
           >
-            Continue
-          </AButton>
-          <AButton
-            v-else
-            variant="primary"
-            :loading="isLoading"
-            @click="handleSubmit"
-          >
-            Complete Registration
+            {{ submitButtonText }}
           </AButton>
         </div>
       </div>
@@ -83,12 +83,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch } from 'vue';
+import { defineComponent, ref, computed, watch } from 'vue';
 import { useEventBus } from '~/composables/use-event-bus';
-import { useAuthStore } from '~/composables/use-auth-store';
+import { useRegistrationForm } from '~/composables/use-registration-form';
 import { EVENTS } from '~/constants/event-bus-constants';
-import { REGISTRATION_STEPS } from '~/constants/registration-constants';
-import type { UserProfile, RegistrationStep } from '~/types/user';
 import OModal from '~/components/organisms/o-modal';
 import AButton from '~/components/atoms/a-button';
 import MRegistrationStepOne from '~/components/molecules/m-registration-step-one';
@@ -110,19 +108,23 @@ export default defineComponent({
   },
 
   setup() {
-    const { register } = useAuthStore();
-    const { setBusListener, BUS } = useEventBus();
-    const isOpen = ref(false);
-    const isLoading = ref(false);
-    const currentStep = ref(1);
-    const steps = reactive<RegistrationStep[]>(REGISTRATION_STEPS);
-    const errors = reactive<Record<string, string>>({});
+    const { setBusListener } = useEventBus();
+    const {
+      formData,
+      currentStep,
+      isLoading,
+      steps,
+      totalSteps,
+      submitButtonText,
+      handleSubmit,
+      goToStep,
+      nextStep,
+      previousStep,
+      resetForm
+    } = useRegistrationForm();
 
-    const formData = reactive<Partial<UserProfile>>({
-      notifications_enabled: true,
-      email_notifications: true,
-      sms_notifications: true
-    });
+    const isOpen = ref(false);
+    const currentStepRef = ref<InstanceType<typeof MRegistrationStepOne | typeof MRegistrationStepTwo | typeof MRegistrationStepThree | typeof MRegistrationStepFour | typeof MRegistrationStepFive> | null>(null);
 
     const currentStepComponent = computed(() => {
       const components = {
@@ -135,71 +137,26 @@ export default defineComponent({
       return components[currentStep.value as keyof typeof components];
     });
 
-    const totalSteps = computed(() => steps.length);
-
-    const updateFormData = (newData: Partial<UserProfile>) => {
-      Object.assign(formData, newData);
-    };
-
-    const validateStep = async (): Promise<boolean> => {
-      try {
-        await getCurrentStepComponent.value?.validate();
-        steps[currentStep.value - 1].isCompleted = true;
-        return true;
-      } catch (validationErrors) {
-        Object.assign(errors, validationErrors);
-        return false;
-      }
-    };
-
-    const goToStep = async (stepId: number) => {
-      if (stepId < currentStep.value || steps[stepId - 1].isCompleted) {
-        currentStep.value = stepId;
-      }
-    };
-
-    const nextStep = async () => {
-      if (await validateStep()) {
-        if (currentStep.value < totalSteps.value) {
-          currentStep.value++;
-        }
-      }
-    };
-
-    const previousStep = () => {
-      if (currentStep.value > 1) {
-        currentStep.value--;
-      }
-    };
-
-    const handleSubmit = async () => {
-      if (await validateStep()) {
-        try {
-          isLoading.value = true;
-          await register(formData as Required<UserProfile>);
-          BUS.emit(EVENTS.SUCCESS_REGISTER);
-          handleClose();
-        } catch (error) {
-          if (error instanceof Error) {
-            BUS.emit(EVENTS.FAILED_REGISTER, { error: error.message });
-          }
-        } finally {
-          isLoading.value = false;
-        }
+    const handleSubmitButtonClick = async () => {
+      if (currentStep.value < totalSteps.value) {
+        nextStep();
+      } else {
+        await handleSubmit();
       }
     };
 
     const handleClose = () => {
       isOpen.value = false;
-      currentStep.value = 1;
-      Object.assign(formData, {
-        notifications_enabled: true,
-        email_notifications: true,
-        sms_notifications: true
-      });
-      steps.forEach(step => step.isCompleted = false);
-      Object.assign(errors, {});
+      resetForm();
       document.body.style.overflow = '';
+    };
+
+    const handleCancelButtonClick = () => {
+      handleClose();
+    };
+
+    const handleBackButtonClick = () => {
+      previousStep();
     };
 
     // Set up event listeners
@@ -220,20 +177,17 @@ export default defineComponent({
 
     return {
       isOpen,
-      isLoading,
       currentStep,
+      currentStepRef,
       steps,
       formData,
-      errors,
       currentStepComponent,
-      totalSteps,
+      submitButtonText,
+      isLoading,
+      handleSubmitButtonClick,
       goToStep,
-      nextStep,
-      previousStep,
-      handleSubmit,
-      handleClose,
-      updateFormData,
-      validateStep
+      handleCancelButtonClick,
+      handleBackButtonClick,
     };
   }
 });
@@ -246,11 +200,11 @@ export default defineComponent({
   }
 
   .layout {
-    @apply flex h-screen;
+    @apply flex h-full;
   }
 
   .sidebar {
-    @apply w-96 bg-gray-50 border-r border-gray-200 p-8 overflow-y-auto;
+    @apply w-96 bg-gray-50 p-8 overflow-y-auto;
   }
 
   .header {
@@ -331,10 +285,10 @@ export default defineComponent({
   }
 
   .actions {
-    @apply flex items-center justify-between p-6 bg-gray-50 border-t border-gray-200;
+    @apply flex items-center justify-end bg-gray-50 p-6;
 
-    &__spacer {
-      @apply flex-1;
+    .action-button-back {
+      @apply mr-6
     }
   }
 }

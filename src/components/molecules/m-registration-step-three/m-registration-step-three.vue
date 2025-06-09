@@ -10,7 +10,6 @@
         label="Full Address"
         :placeholder="'Enter your complete address...'"
         :required="true"
-        :error="errors.address"
         :rows="3"
         icon="fas fa-home"
       />
@@ -22,7 +21,6 @@
           label="Emergency Contact Name"
           type="text"
           :required="true"
-          :error="errors.emergency_contact_name"
           icon="fas fa-user-shield"
         />
 
@@ -32,7 +30,6 @@
           label="Emergency Contact Phone"
           type="tel"
           :required="true"
-          :error="errors.emergency_contact_phone"
           icon="fas fa-phone-alt"
         />
       </div>
@@ -42,23 +39,9 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { useField, useForm } from 'vee-validate';
-import * as yup from 'yup';
 import type { UserProfile } from '~/types/user';
 import AFormInput from '~/components/atoms/a-form-input';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
-
-const validationSchema = yup.object({
-  address: yup.string()
-    .required('Address is required')
-    .min(10, 'Please provide a complete address'),
-  emergency_contact_name: yup.string()
-    .required('Emergency contact name is required')
-    .min(2, 'Please enter a valid name'),
-  emergency_contact_phone: yup.string()
-    .required('Emergency contact phone is required')
-    .matches(/^\+?[\d\s-]{10,}$/, 'Please enter a valid phone number')
-});
 
 export default defineComponent({
   name: 'MRegistrationStepThree',
@@ -72,42 +55,19 @@ export default defineComponent({
     modelValue: {
       type: Object as () => Partial<UserProfile>,
       required: true
-    },
-    errors: {
-      type: Object as () => Record<string, string>,
-      required: true
     }
   },
 
-  emits: ['update:modelValue', 'validate'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { handleSubmit, errors: validationErrors } = useForm({
-      validationSchema,
-      initialValues: props.modelValue
-    });
-
-    const { value: address } = useField('address');
-    const { value: emergency_contact_name } = useField('emergency_contact_name');
-    const { value: emergency_contact_phone } = useField('emergency_contact_phone');
-
     const formData = computed({
       get: () => props.modelValue,
       set: (value) => emit('update:modelValue', value)
     });
 
-    const validate = handleSubmit(async (values) => {
-      emit('update:modelValue', values);
-      return values;
-    });
-
     return {
-      formData,
-      validate,
-      errors: validationErrors,
-      address,
-      emergency_contact_name,
-      emergency_contact_phone
+      formData
     };
   }
 });

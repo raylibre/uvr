@@ -1,5 +1,5 @@
 <template>
-  <div class="m-registration-step-five" data-at="registration-step-five">
+  <form @submit.prevent="onSubmit" class="m-registration-step-five" data-at="registration-step-five">
     <h2 class="title">Review Your Information</h2>
     <p class="description">Please review your registration details before submitting.</p>
 
@@ -126,9 +126,8 @@
         <div class="terms">
           <div class="terms__checkbox">
             <ACheckbox
-              v-model="termsAccepted"
+              v-model="formData.terms"
               :id="'register-terms'"
-              :error="errors.terms"
               data-at="registration-terms-checkbox"
             />
           </div>
@@ -139,27 +138,27 @@
               and
               <a href="#" class="terms__link">Privacy Policy</a>
             </label>
-            <p v-if="errors.terms" class="terms__error">{{ errors.terms }}</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="actions">
+      <button 
+        type="submit" 
+        class="submit-button"
+        data-at="registration-submit">
+        Submit Registration
+      </button>
+    </div>
+  </form>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
-import { useField, useForm } from 'vee-validate';
-import * as yup from 'yup';
+import { defineComponent, computed } from 'vue';
 import type { UserProfile, UserCategory } from '~/types/user';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
-
-const validationSchema = yup.object({
-  terms: yup.boolean()
-    .oneOf([true], 'You must accept the terms and conditions')
-    .required('You must accept the terms and conditions')
-});
 
 export default defineComponent({
   name: 'MRegistrationStepFive',
@@ -172,22 +171,12 @@ export default defineComponent({
     modelValue: {
       type: Object as () => Partial<UserProfile>,
       required: true
-    },
-    errors: {
-      type: Object as () => Record<string, string>,
-      required: true
     }
   },
 
-  emits: ['update:modelValue', 'validate'],
+  emits: ['update:modelValue', 'submit'],
 
   setup(props, { emit }) {
-    const { handleSubmit, errors: validationErrors } = useForm({
-      validationSchema
-    });
-
-    const termsAccepted = ref(false);
-
     const formData = computed({
       get: () => props.modelValue,
       set: (value) => emit('update:modelValue', value)
@@ -213,20 +202,13 @@ export default defineComponent({
       return CITIES[region as keyof typeof CITIES]?.find(c => c.value === city)?.label || city;
     };
 
-    const validate = handleSubmit(async () => {
-      if (!termsAccepted.value) {
-        return Promise.reject({
-          terms: 'You must accept the terms and conditions'
-        });
-      }
-      return props.modelValue;
-    });
+    const onSubmit = () => {
+      emit('submit', formData.value);
+    };
 
     return {
       formData,
-      termsAccepted,
-      validate,
-      errors: validationErrors,
+      onSubmit,
       formatDate,
       getCategoryLabel,
       getRegionLabel,
@@ -330,10 +312,14 @@ export default defineComponent({
     &__link {
       @apply text-primary hover:text-primary-dark;
     }
+  }
 
-    &__error {
-      @apply mt-1 text-sm text-red-600;
-    }
+  .actions {
+    @apply mt-8 flex justify-end;
+  }
+
+  .submit-button {
+    @apply px-6 py-2 bg-primary text-white rounded-lg;
   }
 }
 </style> 

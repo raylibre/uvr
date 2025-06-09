@@ -47,7 +47,7 @@
             </div>
 
             <!-- Content -->
-            <div :class="['content', { 'content--fullscreen': fullScreen }, contentClass]">
+            <div :class="['modal-content', { 'content--fullscreen': fullScreen }, contentClass]">
               <slot />
             </div>
 
@@ -188,11 +188,11 @@ export default defineComponent({
     }
   }
 
-  .content {
-    @apply px-6 py-4;
+  .modal-content {
+    @apply h-full px-6 py-4;
 
     &--fullscreen {
-      @apply h-[calc(100vh-theme('spacing.16'))] overflow-y-auto;
+      @apply overflow-y-auto;
     }
   }
 
