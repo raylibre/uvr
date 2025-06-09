@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" class="m-registration-step-five" data-at="registration-step-five">
+  <div class="m-registration-step-five" data-at="registration-step-five">
     <h2 class="title">Review Your Information</h2>
     <p class="description">Please review your registration details before submitting.</p>
 
@@ -7,7 +7,7 @@
       <!-- Personal Information -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-user"></i>
+          <i class="section__icon fas fa-user"/>
           Personal Information
         </h3>
         <dl class="info-grid">
@@ -37,7 +37,7 @@
       <!-- Demographics -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-info-circle"></i>
+          <i class="section__icon fas fa-info-circle"/>
           Demographics
         </h3>
         <dl class="info-grid">
@@ -67,7 +67,7 @@
       <!-- Emergency Contact -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-phone-alt"></i>
+          <i class="section__icon fas fa-phone-alt"/>
           Emergency Contact
         </h3>
         <dl class="info-grid">
@@ -89,33 +89,36 @@
       <!-- Notification Preferences -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-bell"></i>
+          <i class="section__icon fas fa-bell"/>
           Notification Preferences
         </h3>
         <dl class="notification-list">
           <div class="notification-item">
             <dt class="notification-item__label">Notifications Enabled</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 formData.notifications_enabled ? 'fas fa-check' : 'fas fa-times'
-              ]"></i>
+              ]"/>
             </dd>
           </div>
           <div class="notification-item">
             <dt class="notification-item__label">Email Notifications</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 'fas',
                 formData.email_notifications ? 'fa-check' : 'fa-times'
-              ]"></i>
+              ]"/>
             </dd>
           </div>
           <div class="notification-item">
             <dt class="notification-item__label">SMS Notifications</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 formData.sms_notifications ? 'fas fa-check' : 'fas fa-times'
-              ]"></i>
+              ]"/>
             </dd>
           </div>
         </dl>
@@ -126,9 +129,11 @@
         <div class="terms">
           <div class="terms__checkbox">
             <ACheckbox
-              v-model="formData.terms"
               :id="'register-terms'"
+              v-model="terms.value.value"
               data-at="registration-terms-checkbox"
+              :error="terms.errorMessage.value"
+              @blur="terms.validate"
             />
           </div>
           <div class="terms__content">
@@ -142,23 +147,17 @@
         </div>
       </div>
     </div>
-
-    <div class="actions">
-      <button
-        type="submit"
-        class="submit-button"
-        data-at="registration-submit">
-        Submit Registration
-      </button>
-    </div>
-  </form>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import type { UserProfile } from '~/types/user';
+import { defineComponent } from 'vue';
+import { useField } from 'vee-validate';
+import type { UserCategory } from '~/types/user';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
+import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { useRegistrationData } from '~/composables/use-registration-data';
 
 export default defineComponent({
   name: 'MRegistrationStepFive',
@@ -167,22 +166,16 @@ export default defineComponent({
     ACheckbox
   },
 
-  props: {
-    modelValue: {
-      type: Object as () => Partial<UserProfile>,
-      required: true
-    }
-  },
+  setup() {
+    const { getStepForm } = useRegistrationValidation();
+    const { formData } = useRegistrationData();
+    const stepForm = getStepForm(5);
 
-  emits: ['update:modelValue', 'submit'],
-
-  setup(props, { emit }) {
-    const formData = computed({
-      get: () => ({
-        ...props.modelValue,
-        terms: (props.modelValue as any).terms ?? false
-      }),
-      set: (value) => emit('update:modelValue', value)
+    // Create terms field using useField with the step form context
+    const terms = useField('terms', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
 
     const formatDate = (date: string) => {
@@ -206,13 +199,18 @@ export default defineComponent({
       return CITIES[region as keyof typeof CITIES]?.find(c => c.value === city)?.label || city;
     };
 
-    const onSubmit = () => {
-      emit('submit', formData.value);
+    // Expose validation method for external triggering
+    const validateAll = async () => {
+      const results = await Promise.all([
+        terms.validate()
+      ]);
+      return results.every(result => result.valid);
     };
 
     return {
       formData,
-      onSubmit,
+      terms,
+      validateAll,
       formatDate,
       getCategoryLabel,
       getRegionLabel,
@@ -227,22 +225,22 @@ export default defineComponent({
   @apply max-w-2xl mx-auto;
 
   .title {
-    @apply text-2xl font-semibold text-gray-900 mb-6;
+    @apply text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6;
   }
 
   .description {
-    @apply text-gray-600 mb-8;
+    @apply text-sm sm:text-base text-gray-600 mb-6 sm:mb-8;
   }
 
   .sections {
-    @apply space-y-8;
+    @apply space-y-6 sm:space-y-8;
   }
 
   .section {
-    @apply bg-white rounded-lg border border-gray-200 p-6;
+    @apply bg-white rounded-lg border border-gray-200 p-4 sm:p-6;
 
     &__title {
-      @apply text-lg font-medium text-gray-900 mb-4 flex items-center;
+      @apply text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4 flex items-center;
     }
 
     &__icon {
@@ -251,20 +249,20 @@ export default defineComponent({
   }
 
   .info-grid {
-    @apply grid grid-cols-2 gap-4;
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4;
   }
 
   .info-item {
     &--full {
-      @apply col-span-2;
+      @apply col-span-1 sm:col-span-2;
     }
 
     &__label {
-      @apply text-sm font-medium text-gray-500;
+      @apply text-xs sm:text-sm font-medium text-gray-500;
     }
 
     &__value {
-      @apply mt-1 text-sm text-gray-900;
+      @apply mt-1 text-sm sm:text-base text-gray-900;
     }
   }
 
@@ -283,7 +281,7 @@ export default defineComponent({
       @apply text-sm text-gray-900;
 
       i {
-        @apply w-5 h-5;
+        @apply w-4 h-4 sm:w-5 sm:h-5;
       }
     }
   }
@@ -316,14 +314,6 @@ export default defineComponent({
     &__link {
       @apply text-primary hover:text-primary-dark;
     }
-  }
-
-  .actions {
-    @apply mt-8 flex justify-end;
-  }
-
-  .submit-button {
-    @apply px-6 py-2 bg-primary text-white rounded-lg;
   }
 }
 </style>

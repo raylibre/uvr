@@ -40,7 +40,11 @@
                   {{ title }}
                 </slot>
               </DialogTitle>
-              <button v-if="showClose" type="button" class="close" @click="handleClose">
+              <button
+v-if="showClose"
+type="button"
+class="close"
+@click="handleClose">
                 <span class="sr-only">{{ t('common.close') }}</span>
                 <AIcon name="fas fa-xmark" class="close__icon" aria-hidden="true" />
               </button>
@@ -111,7 +115,7 @@ export default defineComponent({
     },
     contentClass: {
       type: String,
-      default: 'px-6 py-4',
+      default: '',
     },
   },
 

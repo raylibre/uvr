@@ -21,7 +21,7 @@
         }"
       >
         <div class="upload-content">
-          <i class="upload-icon fas fa-cloud-upload-alt"></i>
+          <i class="upload-icon fas fa-cloud-upload-alt"/>
           <div class="upload-text">
             <label
               :for="id"
@@ -60,7 +60,7 @@
           class="file-item"
         >
           <div class="file-item__content">
-            <i class="file-item__icon fas fa-file"></i>
+            <i class="file-item__icon fas fa-file"/>
             <span class="file-item__name">{{ file.name }}</span>
             <span class="file-item__size">({{ formatFileSize(file.size) }})</span>
           </div>
@@ -70,7 +70,7 @@
             :disabled="disabled"
             @click="removeFile(index)"
           >
-            <i class="fas fa-times"></i>
+            <i class="fas fa-times"/>
           </button>
         </li>
       </ul>

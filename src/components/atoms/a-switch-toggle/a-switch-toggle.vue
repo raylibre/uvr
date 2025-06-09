@@ -1,8 +1,8 @@
 <template>
   <div class="switch-field" data-at="switch-toggle">
     <button
-      type="button"
       :id="id"
+      type="button"
       :class="[
         'switch',
         modelValue ? 'is-active' : 'is-inactive',
@@ -15,7 +15,7 @@
     >
       <span class="switch__handle" :class="{ 'is-active': modelValue }" />
     </button>
-    <p v-if="error" class="error-message" :id="`${id}-error`">{{ error }}</p>
+    <p v-if="error" :id="`${id}-error`" class="error-message">{{ error }}</p>
   </div>
 </template>
 

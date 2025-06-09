@@ -7,7 +7,7 @@
 
     <div class="select-wrapper">
       <div v-if="icon" class="select-icon">
-        <i :class="[icon, 'select-icon__icon']"></i>
+        <i :class="[icon, 'select-icon__icon']"/>
       </div>
 
       <select
@@ -21,11 +21,15 @@
           'has-error': error,
           'is-disabled': disabled
         }"
+        v-bind="$attrs"
         @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
         @blur="$emit('blur', $event)"
-        v-bind="$attrs"
       >
-        <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
+        <option
+v-if="placeholder"
+value=""
+disabled
+selected>{{ placeholder }}</option>
         <option
           v-for="option in options"
           :key="option.value"
@@ -37,11 +41,11 @@
       </select>
 
       <div class="select-arrow">
-        <i class="select-arrow__icon fas fa-chevron-down"></i>
+        <i class="select-arrow__icon fas fa-chevron-down"/>
       </div>
     </div>
 
-    <p v-if="error" class="error" :id="`${id}-error`">{{ error }}</p>
+    <p v-if="error" :id="`${id}-error`" class="error">{{ error }}</p>
   </div>
 </template>
 
@@ -56,6 +60,8 @@ interface SelectOption {
 
 export default defineComponent({
   name: 'AFormSelect',
+
+  inheritAttrs: false,
 
   props: {
     modelValue: {
@@ -96,9 +102,7 @@ export default defineComponent({
     }
   },
 
-  emits: ['update:modelValue', 'blur'],
-
-  inheritAttrs: false
+  emits: ['update:modelValue', 'blur']
 });
 </script>
 

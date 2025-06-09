@@ -3,45 +3,53 @@
     <h2 class="title">Emergency Contact Information</h2>
     <p class="description">Please provide your address and emergency contact details.</p>
 
-    <form @submit.prevent class="form">
+    <div class="form">
       <AFormTextarea
-        v-model="formData.address"
         :id="'register-address'"
+        v-model="address.value.value"
         label="Full Address"
         :placeholder="'Enter your complete address...'"
         :required="true"
         :rows="3"
         icon="fas fa-home"
+        :error="address.errorMessage.value"
+        @update:modelValue="address.validate"
+        @blur="address.validate"
       />
 
       <div class="form-grid">
         <AFormInput
-          v-model="formData.emergency_contact_name"
           :id="'register-emergency-contact-name'"
+          v-model="emergencyContactName.value.value"
           label="Emergency Contact Name"
           type="text"
           :required="true"
           icon="fas fa-user-shield"
+          :error="emergencyContactName.errorMessage.value"
+          @blur="emergencyContactName.validate"
         />
 
         <AFormInput
-          v-model="formData.emergency_contact_phone"
           :id="'register-emergency-contact-phone'"
+          v-model="emergencyContactPhone.value.value"
           label="Emergency Contact Phone"
           type="tel"
           :required="true"
           icon="fas fa-phone-alt"
+          :error="emergencyContactPhone.errorMessage.value"
+          @blur="emergencyContactPhone.validate"
         />
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import type { UserProfile } from '~/types/user';
+import { defineComponent } from 'vue';
+import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
+import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepThree',
@@ -51,23 +59,43 @@ export default defineComponent({
     AFormTextarea
   },
 
-  props: {
-    modelValue: {
-      type: Object as () => Partial<UserProfile>,
-      required: true
-    }
-  },
+  setup() {
+    const { getStepForm } = useRegistrationValidation();
+    const stepForm = getStepForm(3);
 
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const formData = computed({
-      get: () => props.modelValue,
-      set: (value) => emit('update:modelValue', value)
+    // Create fields using useField with the step form context
+    const address = useField('address', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false
     });
 
+    const emergencyContactName = useField('emergency_contact_name', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false
+    });
+
+    const emergencyContactPhone = useField('emergency_contact_phone', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false
+    });
+
+    // Form data persists in global state - no need for prop initialization or emitting
+
+    // Expose validation method for external triggering
+    const validateAll = async () => {
+      const results = await Promise.all([
+        address.validate(),
+        emergencyContactName.validate(),
+        emergencyContactPhone.validate()
+      ]);
+      return results.every(result => result.valid);
+    };
+
     return {
-      formData
+      address,
+      emergencyContactName,
+      emergencyContactPhone,
+      validateAll
     };
   }
 });
@@ -78,19 +106,20 @@ export default defineComponent({
   @apply max-w-2xl mx-auto;
 
   .title {
-    @apply text-2xl font-semibold text-gray-900 mb-6;
+    @apply text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6;
   }
 
   .description {
-    @apply text-gray-600 mb-8;
+    @apply text-sm sm:text-base text-gray-600 mb-6 sm:mb-8;
   }
 
   .form {
-    @apply space-y-6;
+    @apply space-y-4 sm:space-y-6;
   }
 
   .form-grid {
-    @apply grid grid-cols-2 gap-6;
+    // Mobile: Single column, Tablet+: Two columns
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
   }
 }
 </style> 

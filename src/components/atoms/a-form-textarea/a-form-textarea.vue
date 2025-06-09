@@ -7,7 +7,7 @@
 
     <div class="textarea-wrapper">
       <div v-if="icon" class="textarea-icon">
-        <i :class="[icon, 'textarea-icon__icon']"></i>
+        <i :class="[icon, 'textarea-icon__icon']"/>
       </div>
 
       <textarea
@@ -23,13 +23,13 @@
           'has-error': error,
           'is-disabled': disabled
         }"
+        v-bind="$attrs"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
         @blur="$emit('blur', $event)"
-        v-bind="$attrs"
-      ></textarea>
+      />
     </div>
 
-    <p v-if="error" class="error" :id="`${id}-error`">{{ error }}</p>
+    <p v-if="error" :id="`${id}-error`" class="error">{{ error }}</p>
   </div>
 </template>
 
@@ -38,6 +38,8 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'AFormTextarea',
+
+  inheritAttrs: false,
 
   props: {
     modelValue: {
@@ -78,9 +80,7 @@ export default defineComponent({
     }
   },
 
-  emits: ['update:modelValue', 'blur'],
-
-  inheritAttrs: false
+  emits: ['update:modelValue', 'blur']
 });
 </script>
 
@@ -104,6 +104,7 @@ export default defineComponent({
     &__icon {
       @apply text-gray-400 w-5 h-5;
     }
+
   }
 
   .textarea {

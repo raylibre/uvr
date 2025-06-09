@@ -3,7 +3,7 @@
     <h2 class="title">Notification Preferences</h2>
     <p class="description">Choose how you would like to receive updates and notifications.</p>
 
-    <form @submit.prevent class="form">
+    <div class="form">
       <div class="settings-card">
         <div class="settings-item">
           <div class="settings-item__content">
@@ -11,42 +11,45 @@
             <p class="settings-item__description">Receive important updates about your account and our services</p>
           </div>
           <ASwitchToggle
-            v-model="formData.notifications_enabled"
             :id="'register-notifications-enabled'"
+            v-model="notificationsEnabled.value.value"
             data-at="notifications-main-toggle"
+            :error="notificationsEnabled.errorMessage.value"
           />
         </div>
 
         <div class="settings-group">
           <div 
             class="settings-item"
-            :class="{ 'is-disabled': !formData.notifications_enabled }"
+            :class="{ 'is-disabled': !notificationsEnabled.value.value }"
           >
             <div class="settings-item__content">
               <h4 class="settings-item__subtitle">Email Notifications</h4>
               <p class="settings-item__description">Receive updates via email</p>
             </div>
             <ASwitchToggle
-              v-model="formData.email_notifications"
               :id="'register-email-notifications'"
-              :disabled="!formData.notifications_enabled"
+              v-model="emailNotifications.value.value"
+              :disabled="!notificationsEnabled.value.value"
               data-at="notifications-email-toggle"
+              :error="emailNotifications.errorMessage.value"
             />
           </div>
 
           <div 
             class="settings-item"
-            :class="{ 'is-disabled': !formData.notifications_enabled }"
+            :class="{ 'is-disabled': !notificationsEnabled.value.value }"
           >
             <div class="settings-item__content">
               <h4 class="settings-item__subtitle">SMS Notifications</h4>
               <p class="settings-item__description">Receive updates via SMS</p>
             </div>
             <ASwitchToggle
-              v-model="formData.sms_notifications"
               :id="'register-sms-notifications'"
-              :disabled="!formData.notifications_enabled"
+              v-model="smsNotifications.value.value"
+              :disabled="!notificationsEnabled.value.value"
               data-at="notifications-sms-toggle"
+              :error="smsNotifications.errorMessage.value"
             />
           </div>
         </div>
@@ -54,18 +57,19 @@
 
       <div class="info-box">
         <p class="info-box__content">
-          <i class="info-box__icon fas fa-info-circle"></i>
+          <i class="info-box__icon fas fa-info-circle"/>
           You can change these preferences at any time in your account settings.
         </p>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from 'vue';
-import type { UserProfile } from '~/types/user';
+import { defineComponent, watch } from 'vue';
+import { useField } from 'vee-validate';
 import ASwitchToggle from '~/components/atoms/a-switch-toggle';
+import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepFour',
@@ -74,31 +78,52 @@ export default defineComponent({
     ASwitchToggle
   },
 
-  props: {
-    modelValue: {
-      type: Object as () => Partial<UserProfile>,
-      required: true
-    }
-  },
+  setup() {
+    const { getStepForm } = useRegistrationValidation();
+    const stepForm = getStepForm(4);
 
-  emits: ['update:modelValue'],
+    // Create fields using useField with the step form context
+    const notificationsEnabled = useField('notifications_enabled', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
 
-  setup(props, { emit }) {
-    const formData = computed({
-      get: () => props.modelValue,
-      set: (value) => emit('update:modelValue', value)
+    const emailNotifications = useField('email_notifications', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const smsNotifications = useField('sms_notifications', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
 
     // Reset sub-toggles when main toggle is disabled
-    watch(() => formData.value.notifications_enabled, (enabled) => {
+    watch(() => notificationsEnabled.value.value, (enabled) => {
       if (!enabled) {
-        formData.value.email_notifications = false;
-        formData.value.sms_notifications = false;
+        emailNotifications.value.value = false;
+        smsNotifications.value.value = false;
       }
     });
 
+    // Expose validation method for external triggering
+    const validateAll = async () => {
+      const results = await Promise.all([
+        notificationsEnabled.validate(),
+        emailNotifications.validate(),
+        smsNotifications.validate()
+      ]);
+      return results.every(result => result.valid);
+    };
+
     return {
-      formData
+      notificationsEnabled,
+      emailNotifications,
+      smsNotifications,
+      validateAll
     };
   }
 });
@@ -109,27 +134,28 @@ export default defineComponent({
   @apply max-w-2xl mx-auto;
 
   .title {
-    @apply text-2xl font-semibold text-gray-900 mb-6;
+    @apply text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6;
   }
 
   .description {
-    @apply text-gray-600 mb-8;
+    @apply text-sm sm:text-base text-gray-600 mb-6 sm:mb-8;
   }
 
   .form {
-    @apply space-y-8;
+    @apply space-y-6 sm:space-y-8;
   }
 
   .settings-card {
-    @apply bg-white rounded-lg border border-gray-200 p-6 space-y-6;
+    @apply bg-white rounded-lg border border-gray-200 p-4 sm:p-6 space-y-4 sm:space-y-6;
   }
 
   .settings-group {
-    @apply border-t border-gray-200 pt-6 space-y-6;
+    @apply border-t border-gray-200 pt-4 sm:pt-6 space-y-4 sm:space-y-6;
   }
 
   .settings-item {
-    @apply flex items-center justify-between opacity-100;
+    @apply flex items-start sm:items-center justify-between opacity-100;
+    @apply flex-col sm:flex-row gap-3 sm:gap-0;
 
     &.is-disabled {
       @apply opacity-50;
@@ -140,11 +166,11 @@ export default defineComponent({
     }
 
     &__title {
-      @apply text-lg font-medium text-gray-900;
+      @apply text-base sm:text-lg font-medium text-gray-900;
     }
 
     &__subtitle {
-      @apply text-base font-medium text-gray-900;
+      @apply text-sm sm:text-base font-medium text-gray-900;
     }
 
     &__description {
@@ -153,7 +179,7 @@ export default defineComponent({
   }
 
   .info-box {
-    @apply bg-gray-50 rounded-lg p-4;
+    @apply bg-gray-50 rounded-lg p-3 sm:p-4;
 
     &__content {
       @apply text-sm text-gray-600;
