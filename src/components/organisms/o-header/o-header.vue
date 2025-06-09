@@ -149,11 +149,11 @@ export default defineComponent({
     };
 
     const handleJoin = () => {
-      BUS.emit(EVENTS.OPEN_REGISTER_MODAL);
+      BUS.emit(EVENTS.OPEN_REGISTER_MODAL as any);
     };
 
     const handleLogin = () => {
-      BUS.emit(EVENTS.SHOW_LOGIN_MODAL);
+      BUS.emit(EVENTS.SHOW_LOGIN_MODAL as any);
     };
 
     return {
@@ -266,4 +266,4 @@ export default defineComponent({
     @apply h-16;
   }
 }
-</style> 
+</style>

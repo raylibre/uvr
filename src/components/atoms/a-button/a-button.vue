@@ -50,7 +50,7 @@ export default defineComponent({
       validator: (value: string) => ['sm', 'md', 'lg'].includes(value)
     },
     type: {
-      type: String,
+      type: String as () => 'button' | 'submit' | 'reset',
       default: 'button'
     },
     icon: {
@@ -129,4 +129,4 @@ export default defineComponent({
     @apply cursor-not-allowed;
   }
 }
-</style> 
+</style>

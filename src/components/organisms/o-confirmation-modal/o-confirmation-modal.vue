@@ -32,16 +32,16 @@ export default defineComponent({
     const { BUS, EVENTS } = useEventBus();
 
     const handleConfirm = () => {
-      BUS.emit(EVENTS.MODAL_CONFIRM);
+      BUS.emit(EVENTS.MODAL_CONFIRM as any);
     };
 
     const handleReject = () => {
-      BUS.emit(EVENTS.MODAL_REJECT);
+      BUS.emit(EVENTS.MODAL_REJECT as any);
     };
 
     const handleClose = () => {
-      BUS.emit(EVENTS.MODAL_CLOSE);
-      BUS.emit(EVENTS.MODAL_CLOSED);
+      BUS.emit(EVENTS.MODAL_CLOSE as any);
+      BUS.emit(EVENTS.MODAL_CLOSED as any);
     };
 
     return {
@@ -54,4 +54,4 @@ export default defineComponent({
     };
   }
 });
-</script> 
+</script>

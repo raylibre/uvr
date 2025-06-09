@@ -37,7 +37,7 @@
       placeholder="Enter your message"
       required
       :error="errors.message"
-      rows="6"
+      :rows="6"
     />
 
     <div class="form-footer">
@@ -142,7 +142,7 @@ export default defineComponent({
       if (!validateForm()) return;
 
       isSubmitting.value = true;
-      
+
       try {
         await emit('submit', { ...form });
         // Reset form after successful submission
@@ -206,4 +206,4 @@ export default defineComponent({
     }
   }
 }
-</style> 
+</style>

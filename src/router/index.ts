@@ -15,7 +15,7 @@ const router = createRouter({
   ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const { hasAnyPermission } = usePermissions();
   const currentUser = localStorage.getItem('currentUser');
 
@@ -32,4 +32,4 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-export default router; 
+export default router;

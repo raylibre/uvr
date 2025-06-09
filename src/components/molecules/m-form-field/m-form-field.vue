@@ -8,7 +8,7 @@
       {{ label }}
       <span v-if="required" class="label__required">*</span>
     </label>
-    
+
     <div class="field-wrapper">
       <Field
         :id="id"
@@ -16,7 +16,7 @@
         :name="name"
         :type="type"
         :placeholder="placeholder"
-        :rules="rules"
+        :rules="rules as any"
       >
         <component
           :is="fieldComponent"
@@ -99,7 +99,7 @@ export default defineComponent({
 
   setup(props) {
     const fieldComponent = computed(() => props.type === 'textarea' ? 'textarea' : 'input');
-    
+
     // Example of using VueUse for responsive textarea
     const { width } = useElementSize(document.body);
     const dynamicRows = computed(() => width.value < 640 ? Math.max(3, props.rows - 1) : props.rows);
@@ -142,4 +142,4 @@ export default defineComponent({
     @apply mt-1 text-sm text-red-600;
   }
 }
-</style> 
+</style>

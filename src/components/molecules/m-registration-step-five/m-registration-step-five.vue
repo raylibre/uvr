@@ -43,19 +43,19 @@
         <dl class="info-grid">
           <div class="info-item">
             <dt class="info-item__label">Date of Birth</dt>
-            <dd class="info-item__value">{{ formatDate(formData.date_of_birth) }}</dd>
+            <dd class="info-item__value">{{ formatDate(formData.date_of_birth ?? '') }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">Category</dt>
-            <dd class="info-item__value">{{ getCategoryLabel(formData.category) }}</dd>
+            <dd class="info-item__value">{{ getCategoryLabel(formData.category ?? '') }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">Region</dt>
-            <dd class="info-item__value">{{ getRegionLabel(formData.region) }}</dd>
+            <dd class="info-item__value">{{ getRegionLabel(formData.region ?? '') }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">City</dt>
-            <dd class="info-item__value">{{ getCityLabel(formData.region, formData.city) }}</dd>
+            <dd class="info-item__value">{{ getCityLabel(formData.region ?? '', formData.city ?? '') }}</dd>
           </div>
           <div v-if="formData.bio" class="info-item info-item--full">
             <dt class="info-item__label">Bio</dt>
@@ -144,8 +144,8 @@
     </div>
 
     <div class="actions">
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         class="submit-button"
         data-at="registration-submit">
         Submit Registration
@@ -156,7 +156,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import type { UserProfile, UserCategory } from '~/types/user';
+import type { UserProfile } from '~/types/user';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
 
@@ -178,11 +178,15 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const formData = computed({
-      get: () => props.modelValue,
+      get: () => ({
+        ...props.modelValue,
+        terms: (props.modelValue as any).terms ?? false
+      }),
       set: (value) => emit('update:modelValue', value)
     });
 
     const formatDate = (date: string) => {
+      if (!date) return '';
       return new Date(date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -190,7 +194,7 @@ export default defineComponent({
       });
     };
 
-    const getCategoryLabel = (category: UserCategory) => {
+    const getCategoryLabel = (category: string) => {
       return USER_CATEGORIES.find(c => c.value === category)?.label || category;
     };
 
@@ -322,4 +326,4 @@ export default defineComponent({
     @apply px-6 py-2 bg-primary text-white rounded-lg;
   }
 }
-</style> 
+</style>

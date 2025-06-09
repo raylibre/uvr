@@ -36,7 +36,7 @@ export default defineComponent({
     };
 
     const handleLogin = () => {
-      BUS.emit(EVENTS.SHOW_LOGIN_MODAL);
+      BUS.emit(EVENTS.SHOW_LOGIN_MODAL as any);
     };
 
     return {

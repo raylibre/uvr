@@ -26,7 +26,7 @@ export default defineComponent({
 
   props: {
     schema: {
-      type: Object as PropType<ObjectSchema<unknown>>,
+      type: Object as PropType<ObjectSchema<Record<string, any>>>,
       required: true
     },
     submitDelay: {
@@ -56,4 +56,4 @@ export default defineComponent({
     };
   }
 });
-</script> 
+</script>

@@ -18,7 +18,7 @@
           v-model="formData.region"
           :id="'register-region'"
           label="Region"
-          :options="REGIONS"
+          :options="[...REGIONS]"
           :required="true"
           icon="fas fa-map-marker-alt"
           @update:modelValue="handleRegionChange"
@@ -28,7 +28,7 @@
           v-model="formData.city"
           :id="'register-city'"
           label="City"
-          :options="availableCities"
+          :options="[...availableCities]"
           :required="true"
           icon="fas fa-city"
           :disabled="!formData.region"
@@ -39,7 +39,7 @@
         v-model="formData.category"
         :id="'register-category'"
         label="Category"
-        :options="USER_CATEGORIES"
+        :options="[...USER_CATEGORIES]"
         :required="true"
         icon="fas fa-users"
       />
@@ -89,7 +89,7 @@ export default defineComponent({
 
     const availableCities = computed(() => {
       if (!formData.value.region) return [];
-      return CITIES[formData.value.region as keyof typeof CITIES] || [];
+      return [...(CITIES[formData.value.region as keyof typeof CITIES] || [])];
     });
 
     const handleRegionChange = () => {
@@ -127,4 +127,4 @@ export default defineComponent({
     @apply grid grid-cols-2 gap-6;
   }
 }
-</style> 
+</style>

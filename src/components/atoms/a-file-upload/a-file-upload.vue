@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 
 export default defineComponent({
   name: 'AFileUpload',
@@ -320,4 +320,4 @@ export default defineComponent({
     @apply mt-1 text-sm text-red-600;
   }
 }
-</style> 
+</style>

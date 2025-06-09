@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { useEventBus } from './use-event-bus';
 import { useAuthStore } from './use-auth-store';
 import { useRegistrationData } from './use-registration-data';
-import { EVENTS, type EventType } from '~/constants/event-bus-constants';
+import { EVENTS } from '~/constants/event-bus-constants';
 import type { UserProfile } from '~/types/user.d';
 
 export const useRegistrationForm = () => {
@@ -26,12 +26,12 @@ export const useRegistrationForm = () => {
     try {
       isLoading.value = true;
       await register(formData as Required<UserProfile>);
-      BUS.emit(EVENTS.SUCCESS_REGISTER as EventType);
+      BUS.emit(EVENTS.SUCCESS_REGISTER as any);
       resetForm();
       return true;
     } catch (error) {
       if (error instanceof Error) {
-        BUS.emit(EVENTS.FAILED_REGISTER as EventType, { error: error.message });
+        BUS.emit(EVENTS.FAILED_REGISTER as any, { error: error.message });
       }
       return false;
     } finally {
@@ -70,4 +70,4 @@ export const useRegistrationForm = () => {
     previousStep,
     resetForm
   };
-}; 
+};

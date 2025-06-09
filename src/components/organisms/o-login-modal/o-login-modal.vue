@@ -103,7 +103,7 @@ export default defineComponent({
     };
 
     const handleClose = () => {
-      BUS.emit(EVENTS.HIDE_LOGIN_MODAL);
+      BUS.emit(EVENTS.HIDE_LOGIN_MODAL as any);
       isOpen.value = false;
     };
 
@@ -113,7 +113,7 @@ export default defineComponent({
       try {
         isLoading.value = true;
         await login(form);
-        BUS.emit(EVENTS.SUCCESS_LOGIN);
+        BUS.emit(EVENTS.SUCCESS_LOGIN as any);
         handleClose();
       } catch (error) {
         if (error instanceof Error) {
@@ -123,7 +123,7 @@ export default defineComponent({
           } else {
             errors.identifier = 'An error occurred. Please try again.';
           }
-          BUS.emit(EVENTS.FAILED_LOGIN, { error: error.message });
+          BUS.emit(EVENTS.FAILED_LOGIN as any, { error: error.message });
         }
       } finally {
         isLoading.value = false;
@@ -159,4 +159,4 @@ export default defineComponent({
 .login-actions {
   @apply flex justify-end space-x-3;
 }
-</style> 
+</style>
