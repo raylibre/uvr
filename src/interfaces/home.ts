@@ -9,7 +9,8 @@ export interface Representative {
   id: number;
   name: string;
   position: string;
-  image: string;
+  image: string | null;
+  bio?: string;
 }
 
 export interface NewsItem {
