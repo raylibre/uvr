@@ -1,56 +1,63 @@
 <template>
   <div class="m-registration-step-four" data-at="registration-step-four">
-    <h2 class="title">Notification Preferences</h2>
-    <p class="description">Choose how you would like to receive updates and notifications.</p>
+    <h2 class="title">Notifications</h2>
+    <p class="description">Set your notification preferences.</p>
 
     <div class="form">
-      <div class="settings-card">
-        <div class="settings-item">
-          <div class="settings-item__content">
-            <h3 class="settings-item__title">Enable Notifications</h3>
-            <p class="settings-item__description">Receive important updates about your account and our services</p>
-          </div>
+      <div class="notification-section">
+        <div class="notification-item">
           <ASwitchToggle
             :id="'register-notifications-enabled'"
-            v-model="notificationsEnabled.value.value"
-            data-at="notifications-main-toggle"
+            :model-value="notificationsEnabled.value.value as boolean"
             :error="notificationsEnabled.errorMessage.value"
+            @update:model-value="notificationsEnabled.setValue"
+            @blur="notificationsEnabled.validate"
           />
+          <div class="notification-content">
+            <label for="register-notifications-enabled" class="notification-label">
+              Enable Notifications
+            </label>
+            <p class="notification-description">
+              Receive important updates and announcements
+            </p>
+          </div>
         </div>
 
-        <div class="settings-group">
-          <div 
-            class="settings-item"
-            :class="{ 'is-disabled': !notificationsEnabled.value.value }"
-          >
-            <div class="settings-item__content">
-              <h4 class="settings-item__subtitle">Email Notifications</h4>
-              <p class="settings-item__description">Receive updates via email</p>
-            </div>
-            <ASwitchToggle
-              :id="'register-email-notifications'"
-              v-model="emailNotifications.value.value"
-              :disabled="!notificationsEnabled.value.value"
-              data-at="notifications-email-toggle"
-              :error="emailNotifications.errorMessage.value"
-            />
+        <div class="notification-item" :class="{ disabled: !notificationsEnabled.value.value }">
+          <ASwitchToggle
+            :id="'register-email-notifications'"
+            :model-value="emailNotifications.value.value as boolean"
+            :disabled="!notificationsEnabled.value.value"
+            :error="emailNotifications.errorMessage.value"
+            @update:model-value="emailNotifications.setValue"
+            @blur="emailNotifications.validate"
+          />
+          <div class="notification-content">
+            <label for="register-email-notifications" class="notification-label">
+              Email Notifications
+            </label>
+            <p class="notification-description">
+              Receive notifications via email
+            </p>
           </div>
+        </div>
 
-          <div 
-            class="settings-item"
-            :class="{ 'is-disabled': !notificationsEnabled.value.value }"
-          >
-            <div class="settings-item__content">
-              <h4 class="settings-item__subtitle">SMS Notifications</h4>
-              <p class="settings-item__description">Receive updates via SMS</p>
-            </div>
-            <ASwitchToggle
-              :id="'register-sms-notifications'"
-              v-model="smsNotifications.value.value"
-              :disabled="!notificationsEnabled.value.value"
-              data-at="notifications-sms-toggle"
-              :error="smsNotifications.errorMessage.value"
-            />
+        <div class="notification-item" :class="{ disabled: !notificationsEnabled.value.value }">
+          <ASwitchToggle
+            :id="'register-sms-notifications'"
+            :model-value="smsNotifications.value.value as boolean"
+            :disabled="!notificationsEnabled.value.value"
+            :error="smsNotifications.errorMessage.value"
+            @update:model-value="smsNotifications.setValue"
+            @blur="smsNotifications.validate"
+          />
+          <div class="notification-content">
+            <label for="register-sms-notifications" class="notification-label">
+              SMS Notifications
+            </label>
+            <p class="notification-description">
+              Receive notifications via text message
+            </p>
           </div>
         </div>
       </div>
@@ -66,10 +73,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue';
+import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
 import ASwitchToggle from '~/components/atoms/a-switch-toggle';
-import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepFour',
@@ -79,34 +85,20 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
-    const stepForm = getStepForm(4);
-
-    // Create fields using useField with the step form context
+    // Create fields using useField
     const notificationsEnabled = useField('notifications_enabled', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const emailNotifications = useField('email_notifications', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const smsNotifications = useField('sms_notifications', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
-    });
-
-    // Reset sub-toggles when main toggle is disabled
-    watch(() => notificationsEnabled.value.value, (enabled) => {
-      if (!enabled) {
-        emailNotifications.value.value = false;
-        smsNotifications.value.value = false;
-      }
     });
 
     // Expose validation method for external triggering
@@ -145,19 +137,15 @@ export default defineComponent({
     @apply space-y-6 sm:space-y-8;
   }
 
-  .settings-card {
+  .notification-section {
     @apply bg-white rounded-lg border border-gray-200 p-4 sm:p-6 space-y-4 sm:space-y-6;
   }
 
-  .settings-group {
-    @apply border-t border-gray-200 pt-4 sm:pt-6 space-y-4 sm:space-y-6;
-  }
-
-  .settings-item {
+  .notification-item {
     @apply flex items-start sm:items-center justify-between opacity-100;
     @apply flex-col sm:flex-row gap-3 sm:gap-0;
 
-    &.is-disabled {
+    &.disabled {
       @apply opacity-50;
     }
 
@@ -165,12 +153,8 @@ export default defineComponent({
       @apply flex-grow;
     }
 
-    &__title {
+    &__label {
       @apply text-base sm:text-lg font-medium text-gray-900;
-    }
-
-    &__subtitle {
-      @apply text-sm sm:text-base font-medium text-gray-900;
     }
 
     &__description {

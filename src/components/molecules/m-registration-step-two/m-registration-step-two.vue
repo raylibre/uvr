@@ -1,63 +1,68 @@
 <template>
   <div class="m-registration-step-two">
     <h2 class="title">Demographics</h2>
-    <p class="description">Tell us more about yourself to help us better understand your needs.</p>
+    <p class="description">Tell us about yourself.</p>
 
     <div class="form">
       <AFormDatepicker
         :id="'register-date-of-birth'"
-        v-model="dateOfBirth.value.value"
+        :model-value="dateOfBirth.value.value as string"
         label="Date of Birth"
         :required="true"
         icon="fas fa-calendar"
         :error="dateOfBirth.errorMessage.value"
+        @update:model-value="dateOfBirth.setValue"
         @blur="dateOfBirth.validate"
       />
 
       <div class="form-grid">
         <AFormSelect
           :id="'register-region'"
-          v-model="region.value.value"
+          :model-value="region.value.value as string"
           label="Region"
-          :options="[...REGIONS]"
           :required="true"
           icon="fas fa-map-marker-alt"
+          :options="regionOptions"
           :error="region.errorMessage.value"
-          @blur="region.validate"
           @update:model-value="handleRegionChange"
+          @blur="region.validate"
         />
 
         <AFormSelect
           :id="'register-city'"
-          v-model="city.value.value"
+          :model-value="city.value.value as string"
           label="City"
-          :options="[...availableCities]"
           :required="true"
           icon="fas fa-city"
+          :options="cityOptions"
           :disabled="!region.value.value"
           :error="city.errorMessage.value"
+          @update:model-value="city.setValue"
           @blur="city.validate"
         />
       </div>
 
       <AFormSelect
         :id="'register-category'"
-        v-model="category.value.value"
+        :model-value="category.value.value as string"
         label="Category"
-        :options="[...USER_CATEGORIES]"
         :required="true"
-        icon="fas fa-users"
+        icon="fas fa-tags"
+        :options="categoryOptions"
         :error="category.errorMessage.value"
+        @update:model-value="category.setValue"
         @blur="category.validate"
       />
 
       <AFormTextarea
         :id="'register-bio'"
-        v-model="bio.value.value"
+        :model-value="bio.value.value as string"
         label="Bio (Optional)"
-        :placeholder="'Tell us about yourself and your motivation...'"
+        placeholder="Tell us a bit about yourself..."
         :rows="4"
+        icon="fas fa-user-edit"
         :error="bio.errorMessage.value"
+        @update:model-value="bio.setValue"
         @blur="bio.validate"
       />
     </div>
@@ -67,65 +72,63 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useField } from 'vee-validate';
-import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
+import AFormDatepicker from '~/components/atoms/a-form-datepicker';
 import AFormSelect from '~/components/atoms/a-form-select';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
-import AFormDatepicker from '~/components/atoms/a-form-datepicker';
-import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 
 export default defineComponent({
   name: 'MRegistrationStepTwo',
 
   components: {
+    AFormDatepicker,
     AFormSelect,
-    AFormTextarea,
-    AFormDatepicker
+    AFormTextarea
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
-    const stepForm = getStepForm(2);
-
-    // Create fields using useField with the step form context
+    // Create fields using useField
     const dateOfBirth = useField('date_of_birth', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const region = useField('region', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const city = useField('city', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const category = useField('category', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const bio = useField('bio', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
-    // Computed for available cities based on selected region
-    const availableCities = computed(() => {
-      if (!region.value.value) return [];
-      return CITIES[region.value.value as keyof typeof CITIES] || [];
+    // Options for selects
+    const regionOptions = [...REGIONS];
+    const categoryOptions = [...USER_CATEGORIES];
+
+    // Dynamic city options based on selected region
+    const cityOptions = computed(() => {
+      const selectedRegion = region.value.value as string;
+      return selectedRegion ? [...(CITIES[selectedRegion as keyof typeof CITIES] || [])] : [];
     });
 
-    const handleRegionChange = () => {
-      // Clear city when region changes
-      city.value.value = '';
+    // Handle region change - reset city when region changes
+    const handleRegionChange = (newRegion: string) => {
+      region.setValue(newRegion);
+      if (city.value.value && region.value.value !== newRegion) {
+        city.setValue(''); // Reset city when region changes
+      }
     };
 
     // Expose validation method for external triggering
@@ -146,9 +149,9 @@ export default defineComponent({
       city,
       category,
       bio,
-      USER_CATEGORIES,
-      REGIONS,
-      availableCities,
+      regionOptions,
+      cityOptions,
+      categoryOptions,
       handleRegionChange,
       validateAll
     };

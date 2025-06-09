@@ -1,0 +1,69 @@
+
+{
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "full_name": "Олександр Петренко",
+        "member_position": "Директор УВР",
+        "bio": "Ветеран АТО, засновник організації. Має досвід роботи з міжнародними організаціями та 10+ років досвіду в соціальній сфері.",
+        "photo_url": "/images/team/oleksandr-petrenko.jpg",
+        "email": "director@uvr.org.ua",
+        "phone": null,
+        "sort_order": 1
+      },
+      {
+        "id": 2,
+        "full_name": "Марія Коваленко",
+        "member_position": "Координаторка програм",
+        "bio": "Соціальний працівник з 8-річним досвідом. Відповідає за координацію всіх програм підтримки та взаємодію з благодійниками.",
+        "photo_url": "/images/team/maria-kovalenko.jpg",
+        "email": "programs@uvr.org.ua",
+        "phone": null,
+        "sort_order": 2
+      },
+      {
+        "id": 3,
+        "full_name": "Дмитро Іванов",
+        "member_position": "Керівник IT-відділу",
+        "bio": "Розробник з досвідом у військовій сфері. Створює технологічні рішення для автоматизації процесів допомоги.",
+        "photo_url": "/images/team/dmytro-ivanov.jpg",
+        "email": "tech@uvr.org.ua",
+        "phone": null,
+        "sort_order": 3
+      },
+      {
+        "id": 13,
+        "full_name": "Олександра Петренко",
+        "member_position": "Координатор проектів переквалификації",
+        "bio": "Спеціаліст з HR та професійного розвитку. 8 років досвіду в навчанні дорослих.",
+        "photo_url": null,
+        "email": "o.petrenko@uvr.org.ua",
+        "phone": "+380671234567",
+        "sort_order": 4
+      },
+      {
+        "id": 14,
+        "full_name": "Михайло Ковальчук",
+        "member_position": "Керівник відділу екстреної допомоги",
+        "bio": "Координує програми екстреної допомоги сімям. Досвід роботи в гуманітарних організаціях 6 років.",
+        "photo_url": null,
+        "email": "m.kovalchuk@uvr.org.ua",
+        "phone": "+380671234568",
+        "sort_order": 5
+      },
+      {
+        "id": 15,
+        "full_name": "Тетяна Савченко",
+        "member_position": "Психолог-консультант",
+        "bio": "Клінічний психолог, спеціаліст з травм та ПТСР.",
+        "photo_url": null,
+        "email": "t.savchenko@uvr.org.ua",
+        "phone": "+380671234569",
+        "sort_order": 6
+      }
+    ],
+    "meta": {
+      "total": 6
+    }
+  }
