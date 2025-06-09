@@ -169,68 +169,6 @@ export default {
 </script>
 ```
 
-## Mocking APIs in Tests
-
-### Mock Implementation
-- Mock API services in tests using Jest's mock functions
-- Provide mock implementations that return promises
-- Simulate success and error responses
-- Test loading, success, and error states
-
-```javascript
-// Mock API service
-jest.mock('~/services/api/invoice-api-service', () => ({
-  getInvoiceData: jest.fn(() => Promise.resolve(mockedResponse))
-}));
-
-// Test success case
-it('should load invoice data successfully', async () => {
-  const sut = wrapper(requiredProps);
-  
-  await sut.vm.loadInvoiceData();
-  await nextTickCount(2);
-  
-  expect(sut.vm.invoiceData).toEqual(mockedResponse);
-});
-
-// Test error case
-it('should handle error when loading invoice data', async () => {
-  // Override mock to simulate error
-  getInvoiceData.mockImplementationOnce(() => Promise.reject(new Error('API Error')));
-  
-  const sut = wrapper(requiredProps);
-  
-  await sut.vm.loadInvoiceData();
-  await nextTickCount(2);
-  
-  expect(notifyError).toHaveBeenCalled();
-});
-```
-
-### Testing AsyncSource
-- Test AsyncSource loading states
-- Verify that API methods are called with correct parameters
-- Test success and error callbacks
-- Verify that component state is updated correctly
-
-```javascript
-it('should show loading state during API call', async () => {
-  const sut = wrapper(requiredProps);
-  
-  
-  // Verify loading state is true
-  expect(sut.vm.isLoading).toBe(true);
-  
-  // Complete API call
-  await sut.vm.loadInvoiceData();
-  // Add next tick count if function not awaiting api request
-  await nextTickCount(2);
-  
-  // Verify loading state is false
-  expect(sut.vm.isLoading).toBe(false);
-});
-```
-
 ## Response Handling Patterns
 
 ### Data Transformation

@@ -17,8 +17,6 @@ Each component should be organized as follows:
 
 ```
 component-name/
-├── __tests__/
-│   └── component-name.test.js
 ├── index.js
 ├── component-name.vue
 └── component-name.scss
@@ -27,14 +25,12 @@ component-name/
 - `index.js`: Export file for the component
 - `component-name.vue`: Main Vue component file
 - `component-name.scss`: Component-specific styles
-- `__tests__/`: Directory containing test files
 
 ## Naming Conventions
 
 ### Files and Directories
 - Use kebab-case for file and directory names
 - Component files should match their component name (e.g., `a-button.vue`)
-- Test files should have the `.test.js` suffix
 
 ### Components
 - Use PascalCase for component names in JavaScript/TypeScript
@@ -50,10 +46,6 @@ component-name/
 - Use kebab-case for CSS class names
 - Component root elements should have a class matching the component name
 - Use BEM-like naming for nested elements
-
-### Data Attributes
-- Use `at-` prefix for data attributes used in testing
-- Component root elements should have a data attribute matching the component name
 
 ## Vue Component Guidelines
 

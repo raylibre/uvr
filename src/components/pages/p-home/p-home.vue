@@ -1,108 +1,81 @@
 <template>
   <div class="p-home">
-    <OHeroSection
-      @services-click="scrollToProjects"
-      @contact-click="scrollToContact"
+    <OHeroSection />
+    
+    <OProgramsSection
+      :programs="programs"
+      @program-click="handleProgramClick"
     />
 
-    <OProjectsSection
-      :projects="featuredProjects"
-      @view-details="viewProject"
+    <ORepresentativesSection
+      :representatives="representatives"
+      @representative-click="handleRepresentativeClick"
     />
 
-    <OContactSection @submit="handleContactSubmit" />
+    <ONewsSection
+      :news-items="newsItems"
+      @news-click="handleNewsClick"
+    />
+
+    <OFooter />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useTitle } from '@vueuse/core';
-import { useI18n } from 'vue-i18n';
-import type { Project } from '~/interfaces/project.interface';
-import OHeroSection from '~/components/organisms/o-hero-section/o-hero-section.vue';
-import OProjectsSection from '~/components/organisms/o-projects-section/o-projects-section.vue';
-import OContactSection from '~/components/organisms/o-contact-section/o-contact-section.vue';
+import { defineComponent, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useHomeStore } from '~/composables/use-home-store';
+import OHeroSection from '~/components/organisms/o-hero-section';
+import OProgramsSection from '~/components/organisms/o-programs-section';
+import ORepresentativesSection from '~/components/organisms/o-representatives-section';
+import ONewsSection from '~/components/organisms/o-news-section';
+import OFooter from '~/components/organisms/o-footer';
 
 export default defineComponent({
   name: 'PHome',
 
   components: {
     OHeroSection,
-    OProjectsSection,
-    OContactSection
+    OProgramsSection,
+    ORepresentativesSection,
+    ONewsSection,
+    OFooter
   },
 
   setup() {
-    const { t } = useI18n();
-    useTitle(t('common.navigation.home') + ' | Mason Construction');
+    const router = useRouter();
+    const { programs, representatives, newsItems, isLoading, error, fetchData } = useHomeStore();
 
-    const featuredProjects: Project[] = [
-      {
-        id: 1,
-        image: '',
-        title: 'Modern Office Housing Project',
-        description: 'A state-of-the-art office complex featuring eco-friendly design and smart building technology.',
-        category: 'Commercial',
-        client: 'TechCorp Inc.',
-        duration: '18 months',
-        status: 'Completed'
-      },
-      {
-        id: 2,
-        image: '',
-        title: 'Downtown Office Tower Build',
-        description: 'A 25-story office tower in the heart of downtown, featuring premium amenities and sustainable design.',
-        category: 'Commercial',
-        client: 'Urban Developers',
-        duration: '24 months',
-        status: 'Completed'
-      },
-      {
-        id: 3,
-        image: '',
-        title: 'Coastal Bridge Expansion',
-        description: 'Major infrastructure project expanding the coastal bridge to accommodate increased traffic flow.',
-        category: 'Infrastructure',
-        client: 'City Council',
-        duration: '36 months',
-        status: 'In Progress'
-      }
-    ];
+    onMounted(fetchData);
 
-    function scrollToSection(id: string) {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    const handleProgramClick = (id: number) => {
+      router.push(`/programs/${id}`);
+    };
 
-    function scrollToProjects() {
-      scrollToSection('projects');
-    }
+    const handleRepresentativeClick = (id: number) => {
+      router.push(`/representatives/${id}`);
+    };
 
-    function scrollToContact() {
-      scrollToSection('contact');
-    }
-
-    function viewProject(id: number) {
-      console.log('Viewing project:', id);
-      // Will be implemented when we add project details page
-    }
-
-    function handleContactSubmit(formData: any) {
-      console.log('Form submitted:', formData);
-      // Will be implemented when we add API integration
-    }
+    const handleNewsClick = (id: number) => {
+      router.push(`/news/${id}`);
+    };
 
     return {
-      featuredProjects,
-      scrollToProjects,
-      scrollToContact,
-      viewProject,
-      handleContactSubmit
+      programs,
+      representatives,
+      newsItems,
+      isLoading,
+      error,
+      handleProgramClick,
+      handleRepresentativeClick,
+      handleNewsClick
     };
   }
 });
 </script>
 
-<style src="./p-home.scss" lang="scss" scoped></style> 
+<style lang="scss" scoped>
+.p-home {
+  @apply min-h-screen;
+}
+</style> 

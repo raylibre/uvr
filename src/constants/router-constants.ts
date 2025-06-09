@@ -1,0 +1,74 @@
+import { type RouteRecordRaw } from 'vue-router';
+import { Permission } from '~/constants/permission-constants';
+
+export const ROUTE_NAMES = {
+  HOME: 'HOME',
+  LEADERSHIP: 'LEADERSHIP',
+  LEGAL_HELP: 'LEGAL_HELP',
+  PROSTHETICS: 'PROSTHETICS',
+  FAMILY: 'FAMILY',
+  ACTIVITIES: 'ACTIVITIES',
+  ABOUT: 'ABOUT',
+  NOT_FOUND: 'NOT_FOUND'
+} as const;
+
+// Export the type for use in other files
+export type ROUTE_NAMES = typeof ROUTE_NAMES;
+
+export const ROUTES: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: ROUTE_NAMES.HOME,
+    component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/leadership',
+    name: ROUTE_NAMES.LEADERSHIP,
+    component: () => import('~/components/pages/p-leadership'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_ACTIVE_PROJECTS]
+    }
+  },
+  {
+    path: '/legal-help',
+    name: ROUTE_NAMES.LEGAL_HELP,
+    component: () => import('~/components/pages/p-legal-help'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_ACTIVE_PROJECTS]
+    }
+  },
+  {
+    path: '/prosthetics',
+    name: ROUTE_NAMES.PROSTHETICS,
+    component: () => import('~/components/pages/p-prosthetics'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_ACTIVE_PROJECTS]
+    }
+  },
+  {
+    path: '/family',
+    name: ROUTE_NAMES.FAMILY,
+    component: () => import('~/components/pages/p-family'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_ACTIVE_PROJECTS]
+    }
+  },
+  {
+    path: '/activities',
+    name: ROUTE_NAMES.ACTIVITIES,
+    component: () => import('~/components/pages/p-activities'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_ACTIVE_PROJECTS]
+    }
+  },
+  {
+    path: '/about',
+    name: ROUTE_NAMES.ABOUT,
+    component: () => import('~/components/pages/p-about')
+  }
+]; 

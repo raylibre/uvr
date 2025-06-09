@@ -7,13 +7,13 @@ export interface FormFieldProps {
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
-  rules?: string | object | Function;
+  rules?: ValidationRule;
   rows?: number;
   id: string;
 }
 
 export interface FormProps {
-  schema: ObjectSchema<any>;
+  schema: ObjectSchema<Record<string, unknown>>;
   submitDelay?: number;
 }
 
@@ -23,4 +23,17 @@ export interface ContactFormData {
   subject: string;
   message: string;
   subscribe: boolean;
+}
+
+export interface ValidationRule {
+  required?: boolean;
+  min?: number;
+  max?: number;
+  email?: boolean;
+  pattern?: RegExp;
+  validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
+}
+
+export interface FormErrors {
+  [key: string]: string;
 } 

@@ -1,0 +1,1 @@
+export { default } from './o-confirmation-modal.vue'; 

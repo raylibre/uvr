@@ -23,6 +23,18 @@ export default {
           700: '#4E4E4E',
           800: '#2B2B2B',
           900: '#1A1A1A'
+        },
+        red: {
+          500: '#EF4444'
+        },
+        green: {
+          500: '#10B981'
+        },
+        yellow: {
+          500: '#F59E0B'
+        },
+        blue: {
+          500: '#3B82F6'
         }
       },
       fontFamily: {
@@ -62,6 +74,44 @@ export default {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio')
+    require('@tailwindcss/aspect-ratio'),
+    function({ addBase, theme }) {
+      function extractRGB(hex) {
+        hex = hex.replace('#', '');
+        return {
+          r: parseInt(hex.slice(0, 2), 16),
+          g: parseInt(hex.slice(2, 4), 16),
+          b: parseInt(hex.slice(4, 6), 16)
+        };
+      }
+
+      const colors = theme('colors');
+      const colorVariables = {};
+
+      // Process colors and their variants
+      Object.entries(colors).forEach(([key, value]) => {
+        if (typeof value === 'object') {
+          Object.entries(value).forEach(([variant, color]) => {
+            if (variant === 'DEFAULT') {
+              colorVariables[`--color-${key}`] = color;
+              const rgb = extractRGB(color);
+              colorVariables[`--color-${key}-rgb`] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+            } else {
+              colorVariables[`--color-${key}-${variant}`] = color;
+              const rgb = extractRGB(color);
+              colorVariables[`--color-${key}-${variant}-rgb`] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+            }
+          });
+        } else {
+          colorVariables[`--color-${key}`] = value;
+          const rgb = extractRGB(value);
+          colorVariables[`--color-${key}-rgb`] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+        }
+      });
+
+      addBase({
+        ':root': colorVariables
+      });
+    }
   ]
 }; 

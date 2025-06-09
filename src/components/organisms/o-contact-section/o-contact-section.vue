@@ -1,12 +1,12 @@
 <template>
-  <section id="contact" class="bg-gray-50 py-20">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-12">
-          <h2 class="text-h2 font-heading font-bold text-gray-900 mb-4">
+  <section id="contact" class="o-contact-section">
+    <div class="container">
+      <div class="content">
+        <div class="header">
+          <h2 class="title">
             {{ t('home.contact.title') }}
           </h2>
-          <p class="text-xl text-gray-600">
+          <p class="description">
             {{ t('home.contact.description') }}
           </p>
         </div>
@@ -45,4 +45,30 @@ export default defineComponent({
     };
   }
 });
-</script> 
+</script>
+
+<style lang="scss" scoped>
+.o-contact-section {
+  @apply bg-gray-50 py-20;
+
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .content {
+    @apply max-w-3xl mx-auto;
+  }
+
+  .header {
+    @apply text-center mb-12;
+  }
+
+  .title {
+    @apply text-h2 font-heading font-bold text-gray-900 mb-4;
+  }
+
+  .description {
+    @apply text-xl text-gray-600;
+  }
+}
+</style> 

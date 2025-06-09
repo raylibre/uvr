@@ -1,0 +1,11 @@
+// Import variables
+@import './variables';
+
+// Re-export variables
+:export {
+  colorPrimary: $color-primary;
+  colorPrimaryDark: $color-primary-dark;
+  colorPrimaryLight: $color-primary-light;
+  colorSecondary: $color-secondary;
+  // Add more exports as needed
+} 

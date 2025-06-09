@@ -1,0 +1,9 @@
+// Function to convert hex to rgb
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+// Function to create rgba from a color variable
+@function rgba-from-var($color-var, $opacity) {
+  @return rgba(var($color-var), $opacity);
+} 

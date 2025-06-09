@@ -1,0 +1,54 @@
+@use "sass:map";
+
+// Z-index function
+@function z($key) {
+  @return map.get($z-index, $key);
+}
+
+// Color function
+@function color($key, $shade: null) {
+  @if $shade {
+    @return map.get(map.get($colors, $key), $shade);
+  }
+  @return map.get($colors, $key);
+}
+
+// Font family function
+@function font($key) {
+  @return map.get($font-family, $key);
+}
+
+// Font size function
+@function size($key) {
+  @return map.get($font-size, $key);
+}
+
+// Spacing function
+@function spacing($key) {
+  @return map.get($spacing, $key);
+}
+
+// Breakpoint function
+@function breakpoint($key) {
+  @return map.get($breakpoints, $key);
+}
+
+// Border radius function
+@function radius($key) {
+  @return map.get($border-radius, $key);
+}
+
+// Transition duration function
+@function duration($key) {
+  @return map.get(map.get($transition, 'duration'), $key);
+}
+
+// Transition timing function
+@function timing($key) {
+  @return map.get(map.get($transition, 'timing'), $key);
+}
+
+// Box shadow function
+@function shadow($key) {
+  @return map.get($box-shadow, $key);
+} 

@@ -7,10 +7,6 @@ This is a Vue.js frontend application built with modern tooling and practices. T
 
 ### Root Structure
 - `src/`: Main source code
-- `jest-utils/`: Testing utilities
-- `dev-utils/`: Development utilities
-- `.husky/`: Git hooks configuration
-- `coverage/`: Test coverage reports
 
 ### Source Code Organization
 The source code is organized into the following directories:
@@ -33,7 +29,6 @@ The source code is organized into the following directories:
 For detailed guidelines on specific aspects of the project, please refer to the following documents:
 
 - [Components](./components.md) - Guidelines for component structure, naming, and organization
-- [Testing](./testing.md) - Guidelines for writing and organizing tests (ALWAYS look here when creating tests)
 - [Code Style](./code-style.md) - Guidelines for code formatting and style conventions
 - [API Integration](./api.md) - Guidelines for integrating with APIs
 
