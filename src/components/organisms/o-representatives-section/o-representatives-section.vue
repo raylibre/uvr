@@ -72,11 +72,14 @@ export default defineComponent({
             
             const cacheKey = generateImageCacheKey(mockTeamMember);
             
-            navigator.serviceWorker.controller.postMessage({
-              type: 'CACHE_TEAM_IMAGE',
-              url: representative.image,
-              cacheKey: cacheKey
-            });
+            // Add null check for TypeScript
+            if (navigator.serviceWorker.controller) {
+              navigator.serviceWorker.controller.postMessage({
+                type: 'CACHE_TEAM_IMAGE',
+                url: representative.image,
+                cacheKey: cacheKey
+              });
+            }
           }
         });
       }

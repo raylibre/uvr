@@ -1,42 +1,49 @@
 <template>
   <div class="m-registration-step-three" data-at="registration-step-three">
-    <h2 class="title">Emergency Contact Information</h2>
+    <h2 class="title">Contact Information</h2>
     <p class="description">Please provide your address and emergency contact details.</p>
 
     <div class="form">
       <AFormTextarea
         :id="'register-address'"
-        v-model="address.value.value"
-        label="Full Address"
-        :placeholder="'Enter your complete address...'"
+        :model-value="address.value.value as string"
+        label="Address"
+        placeholder="Please provide your full address"
         :required="true"
         :rows="3"
-        icon="fas fa-home"
+        icon="fas fa-map-marker-alt"
         :error="address.errorMessage.value"
-        @update:modelValue="address.validate"
+        @update:model-value="address.setValue"
         @blur="address.validate"
       />
 
-      <div class="form-grid">
+      <div class="section">
+        <h3 class="section-title">
+          <i class="section-icon fas fa-phone"></i>
+          Emergency Contact
+        </h3>
+        
         <AFormInput
           :id="'register-emergency-contact-name'"
-          v-model="emergencyContactName.value.value"
-          label="Emergency Contact Name"
+          :model-value="emergencyContactName.value.value as string"
+          label="Contact Name"
           type="text"
           :required="true"
-          icon="fas fa-user-shield"
+          icon="fas fa-user"
           :error="emergencyContactName.errorMessage.value"
+          @update:model-value="emergencyContactName.setValue"
           @blur="emergencyContactName.validate"
         />
 
         <AFormInput
           :id="'register-emergency-contact-phone'"
-          v-model="emergencyContactPhone.value.value"
-          label="Emergency Contact Phone"
+          :model-value="emergencyContactPhone.value.value as string"
+          label="Contact Phone"
           type="tel"
           :required="true"
-          icon="fas fa-phone-alt"
+          icon="fas fa-phone"
           :error="emergencyContactPhone.errorMessage.value"
+          @update:model-value="emergencyContactPhone.setValue"
           @blur="emergencyContactPhone.validate"
         />
       </div>
@@ -49,7 +56,6 @@ import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
-import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepThree',
@@ -60,26 +66,21 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
-    const stepForm = getStepForm(3);
-
-    // Create fields using useField with the step form context
+    // Create fields using useField
     const address = useField('address', undefined, {
-      form: stepForm,
-      validateOnValueUpdate: false
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
 
     const emergencyContactName = useField('emergency_contact_name', undefined, {
-      form: stepForm,
-      validateOnValueUpdate: false
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
 
     const emergencyContactPhone = useField('emergency_contact_phone', undefined, {
-      form: stepForm,
-      validateOnValueUpdate: false
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
-
-    // Form data persists in global state - no need for prop initialization or emitting
 
     // Expose validation method for external triggering
     const validateAll = async () => {

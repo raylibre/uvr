@@ -1,23 +1,23 @@
 <template>
   <div class="m-registration-step-five" data-at="registration-step-five">
-    <h2 class="title">Review Your Information</h2>
-    <p class="description">Please review your registration details before submitting.</p>
+    <h2 class="title">Review & Confirm</h2>
+    <p class="description">Please review your information and confirm to complete your registration.</p>
 
     <div class="sections">
       <!-- Personal Information -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-user"/>
+          <i class="section__icon fas fa-user"></i>
           Personal Information
         </h3>
-        <dl class="info-grid">
+        <div class="info-grid">
           <div class="info-item">
-            <dt class="info-item__label">First Name</dt>
-            <dd class="info-item__value">{{ formData.first_name }}</dd>
+            <dt class="info-item__label">Name</dt>
+            <dd class="info-item__value">{{ formData.first_name }} {{ formData.last_name }}</dd>
           </div>
-          <div class="info-item">
-            <dt class="info-item__label">Last Name</dt>
-            <dd class="info-item__value">{{ formData.last_name }}</dd>
+          <div v-if="formData.patronymic" class="info-item">
+            <dt class="info-item__label">Patronymic</dt>
+            <dd class="info-item__value">{{ formData.patronymic }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">Email</dt>
@@ -27,97 +27,82 @@
             <dt class="info-item__label">Phone</dt>
             <dd class="info-item__value">{{ formData.phone }}</dd>
           </div>
-          <div v-if="formData.patronymic" class="info-item">
-            <dt class="info-item__label">Patronymic</dt>
-            <dd class="info-item__value">{{ formData.patronymic }}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <!-- Demographics -->
-      <div class="section">
-        <h3 class="section__title">
-          <i class="section__icon fas fa-info-circle"/>
-          Demographics
-        </h3>
-        <dl class="info-grid">
           <div class="info-item">
             <dt class="info-item__label">Date of Birth</dt>
-            <dd class="info-item__value">{{ formatDate(formData.date_of_birth ?? '') }}</dd>
-          </div>
-          <div class="info-item">
-            <dt class="info-item__label">Category</dt>
-            <dd class="info-item__value">{{ getCategoryLabel(formData.category ?? '') }}</dd>
+            <dd class="info-item__value">{{ formatDate(formData.date_of_birth || '') }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">Region</dt>
-            <dd class="info-item__value">{{ getRegionLabel(formData.region ?? '') }}</dd>
+            <dd class="info-item__value">{{ getRegionLabel(formData.region || '') }}</dd>
           </div>
           <div class="info-item">
             <dt class="info-item__label">City</dt>
-            <dd class="info-item__value">{{ getCityLabel(formData.region ?? '', formData.city ?? '') }}</dd>
+            <dd class="info-item__value">{{ getCityLabel(formData.region || '', formData.city || '') }}</dd>
+          </div>
+          <div class="info-item">
+            <dt class="info-item__label">Category</dt>
+            <dd class="info-item__value">{{ getCategoryLabel(formData.category || '') }}</dd>
           </div>
           <div v-if="formData.bio" class="info-item info-item--full">
             <dt class="info-item__label">Bio</dt>
             <dd class="info-item__value">{{ formData.bio }}</dd>
           </div>
-        </dl>
+        </div>
       </div>
 
-      <!-- Emergency Contact -->
+      <!-- Contact Information -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-phone-alt"/>
-          Emergency Contact
+          <i class="section__icon fas fa-map-marker-alt"></i>
+          Contact Information
         </h3>
-        <dl class="info-grid">
+        <div class="info-grid">
           <div class="info-item info-item--full">
             <dt class="info-item__label">Address</dt>
             <dd class="info-item__value">{{ formData.address }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Contact Name</dt>
+            <dt class="info-item__label">Emergency Contact</dt>
             <dd class="info-item__value">{{ formData.emergency_contact_name }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Contact Phone</dt>
+            <dt class="info-item__label">Emergency Phone</dt>
             <dd class="info-item__value">{{ formData.emergency_contact_phone }}</dd>
           </div>
-        </dl>
+        </div>
       </div>
 
       <!-- Notification Preferences -->
       <div class="section">
         <h3 class="section__title">
-          <i class="section__icon fas fa-bell"/>
+          <i class="section__icon fas fa-bell"></i>
           Notification Preferences
         </h3>
         <dl class="notification-list">
           <div class="notification-item">
             <dt class="notification-item__label">Notifications Enabled</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
-                formData.notifications_enabled ? 'fas fa-check' : 'fas fa-times'
+              <i :class="[
+                'icon',
+                formData.notifications_enabled ? 'icon--check fas fa-check' : 'icon--times fas fa-times'
               ]"/>
             </dd>
           </div>
           <div class="notification-item">
             <dt class="notification-item__label">Email Notifications</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
-                'fas',
-                formData.email_notifications ? 'fa-check' : 'fa-times'
+              <i :class="[
+                'icon',
+                formData.email_notifications ? 'icon--check fas fa-check' : 'icon--times fas fa-times'
               ]"/>
             </dd>
           </div>
           <div class="notification-item">
             <dt class="notification-item__label">SMS Notifications</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
-                formData.sms_notifications ? 'fas fa-check' : 'fas fa-times'
+              <i :class="[
+                'icon',
+                formData.sms_notifications ? 'icon--check fas fa-check' : 'icon--times fas fa-times'
               ]"/>
             </dd>
           </div>
@@ -130,9 +115,10 @@
           <div class="terms__checkbox">
             <ACheckbox
               :id="'register-terms'"
-              v-model="terms.value.value"
+              :model-value="terms.value.value as boolean"
               data-at="registration-terms-checkbox"
               :error="terms.errorMessage.value"
+              @update:model-value="terms.setValue"
               @blur="terms.validate"
             />
           </div>
@@ -153,10 +139,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
-import type { UserCategory } from '~/types/user';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
-import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useRegistrationData } from '~/composables/use-registration-data';
 
 export default defineComponent({
@@ -167,13 +151,10 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
     const { formData } = useRegistrationData();
-    const stepForm = getStepForm(5);
 
-    // Create terms field using useField with the step form context
+    // Create terms field using useField
     const terms = useField('terms', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });

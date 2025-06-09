@@ -14,79 +14,86 @@
       <div class="form-grid">
         <AFormInput
           :id="'register-first-name'"
-          v-model="firstName.value.value"
+          :model-value="firstName.value.value as string"
           label="First Name"
           type="text"
           :required="true"
           icon="fas fa-user"
           :error="firstName.errorMessage.value"
+          @update:model-value="firstName.setValue"
           @blur="firstName.validate"
         />
 
         <AFormInput
           :id="'register-last-name'"
-          v-model="lastName.value.value"
+          :model-value="lastName.value.value as string"
           label="Last Name"
           type="text"
           :required="true"
           icon="fas fa-user"
           :error="lastName.errorMessage.value"
+          @update:model-value="lastName.setValue"
           @blur="lastName.validate"
         />
       </div>
 
       <AFormInput
         :id="'register-patronymic'"
-        v-model="patronymic.value.value"
+        :model-value="patronymic.value.value as string"
         label="Patronymic (Optional)"
         type="text"
         icon="fas fa-user"
         :error="patronymic.errorMessage.value"
+        @update:model-value="patronymic.setValue"
         @blur="patronymic.validate"
       />
 
       <AFormInput
         :id="'register-email'"
-        v-model="email.value.value"
+        :model-value="email.value.value as string"
         label="Email Address"
         type="email"
         :required="true"
         icon="fas fa-envelope"
         :error="email.errorMessage.value"
+        @update:model-value="email.setValue"
         @blur="email.validate"
       />
 
       <AFormInput
         :id="'register-phone'"
-        v-model="phone.value.value"
+        :model-value="phone.value.value as string"
         label="Phone Number"
         type="tel"
         :required="true"
         icon="fas fa-phone"
         :error="phone.errorMessage.value"
+        @update:model-value="phone.setValue"
         @blur="phone.validate"
       />
 
       <div class="form-grid">
         <AFormInput
           :id="'register-password'"
-          v-model="password.value.value"
+          :model-value="password.value.value as string"
           label="Password"
           type="password"
           :required="true"
           icon="fas fa-lock"
           :error="password.errorMessage.value"
+          @update:model-value="password.setValue"
           @blur="password.validate"
         />
 
         <AFormInput
           :id="'register-password-confirmation'"
-          v-model="passwordConfirmation.value.value"
+          :model-value="passwordConfirmation.value.value as string"
           label="Confirm Password"
           type="password"
           :required="true"
           icon="fas fa-lock"
           :error="passwordConfirmation.errorMessage.value"
+          @update:model-value="passwordConfirmation.setValue"
           @blur="passwordConfirmation.validate"
         />
       </div>
@@ -98,7 +105,6 @@
 import { defineComponent, computed, ref } from 'vue';
 import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
-import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepOne',
@@ -108,49 +114,40 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
-    const stepForm = getStepForm(1);
     const showDebug = ref(false);
 
-    // Create fields using useField with the step form context
+    // Create fields using useField
     const firstName = useField('first_name', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const lastName = useField('last_name', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const patronymic = useField('patronymic', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const email = useField('email', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const phone = useField('phone', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const password = useField('password', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const passwordConfirmation = useField('password_confirmation', undefined, {
-      form: stepForm,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
@@ -208,8 +205,8 @@ export default defineComponent({
       password,
       passwordConfirmation,
       validateAll,
-      showDebug,
-      debugInfo
+      debugInfo,
+      showDebug
     };
   }
 });
