@@ -2,6 +2,7 @@ import type { LoginResponse, LoginCredentials } from '~/interfaces/auth';
 import { AxiosResponse } from 'axios';
 import apiClient from './api-client';
 import type { RegistrationPayload, ApiResponse } from '~/types/auth';
+import { FUNCTIONS_V1_AUTH_REGISTRATION } from '~/constants/url-constants.ts';
 
 // This is a mock implementation. Replace with actual API calls.
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
@@ -24,8 +25,15 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
   throw new Error('Invalid credentials');
 }
 
-// Mock implementation for registration
 export async function register(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
+  return await apiClient.post(
+    FUNCTIONS_V1_AUTH_REGISTRATION,
+    credentials
+  );
+}
+
+// Mock implementation for registration
+export async function registerMock(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
 
