@@ -1,9 +1,9 @@
 <template>
   <OModal v-model="isOpen" title="Login">
-    <form @submit.prevent="handleSubmit" class="login-form">
+    <form class="login-form" @submit.prevent="handleSubmit">
       <AFormInput
-        v-model="form.identifier"
         :id="'login-identifier'"
+        v-model="form.identifier"
         :label="'Email or Phone Number'"
         :type="'text'"
         :required="true"
@@ -12,8 +12,8 @@
       />
 
       <AFormInput
-        v-model="form.password"
         :id="'login-password'"
+        v-model="form.password"
         :label="'Password'"
         :type="'password'"
         :required="true"

@@ -3,8 +3,8 @@
     <div class="checkbox__container">
       <div class="checkbox__input-wrapper">
         <input
-          type="checkbox"
           :id="id"
+          type="checkbox"
           :name="name"
           :checked="modelValue"
           :required="required"
@@ -15,9 +15,9 @@
             error ? 'checkbox__input--error' : '',
             disabled ? 'checkbox__input--disabled' : 'checkbox__input--interactive'
           ]"
+          v-bind="$attrs"
           @change="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
           @blur="$emit('blur', $event)"
-          v-bind="$attrs"
         />
       </div>
       <div class="checkbox__content">
@@ -30,7 +30,7 @@
           {{ label }}
           <span v-if="required" class="checkbox__required">*</span>
         </label>
-        <slot></slot>
+        <slot/>
         <p
           v-if="description"
           :id="`${id}-description`"
@@ -55,6 +55,8 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ACheckbox',
+
+  inheritAttrs: false,
 
   props: {
     modelValue: {
@@ -91,9 +93,7 @@ export default defineComponent({
     }
   },
 
-  emits: ['update:modelValue', 'blur'],
-
-  inheritAttrs: false
+  emits: ['update:modelValue', 'blur']
 });
 </script>
 

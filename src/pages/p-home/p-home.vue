@@ -95,12 +95,13 @@
         <div class="footer-section">
           <h3>{{ t(T_KEYS.FOOTER.SOCIAL.TITLE) }}</h3>
           <div class="social-links">
-            <a v-for="social in socialLinks" 
+            <a
+v-for="social in socialLinks" 
                :key="social.id" 
                :href="social.url" 
                target="_blank" 
                rel="noopener noreferrer">
-              <i :class="social.icon"></i>
+              <i :class="social.icon"/>
             </a>
           </div>
         </div>

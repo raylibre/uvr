@@ -3,105 +3,154 @@
     <h2 class="title">Demographics</h2>
     <p class="description">Tell us more about yourself to help us better understand your needs.</p>
 
-    <form @submit.prevent class="form">
-      <AFormInput
-        v-model="formData.date_of_birth"
+    <div class="form">
+      <AFormDatepicker
         :id="'register-date-of-birth'"
+        v-model="dateOfBirth.value.value"
         label="Date of Birth"
-        type="date"
         :required="true"
         icon="fas fa-calendar"
+        :error="dateOfBirth.errorMessage.value"
+        @blur="dateOfBirth.validate"
       />
 
       <div class="form-grid">
         <AFormSelect
-          v-model="formData.region"
           :id="'register-region'"
+          v-model="region.value.value"
           label="Region"
           :options="[...REGIONS]"
           :required="true"
           icon="fas fa-map-marker-alt"
-          @update:modelValue="handleRegionChange"
+          :error="region.errorMessage.value"
+          @blur="region.validate"
+          @update:model-value="handleRegionChange"
         />
 
         <AFormSelect
-          v-model="formData.city"
           :id="'register-city'"
+          v-model="city.value.value"
           label="City"
           :options="[...availableCities]"
           :required="true"
           icon="fas fa-city"
-          :disabled="!formData.region"
+          :disabled="!region.value.value"
+          :error="city.errorMessage.value"
+          @blur="city.validate"
         />
       </div>
 
       <AFormSelect
-        v-model="formData.category"
         :id="'register-category'"
+        v-model="category.value.value"
         label="Category"
         :options="[...USER_CATEGORIES]"
         :required="true"
         icon="fas fa-users"
+        :error="category.errorMessage.value"
+        @blur="category.validate"
       />
 
       <AFormTextarea
-        v-model="formData.bio"
         :id="'register-bio'"
+        v-model="bio.value.value"
         label="Bio (Optional)"
         :placeholder="'Tell us about yourself and your motivation...'"
         :rows="4"
+        :error="bio.errorMessage.value"
+        @blur="bio.validate"
       />
-    </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import type { UserProfile } from '~/types/user';
+import { useField } from 'vee-validate';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
-import AFormInput from '~/components/atoms/a-form-input';
 import AFormSelect from '~/components/atoms/a-form-select';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
+import AFormDatepicker from '~/components/atoms/a-form-datepicker';
+import { useRegistrationValidation } from '~/composables/use-registration-validation';
 
 export default defineComponent({
   name: 'MRegistrationStepTwo',
 
   components: {
-    AFormInput,
     AFormSelect,
-    AFormTextarea
+    AFormTextarea,
+    AFormDatepicker
   },
 
-  props: {
-    modelValue: {
-      type: Object as () => Partial<UserProfile>,
-      required: true
-    }
-  },
+  setup() {
+    const { getStepForm } = useRegistrationValidation();
+    const stepForm = getStepForm(2);
 
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const formData = computed({
-      get: () => props.modelValue,
-      set: (value) => emit('update:modelValue', value)
+    // Create fields using useField with the step form context
+    const dateOfBirth = useField('date_of_birth', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
     });
 
+    const region = useField('region', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const city = useField('city', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const category = useField('category', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const bio = useField('bio', undefined, {
+      form: stepForm,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    // Computed for available cities based on selected region
     const availableCities = computed(() => {
-      if (!formData.value.region) return [];
-      return [...(CITIES[formData.value.region as keyof typeof CITIES] || [])];
+      if (!region.value.value) return [];
+      return CITIES[region.value.value as keyof typeof CITIES] || [];
     });
 
     const handleRegionChange = () => {
-      formData.value.city = '';
+      // Clear city when region changes
+      city.value.value = '';
+    };
+
+    // Expose validation method for external triggering
+    const validateAll = async () => {
+      const results = await Promise.all([
+        dateOfBirth.validate(),
+        region.validate(),
+        city.validate(),
+        category.validate(),
+        bio.validate()
+      ]);
+      return results.every(result => result.valid);
     };
 
     return {
-      formData,
+      dateOfBirth,
+      region,
+      city,
+      category,
+      bio,
       USER_CATEGORIES,
       REGIONS,
       availableCities,
-      handleRegionChange
+      handleRegionChange,
+      validateAll
     };
   }
 });
@@ -112,19 +161,20 @@ export default defineComponent({
   @apply max-w-2xl mx-auto;
 
   .title {
-    @apply text-2xl font-semibold text-gray-900 mb-6;
+    @apply text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6;
   }
 
   .description {
-    @apply text-gray-600 mb-8;
+    @apply text-sm sm:text-base text-gray-600 mb-6 sm:mb-8;
   }
 
   .form {
-    @apply space-y-6;
+    @apply space-y-4 sm:space-y-6;
   }
 
   .form-grid {
-    @apply grid grid-cols-2 gap-6;
+    // Mobile: Single column, Tablet+: Two columns
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
   }
 }
 </style>

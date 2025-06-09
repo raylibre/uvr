@@ -1,12 +1,13 @@
 <template>
   <OModal
     v-model="isOpen"
-    :fullScreen="true"
+    :full-screen="true"
     class="o-register-modal"
+    content-class="register-modal"
   >
     <div class="layout">
-      <!-- Left sidebar with steps -->
-      <div class="sidebar">
+      <!-- Left sidebar with steps - Hidden on mobile/tablet, visible on desktop -->
+      <div class="sidebar hidden lg:flex">
         <div class="header">
           <h1 class="header__title">New Account</h1>
         </div>
@@ -18,20 +19,30 @@
             class="step"
             :class="{
               'is-active': currentStep === step.id,
-              'is-completed': step.isCompleted
+              'is-completed': step.isCompleted,
+              'is-available': canNavigateToStep(step.id),
+              'is-locked': !canNavigateToStep(step.id)
             }"
-            @click="goToStep(step.id)"
+            :disabled="!canNavigateToStep(step.id)"
+            @click="handleStepClick(step.id)"
           >
             <div class="step__content">
               <div class="step__icon">
-                <i :class="step.icon"></i>
+                <i v-if="step.isCompleted" class="fas fa-check" />
+                <i v-else-if="currentStep === step.id" :class="step.icon" />
+                <i v-else-if="canNavigateToStep(step.id)" :class="step.icon" />
+                <i v-else class="fas fa-lock" />
               </div>
               <div class="step__info">
-                <p class="step__title" :class="{
-                  'is-active': currentStep === step.id,
-                  'is-completed': step.isCompleted,
-                  'is-inactive': !step.isCompleted && currentStep !== step.id
-                }">
+                <p 
+                  class="step__title" 
+                  :class="{
+                    'is-active': currentStep === step.id,
+                    'is-completed': step.isCompleted,
+                    'is-available': canNavigateToStep(step.id) && currentStep !== step.id,
+                    'is-locked': !canNavigateToStep(step.id)
+                  }"
+                >
                   {{ step.title }}
                 </p>
                 <p class="step__description">{{ step.description }}</p>
@@ -43,11 +54,23 @@
 
       <!-- Right side content -->
       <div class="content">
+        <!-- Mobile progress indicator - Show on mobile/tablet, hide on desktop -->
+        <div class="mobile-progress lg:hidden">
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              :style="{ width: `${(currentStep / totalSteps) * 100}%` }"
+            />
+          </div>
+          <p class="progress-text">
+            Step {{ currentStep }} of {{ totalSteps }}: {{ steps[currentStep - 1]?.title }}
+          </p>
+        </div>
+
         <div class="form">
           <component
             :is="currentStepComponent"
             ref="currentStepRef"
-            v-model="formData"
           />
         </div>
 
@@ -55,7 +78,7 @@
         <div class="actions">
           <AButton
             variant="outline"
-            class="action-button-back"
+            class="action-button-cancel"
             @click="handleCancelButtonClick"
           >
             Cancel
@@ -66,6 +89,7 @@
             class="action-button-back"
             @click="handleBackButtonClick"
           >
+            <i class="fas fa-arrow-left mr-2" />
             Back
           </AButton>
           <AButton
@@ -75,6 +99,8 @@
             @click="handleSubmitButtonClick"
           >
             {{ submitButtonText }}
+            <i v-if="currentStep < totalSteps" class="fas fa-arrow-right ml-2" />
+            <i v-else class="fas fa-check ml-2" />
           </AButton>
         </div>
       </div>
@@ -84,6 +110,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue';
+import { Form as VForm } from 'vee-validate';
 import { useEventBus } from '~/composables/use-event-bus';
 import { useRegistrationForm } from '~/composables/use-registration-form';
 import { EVENTS } from '~/constants/event-bus-constants';
@@ -98,6 +125,7 @@ import MRegistrationStepFive from '~/components/molecules/m-registration-step-fi
 export default defineComponent({
   name: 'ORegisterModal',
   components: {
+    VForm,
     OModal,
     AButton,
     MRegistrationStepOne,
@@ -118,9 +146,10 @@ export default defineComponent({
       submitButtonText,
       handleSubmit,
       goToStep,
-      nextStep,
       previousStep,
-      resetForm
+      resetForm,
+      handleNextStep,
+      canNavigateToStep
     } = useRegistrationForm();
 
     const isOpen = ref(false);
@@ -139,7 +168,10 @@ export default defineComponent({
 
     const handleSubmitButtonClick = async () => {
       if (currentStep.value < totalSteps.value) {
-        nextStep();
+        const success = await handleNextStep();
+        if (!success) {
+          console.warn('Step validation failed');
+        }
       } else {
         await handleSubmit();
       }
@@ -157,6 +189,10 @@ export default defineComponent({
 
     const handleBackButtonClick = () => {
       previousStep();
+    };
+
+    const handleStepClick = (stepId: number) => {
+      goToStep(stepId);
     };
 
     // Set up event listeners
@@ -184,10 +220,13 @@ export default defineComponent({
       currentStepComponent,
       submitButtonText,
       isLoading,
+      totalSteps,
       handleSubmitButtonClick,
       goToStep,
       handleCancelButtonClick,
       handleBackButtonClick,
+      handleStepClick,
+      canNavigateToStep
     };
   }
 });
@@ -196,15 +235,32 @@ export default defineComponent({
 <style lang="scss">
 .o-register-modal {
   :deep(.content) {
-    @apply w-screen h-screen max-w-none m-0 rounded-none bg-white p-0;
+    @apply w-screen max-w-none m-0 rounded-none bg-white p-0;
+    // Use viewport height units for better mobile support
+    height: 100vh;
+    height: 100dvh; // Use dynamic viewport height for mobile browsers
+  }
+  .register-modal {
+    &.modal-content {
+      @apply p-0;
+    }
   }
 
   .layout {
-    @apply flex h-full;
+    // Mobile/Tablet: Single column, Desktop: Side by side
+    @apply flex flex-col lg:flex-row;
+    // Ensure full height usage
+    height: 100%;
+    min-height: 100%;
   }
 
   .sidebar {
-    @apply w-96 bg-gray-50 p-8 overflow-y-auto;
+    // Desktop only: Vertical sidebar
+    @apply w-80 xl:w-96 bg-gray-50 overflow-y-auto flex-col;
+    @apply hidden lg:flex p-8;
+
+    // Ensure sidebar doesn't interfere on mobile (it's hidden anyway)
+    @apply flex-shrink-0;
   }
 
   .header {
@@ -220,18 +276,36 @@ export default defineComponent({
   }
 
   .nav {
-    @apply space-y-4;
+    // Desktop: Vertical layout only
+    @apply flex flex-col space-y-4;
   }
 
   .step {
-    @apply w-full text-left px-4 py-3 rounded-lg transition-colors;
+    // Desktop: Full width
+    @apply w-full text-left px-4 py-3 rounded-lg transition-all duration-200;
+
+    &:not(:disabled) {
+      @apply hover:bg-gray-100 cursor-pointer;
+    }
+
+    &:disabled {
+      @apply cursor-not-allowed opacity-60;
+    }
 
     &.is-active {
-      @apply bg-white shadow-sm;
+      @apply bg-white shadow-sm ring-2 ring-primary ring-opacity-20;
     }
 
     &.is-completed {
-      @apply hover:bg-gray-100;
+      @apply hover:bg-green-50;
+    }
+
+    &.is-available {
+      @apply hover:bg-blue-50;
+    }
+
+    &.is-locked {
+      @apply bg-gray-50;
     }
 
     &__content {
@@ -239,7 +313,7 @@ export default defineComponent({
     }
 
     &__icon {
-      @apply flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3;
+      @apply flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors;
       @apply bg-gray-100 text-gray-500;
 
       .is-active & {
@@ -247,7 +321,15 @@ export default defineComponent({
       }
 
       .is-completed & {
-        @apply bg-green-100 text-green-500;
+        @apply bg-green-500 text-white;
+      }
+
+      .is-available & {
+        @apply bg-blue-100 text-blue-600;
+      }
+
+      .is-locked & {
+        @apply bg-gray-200 text-gray-400;
       }
     }
 
@@ -256,7 +338,7 @@ export default defineComponent({
     }
 
     &__title {
-      @apply font-medium;
+      @apply text-base font-medium transition-colors;
 
       &.is-active {
         @apply text-primary;
@@ -266,30 +348,111 @@ export default defineComponent({
         @apply text-green-600;
       }
 
-      &.is-inactive {
-        @apply text-gray-500;
+      &.is-available {
+        @apply text-blue-600;
+      }
+
+      &.is-locked {
+        @apply text-gray-400;
       }
     }
 
     &__description {
-      @apply text-sm text-gray-500;
+      @apply text-sm text-gray-500 transition-colors;
+
+      .is-locked & {
+        @apply text-gray-400;
+      }
     }
   }
 
   .content {
     @apply flex-1 flex flex-col;
+    // Ensure content area takes remaining space and handles overflow properly
+    @apply min-h-0 lg:min-h-full;
+  }
+
+  .mobile-progress {
+    @apply p-4 bg-white border-b border-gray-200;
+    // Ensure progress bar is always visible and doesn't scroll
+    @apply flex-shrink-0;
+
+    .progress-bar {
+      @apply w-full bg-gray-200 rounded-full h-2 mb-2;
+    }
+
+    .progress-fill {
+      @apply bg-primary h-2 rounded-full transition-all duration-300;
+    }
+
+    .progress-text {
+      @apply text-sm text-gray-600 text-center;
+    }
   }
 
   .form {
-    @apply flex-1 p-8 overflow-y-auto;
+    @apply flex-1 overflow-y-auto;
+    @apply p-4 sm:p-6 lg:p-8;
+    // Ensure form content scrolls properly within available space
+    @apply min-h-0;
+
+    // Add bottom padding on mobile to ensure content doesn't get hidden behind actions
+    @apply pb-20 lg:pb-8;
+
+    // Ensure smooth scrolling on mobile
+    -webkit-overflow-scrolling: touch;
   }
 
   .actions {
-    @apply flex items-center justify-end bg-gray-50 p-6;
+    @apply flex items-center justify-end bg-gray-50;
+    @apply p-4 sm:p-6;
+    @apply gap-3;
+    // Ensure actions are always visible at bottom
+    @apply flex-shrink-0;
+
+    // On mobile, ensure actions don't scroll away
+    @apply sticky lg:relative bottom-0 lg:bottom-auto;
+    @apply border-t lg:border-t-0 border-gray-200;
+    @apply shadow-lg lg:shadow-none;
+
+    // Mobile: Stack buttons vertically for better touch targets
+    @apply flex-col sm:flex-row;
+
+    .action-button-cancel {
+      @apply w-full sm:w-auto order-1;
+    }
 
     .action-button-back {
-      @apply mr-6
+      @apply w-full sm:w-auto order-2;
+    }
+
+    .action-button-submit {
+      @apply w-full sm:w-auto order-3;
+    }
+
+    // On mobile, reverse order so primary action is at top
+    @media (max-width: 640px) {
+      @apply flex-col-reverse;
+      
+      .action-button-submit {
+        @apply mb-2;
+      }
+    }
+  }
+
+  // Additional mobile-specific improvements
+  @media (max-width: 640px) {
+    // Ensure no horizontal overflow on small screens
+    :deep(.content) {
+      overflow-x: hidden;
+    }
+
+    // Optimize for mobile browsers with address bars
+    .layout {
+      min-height: 100vh;
+      min-height: 100dvh;
     }
   }
 }
 </style> 
+

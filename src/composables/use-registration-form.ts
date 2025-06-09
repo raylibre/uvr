@@ -13,7 +13,14 @@ export const useRegistrationForm = () => {
     currentStep,
     isLoading,
     steps,
-    resetForm
+    validateCurrentStep,
+    nextStep,
+    previousStep,
+    goToStep,
+    resetForm,
+    isStepValid,
+    getCurrentStepForm,
+    canNavigateToStep
   } = useRegistrationData();
 
   const totalSteps = computed(() => steps.length);
@@ -22,16 +29,42 @@ export const useRegistrationForm = () => {
     return currentStep.value < totalSteps.value ? 'Continue' : 'Complete Registration';
   });
 
-  const handleSubmit = async () => {
+  const canGoToNextStep = computed(() => {
+    return currentStep.value < totalSteps.value;
+  });
+
+  const canGoToPreviousStep = computed(() => {
+    return currentStep.value > 1;
+  });
+
+  const handleSubmit = async (): Promise<boolean> => {
     try {
       isLoading.value = true;
-      await register(formData as Required<UserProfile>);
-      BUS.emit(EVENTS.SUCCESS_REGISTER as any);
+
+      // Validate all steps before submitting
+      let allStepsValid = true;
+      for (let i = 1; i <= totalSteps.value; i++) {
+        if (!isStepValid(i)) {
+          allStepsValid = false;
+          break;
+        }
+      }
+
+      if (!allStepsValid) {
+        BUS.emit(EVENTS.FAILED_REGISTER, { error: 'Please complete all required fields in all steps' });
+        return false;
+      }
+
+      // Get the final form data
+      const registrationData = formData.value as Required<UserProfile>;
+      await register(registrationData);
+
+      BUS.emit(EVENTS.SUCCESS_REGISTER, {});
       resetForm();
       return true;
     } catch (error) {
       if (error instanceof Error) {
-        BUS.emit(EVENTS.FAILED_REGISTER as any, { error: error.message });
+        BUS.emit(EVENTS.FAILED_REGISTER, { error: error.message });
       }
       return false;
     } finally {
@@ -39,35 +72,58 @@ export const useRegistrationForm = () => {
     }
   };
 
-  const goToStep = (stepId: number) => {
-    if (stepId < currentStep.value || steps[stepId - 1].isCompleted) {
-      currentStep.value = stepId;
+  const handleNextStep = async (): Promise<boolean> => {
+    if (canGoToNextStep.value) {
+      return await nextStep();
+    }
+    return false;
+  };
+
+  const handlePreviousStep = () => {
+    if (canGoToPreviousStep.value) {
+      previousStep();
     }
   };
 
-  const nextStep = async () => {
-    if (currentStep.value < totalSteps.value) {
-      currentStep.value++;
-    }
+  const handleStepClick = (stepId: number) => {
+    goToStep(stepId);
   };
 
-  const previousStep = () => {
-    if (currentStep.value > 1) {
-      currentStep.value--;
+  const handleFormSubmit = async (): Promise<boolean> => {
+    if (canGoToNextStep.value) {
+      return await handleNextStep();
+    } else {
+      return await handleSubmit();
     }
   };
 
   return {
+    // State
     formData,
     currentStep,
     isLoading,
     steps,
     totalSteps,
+
+    // Computed
     submitButtonText,
+    canGoToNextStep,
+    canGoToPreviousStep,
+
+    // Validation
+    validateCurrentStep,
+    getCurrentStepForm,
+    isStepValid,
+
+    // Actions
     handleSubmit,
+    handleNextStep,
+    handlePreviousStep,
+    handleStepClick,
+    handleFormSubmit,
+    resetForm,
     goToStep,
-    nextStep,
     previousStep,
-    resetForm
+    canNavigateToStep
   };
 };
