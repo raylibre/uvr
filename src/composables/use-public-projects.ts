@@ -1,33 +1,49 @@
-import { ref, computed } from 'vue';
+import { reactive, computed, onBeforeUnmount } from 'vue';
+import AsyncSource from 'async-source';
 import type { PublicProject, PublicProjectsResponse } from '~/interfaces/project.interface';
-import { getPublicProjects } from '~/services/api/projects-api-service';
-
-const publicProjectsData = ref<PublicProjectsResponse | null>(null);
-const isLoading = ref(false);
-const error = ref<string | null>(null);
+import { fetchPublicProjects, fetchFeaturedProjects } from '~/services/api/projects-api-service';
+import { getSharedAsyncSource, removeSharedAsyncSource } from '~/services/async-source-service';
+import { handleApiError } from '~/services/notification-service';
 
 export function usePublicProjects() {
+  // Create shared AsyncSource for public projects data
+  const publicProjectsSource = getSharedAsyncSource(
+    'publicProjects',
+    fetchPublicProjects,
+    handleApiError
+  );
+
+  const featuredProjectsSource = reactive(new AsyncSource(fetchFeaturedProjects, handleApiError));
+
+  // Computed properties for accessing data
+  const publicProjectsData = computed(() => publicProjectsSource.data as PublicProjectsResponse | null);
   const projects = computed(() => publicProjectsData.value?.data.projects || []);
   const meta = computed(() => publicProjectsData.value?.data.meta || null);
-  const featuredProjects = computed(() => projects.value.filter(project => project.is_featured));
+  const featuredProjects = computed(() => featuredProjectsSource.data || projects.value.filter(project => project.is_featured));
   
-  async function fetchPublicProjects(): Promise<void> {
-    if (isLoading.value) return;
-    
-    isLoading.value = true;
-    error.value = null;
-    
-    try {
-      const response = await getPublicProjects();
-      publicProjectsData.value = response;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch public projects';
-      console.error('Error fetching public projects:', err);
-    } finally {
-      isLoading.value = false;
-    }
+  // Loading states
+  const isLoading = computed(() => publicProjectsSource.isLoading);
+  const isFeaturedLoading = computed(() => featuredProjectsSource.isLoading);
+
+  // Methods to fetch data
+  function loadPublicProjects(): void {
+    publicProjectsSource.push(handlePublicProjectsSuccess);
   }
 
+  function loadFeaturedProjects(): void {
+    featuredProjectsSource.push(handleFeaturedProjectsSuccess);
+  }
+
+  // Success handlers
+  function handlePublicProjectsSuccess(data: PublicProjectsResponse) {
+    console.log('Public projects loaded successfully:', data.data.meta.total, 'projects');
+  }
+
+  function handleFeaturedProjectsSuccess(data: PublicProject[]) {
+    console.log('Featured projects loaded successfully:', data.length, 'projects');
+  }
+
+  // Utility methods
   function getProjectBySlug(slug: string): PublicProject | undefined {
     return projects.value.find(project => project.slug === slug);
   }
@@ -40,15 +56,30 @@ export function usePublicProjects() {
     return projects.value.filter(project => project.project_type === type);
   }
 
+  // Cleanup shared AsyncSource on unmount
+  onBeforeUnmount(() => {
+    removeSharedAsyncSource('publicProjects', fetchPublicProjects);
+  });
+
   return {
+    // Data
     projects,
     meta,
     featuredProjects,
+    publicProjectsData,
+    
+    // Loading states
     isLoading,
-    error,
-    fetchPublicProjects,
+    isFeaturedLoading,
+    
+    // Methods
+    loadPublicProjects,
+    loadFeaturedProjects,
     getProjectBySlug,
     getProjectById,
-    getProjectsByType
+    getProjectsByType,
+    
+    // Legacy method for backward compatibility
+    fetchPublicProjects: loadPublicProjects
   };
 } 

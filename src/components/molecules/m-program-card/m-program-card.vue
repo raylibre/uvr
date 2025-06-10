@@ -26,18 +26,26 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-program-card {
-  @apply bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:transform hover:scale-105 cursor-pointer;
+  @apply bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:scale-105 cursor-pointer flex flex-col;
+  min-width: 280px;
+  max-width: 320px;
+  height: 400px;
+  flex: 1 1 280px;
 
   img {
     @apply w-full h-48 object-cover;
   }
 
   h3 {
-    @apply text-xl font-semibold p-4;
+    @apply text-xl font-semibold p-4 pb-2 text-gray-900;
   }
 
   p {
-    @apply p-4 pt-0;
+    @apply p-4 pt-0 text-gray-600 leading-relaxed flex-grow;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
   }
 }
 </style> 

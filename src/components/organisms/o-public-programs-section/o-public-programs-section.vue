@@ -9,8 +9,8 @@
       </div>
 
       <div v-if="isLoading" class="loading-state">
-        <div class="flex justify-center items-center py-16">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div class="flex justify-center items-center min-h-64">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       </div>
 
@@ -164,7 +164,7 @@ export default defineComponent({
   }
 
   .programs-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12;
+    @apply flex flex-wrap justify-center gap-8 mb-12;
   }
 
   .view-all-section {
@@ -179,7 +179,7 @@ export default defineComponent({
         @apply flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm;
 
         i {
-          @apply text-2xl text-blue-500;
+          @apply text-2xl text-primary;
         }
 
         .stat-number {
@@ -197,11 +197,11 @@ export default defineComponent({
     @apply px-6 py-3 rounded-lg font-medium transition-all duration-200 inline-flex items-center;
 
     &.btn-primary {
-      @apply bg-blue-600 text-white hover:bg-blue-700;
+      @apply bg-primary text-white hover:bg-primary-dark;
     }
 
     &.btn-outline {
-      @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white;
+      @apply border-2 border-primary text-primary hover:bg-primary hover:text-white;
     }
   }
 }

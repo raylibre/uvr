@@ -93,7 +93,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-public-project-card {
-  @apply bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:scale-105 cursor-pointer;
+  @apply bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:scale-105 cursor-pointer flex flex-col;
+  min-width: 280px;
+  max-width: 320px;
+  height: 480px;
+  flex: 1 1 280px;
 
   .project-image-container {
     @apply relative;
@@ -116,14 +120,18 @@ export default defineComponent({
   }
 
   .project-content {
-    @apply p-4;
+    @apply p-4 flex-grow flex flex-col;
 
     .project-title {
       @apply text-xl font-semibold mb-2 text-gray-900;
     }
 
     .project-description {
-      @apply text-gray-600 mb-4 line-clamp-2;
+      @apply text-gray-600 mb-4 leading-relaxed;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
 
     .project-stats {
@@ -133,7 +141,7 @@ export default defineComponent({
         @apply flex items-center gap-2 text-sm text-gray-700;
 
         i {
-          @apply text-blue-500 w-4;
+          @apply text-primary w-4;
         }
       }
     }
@@ -147,6 +155,8 @@ export default defineComponent({
     }
 
     .project-type {
+      @apply mt-auto;
+      
       .type-badge {
         @apply inline-block px-3 py-1 rounded-full text-xs font-medium;
 
@@ -159,7 +169,7 @@ export default defineComponent({
         }
 
         &.type-prosthetics {
-          @apply bg-blue-100 text-blue-800;
+          @apply bg-primary-light/20 text-primary-dark;
         }
 
         &.type-civilian_retraining {
