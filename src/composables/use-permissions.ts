@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import { useStorage } from '@vueuse/core';
-import { Permission, ROLE_PERMISSIONS, UserRole } from '~/constants/permission-constants';
+import { Permission, ROLE_PERMISSIONS } from '~/constants/permission-constants';
+import { UserRole } from '~/constants/status-constants';
 
 interface User {
   id: number;

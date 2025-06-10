@@ -26,12 +26,12 @@ export const ROUTES: RouteRecordRaw[] = [
   {
     path: '/programs',
     name: ROUTE_NAMES.PROGRAMS,
-    component: () => import('~/pages/p-programs/p-programs.vue')
+    component: () => import('~/components/pages/p-programs')
   },
   {
     path: '/programs/:slug',
     name: ROUTE_NAMES.PROGRAM_DETAIL,
-    component: () => import('~/pages/p-program-detail/p-program-detail.vue'),
+    component: () => import('~/components/pages/p-program-detail'),
     props: true
   },
   {
