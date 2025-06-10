@@ -8,7 +8,7 @@
           v-for="program in programs"
           :key="program.id"
           :program="program"
-          @click="$emit('program-click', program.id)"
+          @click="$emit('program-click', program)"
         />
       </div>
     </div>

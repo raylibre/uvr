@@ -4,36 +4,59 @@ import type {
   ProgramDetailResponse, 
   JoinProgramRequest, 
   JoinProgramResponse,
-  UserParticipation
+  UserParticipation,
+  ProgramDetail,
+  UserProjectStatusResponse
 } from '~/interfaces/project.interface';
-import { FUNCTIONS_V1_PUBLIC_PROJECTS } from '~/constants/url-constants';
+import { FUNCTIONS_V1_PUBLIC_PROJECTS, FUNCTIONS_V1_PROJECT_BY_SLUG, FUNCTIONS_V1_USER_PROJECT_STATUS } from '~/constants/url-constants';
 import { 
-  MOCK_PROGRAMS, 
-  generateMockParticipation, 
+  generateMockParticipation,
   shouldHaveParticipation 
 } from '~/constants/mock/mock-data-constants';
 import { ParticipationStatus } from '~/constants/status-constants';
 
 /**
- * Fetch public projects from API
+ * Fetch public projects from API with optional pagination
  * This function is used with AsyncSource for proper loading states and error handling
  */
-export async function fetchPublicProjects(): Promise<PublicProjectsResponse> {
-  const response = await apiClient.get<PublicProjectsResponse>(FUNCTIONS_V1_PUBLIC_PROJECTS);
+export async function fetchPublicProjects(limit?: number, offset?: number, featured?: boolean): Promise<PublicProjectsResponse> {
+  const params = new URLSearchParams();
+  
+  if (limit !== undefined) {
+    params.append('limit', limit.toString());
+  }
+  
+  if (offset !== undefined) {
+    params.append('offset', offset.toString());
+  }
+  
+  if (featured !== undefined) {
+    params.append('featured', featured.toString());
+  }
+  
+  const queryString = params.toString();
+  const url = queryString ? `${FUNCTIONS_V1_PUBLIC_PROJECTS}?${queryString}` : FUNCTIONS_V1_PUBLIC_PROJECTS;
+  
+  const response = await apiClient.get<PublicProjectsResponse>(url);
   return response.data;
 }
 
 /**
- * Fetch program detail by slug
+ * Fetch program detail by slug using actual API
  * This function is used with AsyncSource for proper loading states and error handling
  */
-export async function fetchProgramDetail(slug: string): Promise<ProgramDetailResponse> {
-  // TODO: Replace with actual API call when backend is ready
-  // const response = await apiClient.get<ProgramDetailResponse>(`${API_V1_PROJECTS}/${slug}`);
-  // return response.data;
-  
-  // For now, using mock data as requested
-  return getMockProgramDetail(slug);
+export async function fetchProgramDetail(slug: string): Promise<ProgramDetail> {
+  const response = await apiClient.get<ProgramDetail>(`${FUNCTIONS_V1_PROJECT_BY_SLUG}?slug=${slug}`);
+  return response.data;
+}
+
+/**
+ * Fetch user project status using actual API
+ * This function is used with AsyncSource for proper loading states and error handling
+ */
+export async function fetchUserProjectStatus(projectId: number): Promise<UserProjectStatusResponse> {
+  const response = await apiClient.get<UserProjectStatusResponse>(`${FUNCTIONS_V1_USER_PROJECT_STATUS}?project_id=${projectId}`);
+  return response.data;
 }
 
 /**
@@ -50,7 +73,7 @@ export async function submitProgramJoin(request: JoinProgramRequest): Promise<Jo
 }
 
 /**
- * Fetch user program participation status
+ * Legacy function for backward compatibility - fetch user program participation status
  * This function is used with AsyncSource for proper loading states and error handling
  */
 export async function fetchUserProgramStatus(programId: number): Promise<UserParticipation | null> {
@@ -90,7 +113,16 @@ export async function getPublicProjects(): Promise<PublicProjectsResponse> {
 }
 
 export async function getProgramDetail(slug: string): Promise<ProgramDetailResponse> {
-  return fetchProgramDetail(slug);
+  // TODO: Update to use actual API structure when ready
+  // For now, adapting the new API response to the old interface
+  const program = await fetchProgramDetail(slug);
+  return {
+    success: true,
+    data: {
+      program,
+      user_participation: null // This will be fetched separately using fetchUserProjectStatus
+    }
+  };
 }
 
 export async function joinProgram(request: JoinProgramRequest): Promise<JoinProgramResponse> {
@@ -102,33 +134,6 @@ export async function getUserProgramStatus(programId: number): Promise<UserParti
 }
 
 // Mock data functions (to be replaced with real API calls)
-function getMockProgramDetail(slug: string): ProgramDetailResponse {
-  const program = MOCK_PROGRAMS[slug];
-  if (!program) {
-    throw new Error(`Program with slug "${slug}" not found`);
-  }
-
-  // Mock user participation (simulate different scenarios)
-  const mockParticipation = Math.random() > 0.7 ? {
-    id: 1,
-    user_id: 123,
-    project_id: program.id,
-    status: ParticipationStatus.APPROVED,
-    applied_at: '2025-06-01T10:00:00.000Z',
-    approved_at: '2025-06-02T14:30:00.000Z',
-    completed_at: null,
-    notes: 'Заявка схвалена. Очікуйте на дзвінок координатора програми.'
-  } : null;
-
-  return {
-    success: true,
-    data: {
-      program,
-      user_participation: mockParticipation
-    }
-  };
-}
-
 function getMockJoinResponse(request: JoinProgramRequest): Promise<JoinProgramResponse> {
   // Simulate API processing delay
   return new Promise((resolve) => {

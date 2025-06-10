@@ -25,8 +25,13 @@
           <!-- Desktop Language Switcher -->
           <OLangChangeBlock class="language-switcher" />
           
+          <!-- Loading state during initialization -->
+          <div v-if="!isInitialized" class="initialization-loading">
+            <div class="loading-spinner"/>
+          </div>
+          
           <!-- Desktop Authentication Section -->
-          <div v-if="isAuthenticated" class="user-section">
+          <div v-else-if="isAuthenticated" class="user-section">
             <MUserDropdown />
           </div>
           <div v-else class="auth-buttons">
@@ -53,8 +58,13 @@
             <!-- Mobile Language Switcher -->
             <OLangChangeBlock class="mobile-language-switcher" />
             
+            <!-- Mobile Loading State -->
+            <div v-if="!isInitialized" class="mobile-loading">
+              <div class="loading-spinner-sm"/>
+            </div>
+            
             <!-- Mobile User Section -->
-            <div v-if="isAuthenticated" class="mobile-user-section">
+            <div v-else-if="isAuthenticated" class="mobile-user-section">
               <MUserDropdown />
             </div>
             <div v-else class="mobile-auth-buttons">
@@ -189,7 +199,7 @@ export default defineComponent({
     const { initializeLanguage } = useLanguage();
     const route = useRoute();
     const { BUS } = useEventBus();
-    const { isAuthenticated, initialize } = useUserStore();
+    const { isAuthenticated, initialize, unreadNotificationsCount, isInitialized } = useUserStore();
     const isMobileMenuOpen = ref(false);
 
     const toggleMobileMenu = () => {
@@ -225,7 +235,9 @@ export default defineComponent({
       closeMobileMenu,
       handleJoin,
       handleLogin,
-      ROUTE_NAMES
+      ROUTE_NAMES,
+      unreadNotificationsCount,
+      isInitialized
     };
   }
 });
@@ -276,8 +288,16 @@ export default defineComponent({
       @apply hidden md:block;
     }
 
+    .initialization-loading {
+      @apply hidden md:flex items-center px-2;
+    }
+
     .user-section {
-      @apply hidden md:block;
+      @apply hidden md:flex items-center space-x-2;
+    }
+
+    .user-stats {
+      @apply flex items-center;
     }
 
     .auth-buttons {
@@ -290,6 +310,10 @@ export default defineComponent({
 
       .mobile-language-switcher {
         @apply block;
+      }
+
+      .mobile-loading {
+        @apply flex items-center;
       }
 
       .mobile-user-section {
@@ -364,6 +388,14 @@ export default defineComponent({
   // Spacer
   & + .spacer {
     @apply h-16;
+  }
+
+  .loading-spinner {
+    @apply animate-spin h-5 w-5 border-2 border-gray-300 border-t-primary rounded-full;
+  }
+
+  .loading-spinner-sm {
+    @apply animate-spin h-4 w-4 border-2 border-gray-300 border-t-primary rounded-full;
   }
 }
 </style>

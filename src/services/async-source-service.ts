@@ -39,8 +39,7 @@ export function getSharedAsyncSource(
  * @param serviceFunction - API service function (for validation)
  */
 export function removeSharedAsyncSource(
-  key: string,
-  serviceFunction: (...args: any[]) => Promise<any>
+  key: string
 ): void {
   if (!sharedSources.has(key)) {
     return;
@@ -71,4 +70,4 @@ export function clearAllSharedSources(): void {
  */
 export function getSharedSourcesCount(): number {
   return sharedSources.size;
-} 
+}

@@ -29,7 +29,9 @@ export const EVENTS = {
   /** Emitted when registration fails - payload: { error: string } */
   FAILED_REGISTER: 'FAILED_REGISTER',
   /** Emitted when user logs out - no payload */
-  LOGOUT: 'LOGOUT'
+  LOGOUT: 'LOGOUT',
+  /** Emitted when user data is updated - payload: { user: User } */
+  USER_DATA_UPDATED: 'USER_DATA_UPDATED'
 } as const;
 
 /** Type for all possible event names */

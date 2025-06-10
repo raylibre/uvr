@@ -1,0 +1,448 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Vue Router Patterns and Guidelines
+
+This project uses Vue Router with a centralized route configuration system. All routes must be defined using constants and follow specific patterns for consistency and maintainability.
+
+## Route Configuration Structure
+
+### 1. Route Constants (`src/constants/router-constants.ts`)
+All routes are defined in a centralized constants file with the following structure:
+
+```typescript
+// Route names as constants
+export const ROUTE_NAMES = {
+  HOME: 'HOME',
+  PROGRAMS: 'PROGRAMS',
+  PROGRAM_DETAIL: 'PROGRAM_DETAIL',
+  ABOUT: 'ABOUT',
+  NOT_FOUND: 'NOT_FOUND'
+} as const;
+
+// Export type for TypeScript support
+export type ROUTE_NAMES = typeof ROUTE_NAMES;
+
+// Route definitions
+export const ROUTES: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: ROUTE_NAMES.HOME,
+    component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/programs',
+    name: ROUTE_NAMES.PROGRAMS,
+    component: () => import('~/components/pages/p-programs')
+  }
+];
+```
+
+### 2. Router Setup (`src/router/index.ts`)
+The main router configuration imports routes from constants:
+
+```typescript
+import { createRouter, createWebHistory } from 'vue-router';
+import { ROUTES, ROUTE_NAMES } from '~/constants/router-constants';
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    ...ROUTES,
+    {
+      path: '/:pathMatch(.*)*',
+      name: ROUTE_NAMES.NOT_FOUND,
+      component: () => import('~/components/pages/p-not-found')
+    }
+  ]
+});
+
+export default router;
+```
+
+## Page Component Import Rules
+
+### 1. Always Use components/pages Directory
+**NEVER** import page components from `src/pages`. Always use `src/components/pages`:
+
+```typescript
+// ✅ Correct - components/pages directory
+component: () => import('~/components/pages/p-home')
+component: () => import('~/components/pages/p-programs')
+component: () => import('~/components/pages/p-program-detail')
+
+// ❌ Wrong - src/pages directory (deprecated)
+component: () => import('~/pages/p-home')
+component: () => import('~/src/pages/p-home/p-home.vue')
+```
+
+### 2. Use Directory Imports (Not Direct .vue Files)
+Always import the component directory, which resolves to `index.ts`:
+
+```typescript
+// ✅ Correct - directory import (resolves to index.ts)
+component: () => import('~/components/pages/p-program-detail')
+
+// ❌ Wrong - direct .vue file import
+component: () => import('~/components/pages/p-program-detail/p-program-detail.vue')
+```
+
+## Route Naming Conventions
+
+### 1. Route Names
+- Use SCREAMING_SNAKE_CASE for route name constants
+- Names should be descriptive and match the page purpose
+- Always define in `ROUTE_NAMES` object
+
+```typescript
+export const ROUTE_NAMES = {
+  HOME: 'HOME',                    // Home page
+  PROGRAMS: 'PROGRAMS',            // Programs listing
+  PROGRAM_DETAIL: 'PROGRAM_DETAIL', // Individual program
+  USER_PROFILE: 'USER_PROFILE',    // User profile page
+  NOT_FOUND: 'NOT_FOUND'           // 404 page
+} as const;
+```
+
+### 2. Route Paths
+- Use kebab-case for URL paths
+- Keep paths simple and SEO-friendly
+- Use parameters for dynamic routes
+
+```typescript
+{
+  path: '/',                    // Root path
+  path: '/programs',            // Simple path
+  path: '/programs/:slug',      // Dynamic parameter
+  path: '/user-profile',        // Kebab-case for multi-word
+  path: '/legal-help'           // Consistent naming
+}
+```
+
+### 3. Page Component Names
+- Use `p-` prefix for page components
+- Use kebab-case naming
+- Match the route purpose
+
+```typescript
+// Page component naming examples
+p-home              // Home page
+p-programs          // Programs listing
+p-program-detail    // Program detail page
+p-user-profile      // User profile
+p-legal-help        // Legal help page
+p-not-found         // 404 page
+```
+
+## Route Meta Properties
+
+### 1. Authentication
+Use `requiresAuth` meta property for protected routes:
+
+```typescript
+{
+  path: '/dashboard',
+  name: ROUTE_NAMES.DASHBOARD,
+  component: () => import('~/components/pages/p-dashboard'),
+  meta: {
+    requiresAuth: true
+  }
+}
+```
+
+### 2. Permissions
+Use `permissions` array for role-based access:
+
+```typescript
+import { Permission } from '~/constants/permission-constants';
+
+{
+  path: '/admin',
+  name: ROUTE_NAMES.ADMIN,
+  component: () => import('~/components/pages/p-admin'),
+  meta: {
+    requiresAuth: true,
+    permissions: [Permission.ADMIN_ACCESS]
+  }
+}
+```
+
+### 3. Route Guards
+Implement route guards in the router configuration:
+
+```typescript
+router.beforeEach((to, _from, next) => {
+  const { hasAnyPermission } = usePermissions();
+  const currentUser = localStorage.getItem('currentUser');
+
+  // Check authentication
+  if (to.meta.requiresAuth && !currentUser) {
+    next({ name: ROUTE_NAMES.HOME });
+    return;
+  }
+
+  // Check permissions
+  if (to.meta.permissions && !hasAnyPermission(to.meta.permissions as Permission[])) {
+    next({ name: ROUTE_NAMES.HOME });
+    return;
+  }
+
+  next();
+});
+```
+
+## Navigation Patterns
+
+### 1. Programmatic Navigation
+Always use route names for navigation, never hardcoded paths:
+
+```typescript
+import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '~/constants/router-constants';
+
+const router = useRouter();
+
+// ✅ Correct - using route names
+router.push({ name: ROUTE_NAMES.PROGRAMS });
+router.push({ 
+  name: ROUTE_NAMES.PROGRAM_DETAIL, 
+  params: { slug: 'program-slug' } 
+});
+
+// ❌ Wrong - hardcoded paths
+router.push('/programs');
+router.push('/programs/program-slug');
+```
+
+### 2. Template Navigation
+Use `router-link` with route names in templates:
+
+```vue
+<template>
+  <!-- ✅ Correct - using route names -->
+  <router-link :to="{ name: ROUTE_NAMES.PROGRAMS }">
+    Programs
+  </router-link>
+  
+  <router-link 
+    :to="{ 
+      name: ROUTE_NAMES.PROGRAM_DETAIL, 
+      params: { slug: program.slug } 
+    }"
+  >
+    {{ program.title }}
+  </router-link>
+
+  <!-- ❌ Wrong - hardcoded paths -->
+  <router-link to="/programs">Programs</router-link>
+</template>
+
+<script setup>
+import { ROUTE_NAMES } from '~/constants/router-constants';
+</script>
+```
+
+### 3. Route Parameters
+Handle route parameters properly in page components:
+
+```vue
+<!-- p-program-detail.vue -->
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+// Access route parameters
+const slug = computed(() => route.params.slug as string);
+
+// Watch for parameter changes
+watch(() => route.params.slug, (newSlug) => {
+  if (newSlug) {
+    loadProgramData(newSlug);
+  }
+});
+</script>
+```
+
+## Route Organization Best Practices
+
+### 1. Group Related Routes
+Organize routes logically in the constants file:
+
+```typescript
+export const ROUTES: RouteRecordRaw[] = [
+  // Public routes
+  {
+    path: '/',
+    name: ROUTE_NAMES.HOME,
+    component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/about',
+    name: ROUTE_NAMES.ABOUT,
+    component: () => import('~/components/pages/p-about')
+  },
+  
+  // Program routes
+  {
+    path: '/programs',
+    name: ROUTE_NAMES.PROGRAMS,
+    component: () => import('~/components/pages/p-programs')
+  },
+  {
+    path: '/programs/:slug',
+    name: ROUTE_NAMES.PROGRAM_DETAIL,
+    component: () => import('~/components/pages/p-program-detail'),
+    props: true
+  },
+  
+  // Protected routes
+  {
+    path: '/dashboard',
+    name: ROUTE_NAMES.DASHBOARD,
+    component: () => import('~/components/pages/p-dashboard'),
+    meta: {
+      requiresAuth: true
+    }
+  }
+];
+```
+
+### 2. Use Props for Route Parameters
+Enable props for routes with parameters:
+
+```typescript
+{
+  path: '/programs/:slug',
+  name: ROUTE_NAMES.PROGRAM_DETAIL,
+  component: () => import('~/components/pages/p-program-detail'),
+  props: true  // Passes route params as props
+}
+```
+
+Then in the component:
+
+```vue
+<script setup lang="ts">
+interface Props {
+  slug: string;
+}
+
+const props = defineProps<Props>();
+
+// Use props.slug instead of route.params.slug
+</script>
+```
+
+### 3. Lazy Loading
+Always use dynamic imports for code splitting:
+
+```typescript
+// ✅ Correct - lazy loading with dynamic import
+component: () => import('~/components/pages/p-programs')
+
+// ❌ Wrong - direct import (no code splitting)
+import PPrograms from '~/components/pages/p-programs';
+component: PPrograms
+```
+
+## Error Handling
+
+### 1. 404 Routes
+Always include a catch-all route for 404 errors:
+
+```typescript
+{
+  path: '/:pathMatch(.*)*',
+  name: ROUTE_NAMES.NOT_FOUND,
+  component: () => import('~/components/pages/p-not-found')
+}
+```
+
+### 2. Navigation Error Handling
+Handle navigation errors gracefully:
+
+```typescript
+const router = useRouter();
+
+try {
+  await router.push({ name: ROUTE_NAMES.PROGRAMS });
+} catch (error) {
+  console.error('Navigation failed:', error);
+  // Handle navigation error
+}
+```
+
+## TypeScript Integration
+
+### 1. Route Name Types
+Use the exported type for type safety:
+
+```typescript
+import { ROUTE_NAMES, type ROUTE_NAMES as RouteNames } from '~/constants/router-constants';
+
+function navigateToRoute(routeName: keyof RouteNames) {
+  router.push({ name: routeName });
+}
+```
+
+### 2. Route Meta Types
+Define types for route meta properties:
+
+```typescript
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean;
+    permissions?: Permission[];
+    title?: string;
+  }
+}
+```
+
+## Anti-Patterns to Avoid
+
+❌ **Don't do this:**
+```typescript
+// Hardcoded paths
+router.push('/programs/123');
+
+// Direct .vue imports in routes
+component: () => import('~/components/pages/p-home/p-home.vue')
+
+// Routes outside constants file
+const routes = [
+  { path: '/home', component: HomeComponent }
+];
+
+// Missing route names
+{ path: '/programs', component: ProgramsComponent }
+
+// Wrong directory structure
+component: () => import('~/pages/p-home')
+```
+
+✅ **Do this instead:**
+```typescript
+// Named routes with parameters
+router.push({ 
+  name: ROUTE_NAMES.PROGRAM_DETAIL, 
+  params: { id: '123' } 
+});
+
+// Directory imports
+component: () => import('~/components/pages/p-home')
+
+// Centralized route constants
+export const ROUTES: RouteRecordRaw[] = [
+  {
+    path: '/programs',
+    name: ROUTE_NAMES.PROGRAMS,
+    component: () => import('~/components/pages/p-programs')
+  }
+];
+
+// Correct directory structure
+component: () => import('~/components/pages/p-home')
+```

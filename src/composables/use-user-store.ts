@@ -1,14 +1,32 @@
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, readonly } from 'vue';
 import AsyncSource from 'async-source';
-import { loginUser, registerUser, logoutUser } from '~/services/api/auth-api-service';
-import type { User, LoginCredentials } from '~/interfaces/auth';
+import { 
+  loginUser, 
+  registerUser, 
+  logoutUser, 
+  getCurrentUser 
+} from '~/services/api/auth-api-service';
+import type { 
+  User, 
+  LoginCredentials, 
+  AuthMeResponse,
+  UserStatistics,
+  UserVerificationStatus 
+} from '~/interfaces/auth';
 import { useEventBus } from './use-event-bus';
 import { EVENTS } from '~/constants/event-bus-constants';
 import { handleApiError, notifySuccess } from '~/services/notification-service';
 
 // Global state - shared across all instances of the composable
 const user = ref<User | null>(null);
+const userStatistics = ref<UserStatistics | null>(null);
+const verificationStatuses = ref<{
+  primaryCategory: UserVerificationStatus;
+  additionalCategories: UserVerificationStatus[];
+} | null>(null);
+const pendingApplications = ref<any[]>([]);
 const isAuthenticated = ref(false);
+const isInitialized = ref(false);
 
 export function useUserStore() {
   const { BUS } = useEventBus();
@@ -17,6 +35,7 @@ export function useUserStore() {
   const loginSource = reactive(new AsyncSource(loginUser, handleApiError));
   const registerSource = reactive(new AsyncSource(registerUser, handleApiError));
   const logoutSource = reactive(new AsyncSource(logoutUser, handleApiError));
+  const currentUserSource = reactive(new AsyncSource(getCurrentUser, handleAuthMeError));
 
   // Computed properties
   const userFullName = computed(() => {
@@ -41,11 +60,29 @@ export function useUserStore() {
     return user.value?.verification_status === 'verified';
   });
 
+  const availableProjectsCount = computed(() => {
+    return userStatistics.value?.available_projects || 0;
+  });
+
+  const unreadNotificationsCount = computed(() => {
+    return userStatistics.value?.unread_notifications || 0;
+  });
+
+  const pendingApplicationsCount = computed(() => {
+    return userStatistics.value?.pending_applications || 0;
+  });
+
   // Loading states
   const isLoginLoading = computed(() => loginSource.isLoading);
   const isRegisterLoading = computed(() => registerSource.isLoading);
   const isLogoutLoading = computed(() => logoutSource.isLoading);
-  const isLoading = computed(() => isLoginLoading.value || isRegisterLoading.value || isLogoutLoading.value);
+  const isCurrentUserLoading = computed(() => currentUserSource.isLoading);
+  const isLoading = computed(() => 
+    isLoginLoading.value || 
+    isRegisterLoading.value || 
+    isLogoutLoading.value || 
+    isCurrentUserLoading.value
+  );
 
   // Authentication methods
   const login = (credentials: LoginCredentials) => {
@@ -60,6 +97,19 @@ export function useUserStore() {
     logoutSource.push(handleLogoutSuccess);
   };
 
+  // Initialize user data from token
+  const initialize = async () => {
+    const storedToken = localStorage.getItem('token');
+    
+    if (storedToken) {
+      // Try to get current user data from API
+      currentUserSource.push(handleCurrentUserSuccess);
+    } else {
+      // No token, user is not authenticated
+      isInitialized.value = true;
+    }
+  };
+
   // Success handlers
   function handleLoginSuccess(response: any) {
     user.value = response.user;
@@ -71,6 +121,9 @@ export function useUserStore() {
     
     BUS.emit(EVENTS.SUCCESS_LOGIN, { user: response.user });
     notifySuccess('Successfully logged in!');
+
+    // Get fresh user data after login
+    currentUserSource.push(handleCurrentUserSuccess);
   }
 
   function handleRegisterSuccess(response: any) {
@@ -83,10 +136,16 @@ export function useUserStore() {
     
     BUS.emit(EVENTS.SUCCESS_REGISTER, { user: response.user });
     notifySuccess('Registration successful!');
+
+    // Get fresh user data after registration
+    currentUserSource.push(handleCurrentUserSuccess);
   }
 
   function handleLogoutSuccess() {
     user.value = null;
+    userStatistics.value = null;
+    verificationStatuses.value = null;
+    pendingApplications.value = [];
     isAuthenticated.value = false;
     
     // Clear stored data
@@ -97,21 +156,46 @@ export function useUserStore() {
     notifySuccess('Successfully logged out!');
   }
 
-  // Initialize from stored data
-  const initialize = () => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+  function handleCurrentUserSuccess(response: AuthMeResponse) {
+    user.value = response.profile;
+    userStatistics.value = response.statistics;
+    verificationStatuses.value = response.verificationStatuses;
+    pendingApplications.value = response.pendingApplications;
+    isAuthenticated.value = true;
+    isInitialized.value = true;
+
+    // Update stored user data
+    localStorage.setItem('user', JSON.stringify(response.profile));
     
-    if (storedToken && storedUser) {
-      try {
-        user.value = JSON.parse(storedUser);
-        isAuthenticated.value = true;
-      } catch (error) {
-        console.error('Failed to parse stored user data:', error);
-        // Clear corrupted data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
+    BUS.emit(EVENTS.USER_DATA_UPDATED, { user: response.profile });
+  }
+
+  // Special error handler for auth-me that doesn't show notifications
+  // since this runs on every page load
+  function handleAuthMeError(error: any) {
+    console.log('Auth-me failed, user not authenticated:', error.message);
+    
+    // Clear invalid token and user data
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    user.value = null;
+    userStatistics.value = null;
+    verificationStatuses.value = null;
+    pendingApplications.value = [];
+    isAuthenticated.value = false;
+    isInitialized.value = true;
+
+    // Only show error if it's not a 401 (unauthorized)
+    if (error.response?.status !== 401) {
+      handleApiError(error);
+    }
+  }
+
+  // Refresh user data manually
+  const refreshUserData = () => {
+    if (isAuthenticated.value) {
+      currentUserSource.push(handleCurrentUserSuccess);
     }
   };
 
@@ -165,24 +249,35 @@ export function useUserStore() {
 
   return {
     // State
-    user: computed(() => user.value),
-    isAuthenticated: computed(() => isAuthenticated.value),
-    isLoading,
-    isLoginLoading,
-    isRegisterLoading,
-    isLogoutLoading,
+    user: readonly(user),
+    userStatistics: readonly(userStatistics),
+    verificationStatuses: readonly(verificationStatuses),
+    pendingApplications: readonly(pendingApplications),
+    isAuthenticated: readonly(isAuthenticated),
+    isInitialized: readonly(isInitialized),
     
     // Computed properties
     userFullName,
     userDisplayName,
     userInitials,
     isVerified,
+    availableProjectsCount,
+    unreadNotificationsCount,
+    pendingApplicationsCount,
+    
+    // Loading states
+    isLoading,
+    isLoginLoading,
+    isRegisterLoading,
+    isLogoutLoading,
+    isCurrentUserLoading,
     
     // Methods
     login,
     register,
     logout,
     initialize,
+    refreshUserData,
     
     // Future methods
     updateProfile,

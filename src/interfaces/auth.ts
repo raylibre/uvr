@@ -25,6 +25,50 @@ export interface User {
   unread_notifications_count: number;
 }
 
+export interface UserVerificationStatus {
+  category: string;
+  status: string;
+  verified_at: string | null;
+}
+
+export interface UserStatistics {
+  available_projects: number;
+  unread_notifications: number;
+  pending_applications: number;
+}
+
+export interface PendingApplication {
+  id: string;
+  project_id: string;
+  project_name: string;
+  status: string;
+  submitted_at: string;
+  // Add more fields as needed based on actual structure
+}
+
+export interface AuthMeApiResponse {
+  success: boolean;
+  data: {
+    profile: User;
+    verification_statuses: {
+      primary_category: UserVerificationStatus;
+      additional_categories: UserVerificationStatus[];
+    };
+    statistics: UserStatistics;
+    pending_applications: PendingApplication[];
+  };
+}
+
+export interface AuthMeResponse {
+  profile: User;
+  verificationStatuses: {
+    primaryCategory: UserVerificationStatus;
+    additionalCategories: UserVerificationStatus[];
+  };
+  statistics: UserStatistics;
+  pendingApplications: PendingApplication[];
+}
+
 export interface UserSession {
   access_token: string;
   token_type: string;

@@ -13,7 +13,7 @@
         :rows="3"
         icon="fas fa-home"
         :error="address.errorMessage.value"
-        @update:modelValue="address.validate"
+        @update:model-value="address.validate"
         @blur="address.validate"
       />
 

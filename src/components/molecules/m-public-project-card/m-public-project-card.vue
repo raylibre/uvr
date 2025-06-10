@@ -9,11 +9,11 @@
       />
       <div v-else class="project-image-placeholder">
         <div class="placeholder-content">
-          <i class="fas fa-heart text-2xl text-gray-400"></i>
+          <i class="fas fa-heart text-2xl text-gray-400"/>
         </div>
       </div>
       <div v-if="project.is_featured" class="featured-badge">
-        <i class="fas fa-star"></i>
+        <i class="fas fa-star"/>
         Рекомендований
       </div>
     </div>
@@ -24,21 +24,21 @@
       
       <div class="project-stats">
         <div class="stat-item">
-          <i class="fas fa-users"></i>
+          <i class="fas fa-users"/>
           <span>{{ project.total_helped }} допомогли</span>
         </div>
         <div v-if="project.current_participants > 0" class="stat-item">
-          <i class="fas fa-user-clock"></i>
+          <i class="fas fa-user-clock"/>
           <span>{{ project.current_participants }} учасників</span>
         </div>
         <div v-if="project.success_stories_count > 0" class="stat-item">
-          <i class="fas fa-trophy"></i>
+          <i class="fas fa-trophy"/>
           <span>{{ project.success_stories_count }} успішних історій</span>
         </div>
       </div>
       
       <div v-if="project.total_budget" class="project-budget">
-        <i class="fas fa-coins"></i>
+        <i class="fas fa-coins"/>
         <span>Бюджет: {{ formatBudget(project.total_budget) }} грн</span>
       </div>
       

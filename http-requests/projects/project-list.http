@@ -1,4 +1,4 @@
 ### GET request to /public-projects
-GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/public-projects
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/public-projects?limit=1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
 

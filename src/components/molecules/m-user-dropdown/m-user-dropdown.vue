@@ -1,12 +1,12 @@
 <template>
-  <div class="m-user-dropdown" v-click-outside="closeDropdown">
+  <div v-click-outside="closeDropdown" class="m-user-dropdown">
     <!-- User Avatar Button -->
     <button
       type="button"
       class="user-button"
-      @click="toggleDropdown"
       :aria-expanded="isOpen"
       aria-haspopup="true"
+      @click="toggleDropdown"
     >
       <div class="user-avatar">
         <img

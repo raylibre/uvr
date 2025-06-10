@@ -5,11 +5,13 @@ import { fetchPublicProjects, fetchFeaturedProjects } from '~/services/api/proje
 import { getSharedAsyncSource, removeSharedAsyncSource } from '~/services/async-source-service';
 import { handleApiError } from '~/services/notification-service';
 
-export function usePublicProjects() {
-  // Create shared AsyncSource for public projects data
+export function usePublicProjects(limit?: number, offset?: number, featured?: boolean) {
+  // Create shared AsyncSource for public projects data with parameters
+  const sourceKey = `publicProjects_${limit || 'all'}_${offset || 0}_${featured || 'any'}`;
+  
   const publicProjectsSource = getSharedAsyncSource(
-    'publicProjects',
-    fetchPublicProjects,
+    sourceKey,
+    () => fetchPublicProjects(limit, offset, featured),
     handleApiError
   );
 
@@ -24,6 +26,7 @@ export function usePublicProjects() {
   // Loading states
   const isLoading = computed(() => publicProjectsSource.isLoading);
   const isFeaturedLoading = computed(() => featuredProjectsSource.isLoading);
+  const error = computed(() => publicProjectsSource.error);
 
   // Methods to fetch data
   function loadPublicProjects(): void {
@@ -58,7 +61,7 @@ export function usePublicProjects() {
 
   // Cleanup shared AsyncSource on unmount
   onBeforeUnmount(() => {
-    removeSharedAsyncSource('publicProjects', fetchPublicProjects);
+    removeSharedAsyncSource(sourceKey, () => fetchPublicProjects(limit, offset, featured));
   });
 
   return {
@@ -71,6 +74,7 @@ export function usePublicProjects() {
     // Loading states
     isLoading,
     isFeaturedLoading,
+    error,
     
     // Methods
     loadPublicProjects,

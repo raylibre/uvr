@@ -11,6 +11,7 @@ export const ROUTE_NAMES = {
   ABOUT: 'ABOUT',
   PROGRAMS: 'PROGRAMS',
   PROGRAM_DETAIL: 'PROGRAM_DETAIL',
+  NEWS: 'NEWS',
   NOT_FOUND: 'NOT_FOUND'
 } as const;
 
@@ -33,6 +34,11 @@ export const ROUTES: RouteRecordRaw[] = [
     name: ROUTE_NAMES.PROGRAM_DETAIL,
     component: () => import('~/components/pages/p-program-detail'),
     props: true
+  },
+  {
+    path: '/news',
+    name: ROUTE_NAMES.NEWS,
+    component: () => import('~/components/pages/p-news')
   },
   {
     path: '/leadership',

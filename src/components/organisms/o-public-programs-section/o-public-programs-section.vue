@@ -10,15 +10,15 @@
 
       <div v-if="isLoading" class="loading-state">
         <div class="flex justify-center items-center min-h-64">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"/>
         </div>
       </div>
 
       <div v-else-if="error" class="error-state">
         <div class="text-center py-16">
-          <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+          <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"/>
           <p class="text-red-600 mb-4">{{ error }}</p>
-          <button @click="retryFetch" class="btn btn-primary">
+          <button class="btn btn-primary" @click="retryFetch">
             Спробувати знову
           </button>
         </div>
@@ -35,30 +35,30 @@
         </div>
 
         <div v-if="showViewAll" class="view-all-section">
-          <button @click="$emit('view-all')" class="btn btn-outline">
+          <button class="btn btn-outline" @click="$emit('view-all')">
             Переглянути всі програми
-            <i class="fas fa-arrow-right ml-2"></i>
+            <i class="fas fa-arrow-right ml-2"/>
           </button>
         </div>
 
         <div v-if="meta" class="programs-meta">
           <div class="stats-grid">
             <div class="stat-item">
-              <i class="fas fa-project-diagram"></i>
+              <i class="fas fa-project-diagram"/>
               <div>
                 <span class="stat-number">{{ meta.total }}</span>
                 <span class="stat-label">Всього програм</span>
               </div>
             </div>
             <div class="stat-item">
-              <i class="fas fa-star"></i>
+              <i class="fas fa-star"/>
               <div>
                 <span class="stat-number">{{ meta.featured_count }}</span>
                 <span class="stat-label">Рекомендовані</span>
               </div>
             </div>
             <div class="stat-item">
-              <i class="fas fa-tags"></i>
+              <i class="fas fa-tags"/>
               <div>
                 <span class="stat-number">{{ meta.types.length }}</span>
                 <span class="stat-label">Типів програм</span>
@@ -108,12 +108,12 @@ export default defineComponent({
       meta, 
       isLoading, 
       error, 
-      fetchPublicProjects 
-    } = usePublicProjects();
+      loadPublicProjects 
+    } = usePublicProjects(props.limit);
 
     const displayProjects = computed(() => {
       const sourceProjects = props.showFeaturedOnly ? featuredProjects.value : projects.value;
-      return sourceProjects.slice(0, props.limit);
+      return sourceProjects;
     });
 
     const handleProjectClick = (slug: string) => {
@@ -121,12 +121,12 @@ export default defineComponent({
     };
 
     const retryFetch = () => {
-      fetchPublicProjects();
+      loadPublicProjects();
     };
 
     onMounted(() => {
       if (projects.value.length === 0 && !isLoading.value) {
-        fetchPublicProjects();
+        loadPublicProjects();
       }
     });
 

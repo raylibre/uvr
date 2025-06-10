@@ -1,0 +1,1 @@
+export { default } from './m-load-more-button.vue'; 

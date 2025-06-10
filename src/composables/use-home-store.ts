@@ -19,7 +19,7 @@ export function useHomeStore() {
 
   // Computed properties for accessing data
   const homeData = computed(() => homeDataSource.data as HomePageData | null);
-  const programs = computed(() => homeData.value?.programs || featuredProgramsSource.data || []);
+  const programs = computed(() => featuredProgramsSource.data || []);
   const representatives = computed(() => homeData.value?.representatives || representativesSource.data || []);
   const newsItems = computed(() => homeData.value?.newsItems || newsItemsSource.data || []);
 
@@ -48,19 +48,19 @@ export function useHomeStore() {
 
   // Success handlers
   function handleHomeDataSuccess(data: HomePageData) {
-    console.log('Home page data loaded successfully');
+    console.log('Home page data loaded successfully', data);
   }
 
   function handleProgramsSuccess(data: Program[]) {
-    console.log('Featured programs loaded successfully');
+    console.log('Featured programs loaded successfully', data);
   }
 
   function handleRepresentativesSuccess(data: Representative[]) {
-    console.log('Representatives loaded successfully');
+    console.log('Representatives loaded successfully', data);
   }
 
   function handleNewsSuccess(data: NewsItem[]) {
-    console.log('News items loaded successfully');
+    console.log('News items loaded successfully', data);
   }
 
   // Cleanup shared AsyncSource on unmount

@@ -1,8 +1,20 @@
 import apiClient from './api-client';
-import type { LoginResponse, LoginCredentials, LoginApiResponse } from '~/interfaces/auth';
+import type { 
+  LoginResponse, 
+  LoginCredentials, 
+  LoginApiResponse,
+  AuthMeApiResponse,
+  AuthMeResponse 
+} from '~/interfaces/auth';
 import { AxiosResponse } from 'axios';
 import type { RegistrationPayload, ApiResponse } from '~/types/auth';
-import { FUNCTIONS_V1_AUTH_REGISTRATION, FUNCTIONS_V1_AUTH_LOGIN, FUNCTIONS_V1_AUTH_LOGOUT, FUNCTIONS_V1_AUTH_REFRESH } from '~/constants/url-constants';
+import { 
+  FUNCTIONS_V1_AUTH_REGISTRATION, 
+  FUNCTIONS_V1_AUTH_LOGIN,
+  FUNCTIONS_V1_AUTH_ME, 
+  FUNCTIONS_V1_AUTH_LOGOUT, 
+  FUNCTIONS_V1_AUTH_REFRESH 
+} from '~/constants/url-constants';
 
 /**
  * Login user with credentials
@@ -27,6 +39,33 @@ export async function loginUser(credentials: LoginCredentials): Promise<LoginRes
   return {
     user,
     token: session.access_token
+  };
+}
+
+/**
+ * Get current user profile and data
+ * This function is used with AsyncSource for proper loading states and error handling
+ * Requires valid authentication token
+ */
+export async function getCurrentUser(): Promise<AuthMeResponse> {
+  const response: AxiosResponse<AuthMeApiResponse> = await apiClient.get(
+    FUNCTIONS_V1_AUTH_ME
+  );
+
+  if (!response.data.success) {
+    throw new Error('Failed to fetch user data');
+  }
+
+  const { profile, verification_statuses, statistics, pending_applications } = response.data.data;
+
+  return {
+    profile,
+    verificationStatuses: {
+      primaryCategory: verification_statuses.primary_category,
+      additionalCategories: verification_statuses.additional_categories
+    },
+    statistics,
+    pendingApplications: pending_applications
   };
 }
 
@@ -89,61 +128,3 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
 export async function register(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
   return registerUser(credentials);
 }
-
-// Mock implementation for testing - remove when real API is ready
-export async function registerMock(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Mock validation
-  if (credentials.email === 'taken@example.com') {
-    throw new Error('Email is already taken');
-  }
-  if (credentials.phone === '+1234567890') {
-    throw new Error('Phone number is already taken');
-  }
-
-  // Mock successful registration
-  return {
-    user: {
-      id: Math.floor(Math.random() * 1000).toString(),
-      email: credentials.email,
-      first_name: credentials.email.split('@')[0],
-      last_name: '',
-      patronymic: null,
-      phone: credentials.phone,
-      date_of_birth: null,
-      category: 'volunteer',
-      region: null,
-      city: null,
-      verification_status: 'pending',
-      avatar_url: null,
-      last_login_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      bio: null,
-      address: null,
-      emergency_contact_name: null,
-      emergency_contact_phone: null,
-      notifications_enabled: true,
-      email_notifications: true,
-      sms_notifications: false,
-      is_active: true,
-      available_projects_count: 0,
-      unread_notifications_count: 0
-    },
-    token: 'mock-jwt-token'
-  };
-}
-
-// Legacy class-based service - remove after refactoring
-export class AuthApiService {
-  private static readonly BASE_PATH = '/auth';
-
-  static async register(payload: RegistrationPayload): Promise<ApiResponse> {
-    return registerUserWithPayload(payload);
-  }
-
-  static async checkEmailAvailability(email: string): Promise<boolean> {
-    return checkEmailAvailability(email);
-  }
-} 

@@ -1,0 +1,32 @@
+### Test program detail endpoint with prosthetics-for-heroes
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/project-by-slug?slug=prosthetics-for-heroes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+###
+
+### Test non-existent program (should return 404)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/project-by-slug?slug=some-fake-program-url
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+###
+
+### Test another non-existent program
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/project-by-slug?slug=non-existent-program
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+###
+
+### Test user project status for project ID 1 (authenticated user)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IjlwNTh6U0hOOFdQaWpOdzEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2J0Ym1xdmF3cG9rZndwdGNybWVtLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIwYjdhNmIwMy05MThiLTRmMDEtOWU5OC0xMjQ3ZDQwNDAxNmIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ5NTY1MzQ3LCJpYXQiOjE3NDk1NjE3NDcsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInBob25lIjoiMzgwNTAxMjM0NTY3IiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiLCJwaG9uZSJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NDk1NjE3NDd9XSwic2Vzc2lvbl9pZCI6ImIxMzc2NjczLWNkM2ItNGJiNS05NmI5LTE1NjZiMGRlM2YxZCIsImlzX2Fub255bW91cyI6ZmFsc2V9.rXYwrQ8ZQzZw7Wk8-8QVG-3EAmKf_y1tQ-J10IKtVEc
+
+###
+
+### Test user project status without authentication (should return 401)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=1
+
+###
+
+### Test program detail with family support program
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/project-by-slug?slug=family-support-program
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws 
