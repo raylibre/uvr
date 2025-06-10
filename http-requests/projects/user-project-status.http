@@ -1,0 +1,32 @@
+### GET request to /user-project-status
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IjlwNTh6U0hOOFdQaWpOdzEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2J0Ym1xdmF3cG9rZndwdGNybWVtLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIwYjdhNmIwMy05MThiLTRmMDEtOWU5OC0xMjQ3ZDQwNDAxNmIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ5NTU5ODQ1LCJpYXQiOjE3NDk1NTYyNDUsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInBob25lIjoiMzgwNTAxMjM0NTY3IiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiLCJwaG9uZSJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NDk1NTYyNDV9XSwic2Vzc2lvbl9pZCI6ImVlZWMxNDcyLTk5NWItNDdiOC04MjRhLTE1MmI3YjI0MTE2MyIsImlzX2Fub255bW91cyI6ZmFsc2V9.rpPs39qql-0swjggMGfPOhQkRz6lQKzrFsqFCu3-sTE
+
+###
+
+### GET request to /user-project-status with different project
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.user_jwt_token_here
+
+###
+
+### GET request to /user-project-status with invalid project_id (should return 400)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=invalid
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.user_jwt_token_here
+
+###
+
+### GET request to /user-project-status without project_id parameter (should return 400)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.user_jwt_token_here
+
+###
+
+### GET request to /user-project-status without authorization (should return 401)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=1
+
+###
+
+### GET request to /user-project-status with anon token (should return 401)
+GET https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/user-project-status?project_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
