@@ -12,7 +12,7 @@
           </div>
           <ASwitchToggle
             :id="'register-notifications-enabled'"
-            v-model="notificationsEnabled.value.value"
+            v-model="notificationsEnabled.value.value as boolean"
             data-at="notifications-main-toggle"
             :error="notificationsEnabled.errorMessage.value"
           />
@@ -29,7 +29,7 @@
             </div>
             <ASwitchToggle
               :id="'register-email-notifications'"
-              v-model="emailNotifications.value.value"
+              v-model="emailNotifications.value.value as boolean"
               :disabled="!notificationsEnabled.value.value"
               data-at="notifications-email-toggle"
               :error="emailNotifications.errorMessage.value"
@@ -46,7 +46,7 @@
             </div>
             <ASwitchToggle
               :id="'register-sms-notifications'"
-              v-model="smsNotifications.value.value"
+              v-model="smsNotifications.value.value as boolean"
               :disabled="!notificationsEnabled.value.value"
               data-at="notifications-sms-toggle"
               :error="smsNotifications.errorMessage.value"
@@ -84,19 +84,19 @@ export default defineComponent({
 
     // Create fields using useField with the step form context
     const notificationsEnabled = useField('notifications_enabled', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const emailNotifications = useField('email_notifications', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const smsNotifications = useField('sms_notifications', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });

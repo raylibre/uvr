@@ -10,7 +10,7 @@
     >
       <div class="user-avatar">
         <img
-          v-if="user.avatar_url"
+          v-if="user?.avatar_url"
           :src="user.avatar_url"
           :alt="userDisplayName"
           class="avatar-image"
@@ -50,7 +50,7 @@
       <div class="dropdown-header">
         <div class="user-avatar-large">
           <img
-            v-if="user.avatar_url"
+            v-if="user?.avatar_url"
             :src="user.avatar_url"
             :alt="userDisplayName"
             class="avatar-image"
@@ -61,7 +61,7 @@
         </div>
         <div class="user-details">
           <p class="full-name">{{ userFullName }}</p>
-          <p class="email">{{ user.email }}</p>
+          <p class="email">{{ user?.email }}</p>
           <p class="verification-status" :class="statusClass">
             {{ userStatusText }}
           </p>

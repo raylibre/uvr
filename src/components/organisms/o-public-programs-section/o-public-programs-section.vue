@@ -72,8 +72,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, type PropType } from 'vue';
-import type { PublicProject } from '~/interfaces/project.interface';
+import { defineComponent, computed, onMounted } from 'vue';
 import { usePublicProjects } from '~/composables/use-public-projects';
 import MPublicProjectCard from '~/components/molecules/m-public-project-card';
 

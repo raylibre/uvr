@@ -61,7 +61,7 @@ export function usePublicProjects(limit?: number, offset?: number, featured?: bo
 
   // Cleanup shared AsyncSource on unmount
   onBeforeUnmount(() => {
-    removeSharedAsyncSource(sourceKey, () => fetchPublicProjects(limit, offset, featured));
+    removeSharedAsyncSource(sourceKey);
   });
 
   return {

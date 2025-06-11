@@ -65,7 +65,7 @@ export function useHomeStore() {
 
   // Cleanup shared AsyncSource on unmount
   onBeforeUnmount(() => {
-    removeSharedAsyncSource('homePageData', fetchHomePageData);
+    removeSharedAsyncSource('homePageData');
   });
 
   return {
