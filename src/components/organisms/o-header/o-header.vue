@@ -6,7 +6,7 @@
 
         <div class="logo">
           <RouterLink :to="{ name: ROUTE_NAMES.HOME }" class="logo__link">
-            <img src="/images/logo.png" alt="УВР" class="logo__image" />
+            <img src="/images/logo_final.png" alt="УВР" class="logo__image" />
           </RouterLink>
         </div>
 
