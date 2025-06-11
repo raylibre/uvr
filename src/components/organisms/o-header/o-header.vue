@@ -3,10 +3,10 @@
     <nav class="nav">
       <div class="header-container">
         <!-- Logo -->
+
         <div class="logo">
           <RouterLink :to="{ name: ROUTE_NAMES.HOME }" class="logo__link">
-            <img src="../../../assets/images/logo.svg" alt="УВР" class="logo__image" />
-            <span class="logo__text">УВР</span>
+            <img src="/images/logo.png" alt="УВР" class="logo__image" />
           </RouterLink>
         </div>
 
@@ -24,12 +24,12 @@
         <div class="actions">
           <!-- Desktop Language Switcher -->
           <OLangChangeBlock class="language-switcher" />
-          
+
           <!-- Loading state during initialization -->
           <div v-if="!isInitialized" class="initialization-loading">
             <div class="loading-spinner"/>
           </div>
-          
+
           <!-- Desktop Authentication Section -->
           <div v-else-if="isAuthenticated" class="user-section">
             <MUserDropdown />
@@ -57,12 +57,12 @@
           <div class="mobile-compact-actions">
             <!-- Mobile Language Switcher -->
             <OLangChangeBlock class="mobile-language-switcher" />
-            
+
             <!-- Mobile Loading State -->
             <div v-if="!isInitialized" class="mobile-loading">
               <div class="loading-spinner-sm"/>
             </div>
-            
+
             <!-- Mobile User Section -->
             <div v-else-if="isAuthenticated" class="mobile-user-section">
               <MUserDropdown />
@@ -154,7 +154,7 @@
           <div class="mobile-menu__language">
             <OLangChangeBlock />
           </div>
-          
+
           <!-- Mobile Authentication Section -->
           <div v-if="isAuthenticated" class="mobile-menu__user">
             <MUserDropdown />
