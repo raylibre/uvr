@@ -370,7 +370,7 @@ export default defineComponent({
   }
 
   .not-found-content {
-    @apply bg-white rounded-lg p-8 shadow-lg max-w-2xl mx-4 text-center;
+    @apply bg-white rounded-lg p-8 shadow-sm max-w-2xl mx-4 text-center;
 
     .not-found-icon {
       @apply mb-6;
