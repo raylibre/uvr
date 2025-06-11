@@ -18,7 +18,11 @@
       "prosthetics": "Prosthetics",
       "familyToFamily": "Family to Family",
       "ourActivities": "Our Activities",
-      "aboutUs": "About Us"
+      "aboutUs": "About Us",
+      "familySupportProgram": "Family Support Program",
+      "legalAidVeterans": "Legal Aid for Veterans",
+      "prostheticsForHeroes": "Prosthetics for Heroes",
+      "news": "News"
     }
   },
   "home": {
@@ -34,6 +38,65 @@
     "contact": {
       "title": "Start Your Project With Us",
       "description": "Let's bring your vision to life. Whether it's a new commercial building, bridge expansion project, or infrastructure development, we're here to help."
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About Us",
+      "subtitle": "Supporting Veterans and Their Families"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "We are dedicated to providing comprehensive support and resources to veterans and their families, helping them transition to civilian life and thrive in their communities."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "A world where every veteran and their family receives the support they deserve, enabling them to lead fulfilling and successful lives after their service to our country."
+    },
+    "values": {
+      "title": "Our Values",
+      "items": {
+        "integrity": {
+          "title": "Integrity",
+          "description": "We operate with honesty, transparency, and ethical standards in all our interactions."
+        },
+        "compassion": {
+          "title": "Compassion",
+          "description": "We approach every individual with empathy, understanding, and genuine care for their well-being."
+        },
+        "excellence": {
+          "title": "Excellence",
+          "description": "We strive to deliver the highest quality services and support to those we serve."
+        },
+        "community": {
+          "title": "Community",
+          "description": "We believe in the power of connection and building strong, supportive networks."
+        }
+      }
+    },
+    "services": {
+      "title": "What We Do",
+      "description": "We provide a wide range of services to support veterans and their families in their journey:",
+      "items": {
+        "legal": "Legal assistance and advocacy",
+        "prosthetics": "Prosthetic support and rehabilitation services",
+        "family": "Family-to-family support programs",
+        "activities": "Community activities and engagement programs",
+        "leadership": "Leadership development and mentorship"
+      }
+    },
+    "stats": {
+      "title": "Our Impact",
+      "veterans": "Veterans Served",
+      "families": "Families Supported",
+      "programs": "Active Programs",
+      "years": "Years of Service"
+    },
+    "contact": {
+      "title": "Get Involved",
+      "description": "Whether you're a veteran seeking support or someone who wants to help, we'd love to hear from you.",
+      "joinButton": "Join Our Community",
+      "contactButton": "Contact Us"
     }
   },
   "form": {

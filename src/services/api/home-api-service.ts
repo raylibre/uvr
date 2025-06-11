@@ -16,21 +16,14 @@ export async function fetchHomePageData(): Promise<HomePageData> {
     // return response.data;
     
     // Fallback to composing data from multiple endpoints
-    const [teamMembers, publicProjectsResponse, newsItems] = await Promise.all([
+    const [teamMembers, newsItems] = await Promise.all([
       getTeamMembers(),
-      getPublicProjects(),
       getHomePageNews()
     ]);
     
     const representatives = transformTeamMembersToRepresentatives(teamMembers);
-    
-    // Get featured projects or all projects if no featured ones
-    const featuredProjects = getFeaturedPublicProjects(publicProjectsResponse.data.projects);
-    const projectsToShow = featuredProjects.length > 0 ? featuredProjects : publicProjectsResponse.data.projects.slice(0, 4);
-    const programs = transformPublicProjectsToPrograms(projectsToShow);
 
     return {
-      programs,
       representatives,
       newsItems
     };

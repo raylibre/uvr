@@ -3,10 +3,10 @@
     <nav class="nav">
       <div class="header-container">
         <!-- Logo -->
+
         <div class="logo">
           <RouterLink :to="{ name: ROUTE_NAMES.HOME }" class="logo__link">
-            <img src="../../../assets/images/logo.svg" alt="УВР" class="logo__image" />
-            <span class="logo__text">УВР</span>
+            <img src="/images/logo_final.png" alt="УВР" class="logo__image" />
           </RouterLink>
         </div>
 
@@ -15,7 +15,7 @@
           <MHeaderNavButton
             v-for="item in menuItems"
             :key="item.name"
-            :to="{ name: item.name }"
+            :to="getNavigationRoute(item)"
             :translation-key="item.title"
           />
         </div>
@@ -24,12 +24,12 @@
         <div class="actions">
           <!-- Desktop Language Switcher -->
           <OLangChangeBlock class="language-switcher" />
-          
+
           <!-- Loading state during initialization -->
           <div v-if="!isInitialized" class="initialization-loading">
             <div class="loading-spinner"/>
           </div>
-          
+
           <!-- Desktop Authentication Section -->
           <div v-else-if="isAuthenticated" class="user-section">
             <MUserDropdown />
@@ -57,12 +57,12 @@
           <div class="mobile-compact-actions">
             <!-- Mobile Language Switcher -->
             <OLangChangeBlock class="mobile-language-switcher" />
-            
+
             <!-- Mobile Loading State -->
             <div v-if="!isInitialized" class="mobile-loading">
               <div class="loading-spinner-sm"/>
             </div>
-            
+
             <!-- Mobile User Section -->
             <div v-else-if="isAuthenticated" class="mobile-user-section">
               <MUserDropdown />
@@ -143,7 +143,7 @@
         <MHeaderNavButton
           v-for="item in menuItems"
           :key="item.name"
-          :to="{ name: item.name }"
+          :to="getNavigationRoute(item)"
           :translation-key="item.title"
           class="mobile"
           @click="closeMobileMenu"
@@ -154,7 +154,7 @@
           <div class="mobile-menu__language">
             <OLangChangeBlock />
           </div>
-          
+
           <!-- Mobile Authentication Section -->
           <div v-if="isAuthenticated" class="mobile-menu__user">
             <MUserDropdown />
@@ -173,7 +173,7 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import AButton from '~/components/atoms/a-button/a-button.vue';
 import OLangChangeBlock from '~/components/organisms/o-lang-change-block';
-import { MENU_ITEMS } from '~/constants/navigation-constants';
+import { MENU_ITEMS, type MenuItem } from '~/constants/navigation-constants';
 import { useTranslation } from '~/composables/use-translation';
 import { useLanguage } from '~/composables/use-language';
 import { useEventBus } from '~/composables/use-event-bus';
@@ -201,6 +201,15 @@ export default defineComponent({
     const { BUS } = useEventBus();
     const { isAuthenticated, initialize, unreadNotificationsCount, isInitialized } = useUserStore();
     const isMobileMenuOpen = ref(false);
+
+    const getNavigationRoute = (item: MenuItem) => {
+      // If the item has a custom path, use it directly
+      if (item.path) {
+        return item.path;
+      }
+      // Otherwise, use the route name
+      return { name: item.name };
+    };
 
     const toggleMobileMenu = () => {
       isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -231,6 +240,7 @@ export default defineComponent({
       menuItems: MENU_ITEMS,
       isMobileMenuOpen,
       isAuthenticated,
+      getNavigationRoute,
       toggleMobileMenu,
       closeMobileMenu,
       handleJoin,

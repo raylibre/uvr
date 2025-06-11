@@ -3,13 +3,14 @@ import AsyncSource from 'async-source';
 import type { NewsListResponse, NewsItem } from '~/interfaces/home';
 import { getNewsList } from '~/services/api/news-api-service';
 import { handleApiError } from '~/services/notification-service';
+import { NEWS_PAGINATION } from '~/constants/news-constants';
 
 export function useNewsStore() {
   // State
   const newsItems = ref<NewsItem[]>([]);
   const selectedCategory = ref<'general' | 'project_related' | null>(null);
   const currentOffset = ref(0);
-  const limit = ref(10);
+  const limit = ref(NEWS_PAGINATION.DEFAULT_LIMIT);
   const hasMore = ref(true);
   const totalReturned = ref(0);
 

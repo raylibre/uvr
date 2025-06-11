@@ -2,7 +2,7 @@
   <div class="p-program-detail">
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container">
-      <div class="flex justify-center items-center min-h-screen">
+      <div v-loading="true" class="flex justify-center items-center min-h-screen">
         <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"/>
       </div>
     </div>
@@ -248,7 +248,10 @@
               </div>
 
               <!-- Contact Info -->
-              <div class="contact-card">
+              <div
+                v-if="program.contact_email || program.contact_phone"
+                class="contact-card"
+              >
                 <h3 class="contact-title">Контакти</h3>
                 <div class="contact-list">
                   <div v-if="program.contact_email" class="contact-item">
@@ -281,7 +284,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watch, computed } from 'vue';
 import { useProgramDetail } from '~/composables/use-program-detail';
 
 export default defineComponent({
@@ -296,6 +299,8 @@ export default defineComponent({
 
   setup(props) {
     const applicationMessage = ref('');
+
+    const getSlug = computed(() => props.slug);
     
     const {
       program,
@@ -316,7 +321,7 @@ export default defineComponent({
       formatBudget,
       getProjectTypeLabel,
       formatDescription
-    } = useProgramDetail(props.slug);
+    } = useProgramDetail(getSlug);
 
     async function handleSubmitApplication() {
       try {
@@ -328,8 +333,14 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      console.log('mounted');
       loadProgramDetail();
     });
+
+    watch(() => props.slug, () => {
+      console.log('watch');
+      loadProgramDetail();
+    })
 
     return {
       program,
@@ -345,7 +356,6 @@ export default defineComponent({
       error,
       isProgramNotFound,
       applicationMessage,
-      slug: props.slug,
       loadProgramDetail,
       handleSubmitApplication,
       formatDate,
@@ -367,7 +377,7 @@ export default defineComponent({
   }
 
   .not-found-content {
-    @apply bg-white rounded-lg p-8 shadow-lg max-w-2xl mx-4 text-center;
+    @apply bg-white rounded-lg p-8 shadow-sm max-w-2xl mx-4 text-center;
 
     .not-found-icon {
       @apply mb-6;

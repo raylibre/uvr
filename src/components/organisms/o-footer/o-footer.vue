@@ -2,34 +2,35 @@
   <footer class="o-footer">
     <div class="footer-content">
       <div class="footer-section">
-        <h3>Contact Us</h3>
-        <p>Khreshchatyk St, 1, Kyiv, Ukraine</p>
-        <p>info@uvr.org</p>
-        <p>+380 44 123 4567</p>
+        <h3>Контакти</h3>
+        <p>36008 м. Полтава, Київське шосе, б. 21а</p>
+        <p>uvr_military@ukr.net</p>
+        <p>+380503279160</p>
       </div>
       <div class="footer-section">
-        <h3>Quick Links</h3>
+        <h3>Швидкі посилання</h3>
         <nav>
-          <ALink to="/about">About Us</ALink>
-          <ALink to="/programs">Our Programs</ALink>
-          <ALink to="/news">News</ALink>
-          <ALink to="/contact">Contact</ALink>
+          <ALink to="/about">Про нас</ALink>
+          <ALink to="/programs">Наші програми</ALink>
+          <ALink to="/news">Новини</ALink>
+          <ALink to="/contact">Контакти</ALink>
         </nav>
       </div>
       <div class="footer-section">
-        <h3>Follow Us</h3>
+        <h3>Ми в соцмережах</h3>
         <div class="social-links">
           <ASocialLink
             v-for="social in socialLinks"
             :key="social.id"
             :href="social.url"
             :icon="social.icon"
+            :label="social.label"
           />
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ currentYear }} UVR. All rights reserved.</p>
+      <p>&copy; {{ currentYear }} Український Військовий Рух. Всі права захищено.</p>
     </div>
   </footer>
 </template>
@@ -51,10 +52,18 @@ export default defineComponent({
     const currentYear = new Date().getFullYear();
 
     const socialLinks = [
-      { id: 1, icon: 'fab fa-facebook', url: 'https://facebook.com/uvr' },
-      { id: 2, icon: 'fab fa-twitter', url: 'https://twitter.com/uvr' },
-      { id: 3, icon: 'fab fa-instagram', url: 'https://instagram.com/uvr' },
-      { id: 4, icon: 'fab fa-linkedin', url: 'https://linkedin.com/company/uvr' }
+      {
+        id: 1,
+        icon: 'fab fa-facebook',
+        url: 'https://www.facebook.com/people/%D0%A3%D0%BA%D1%80%D0%B0%Dї%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%B9-%D0%92%D1%96%D0%B9%D1%81%D1%8C%D0%BA%D0%BE%D0%B2%D0%B8%D0%B9-%D0%A0%D1%83%D1%85/61575094014594/',
+        label: 'Facebook'
+      },
+      {
+        id: 2,
+        icon: 'fab fa-telegram',
+        url: 'https://t.me/ukrainianmilitarymovement',
+        label: 'Telegram'
+      }
     ];
 
     return {
@@ -91,4 +100,4 @@ export default defineComponent({
     @apply container mx-auto mt-8 pt-8 border-t border-gray-700 text-center;
   }
 }
-</style> 
+</style>

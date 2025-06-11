@@ -1,4 +1,4 @@
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, ComputedRef } from 'vue';
 import AsyncSource from 'async-source';
 import type { 
   ProgramDetail, 
@@ -40,7 +40,7 @@ const USER_STATUS_COLORS = {
   'user_not_verified': 'orange'
 };
 
-export function useProgramDetail(slug: string) {
+export function useProgramDetail(slug: ComputedRef) {
   // Get authentication state from user store
   const { isAuthenticated, user } = useUserStore();
   
@@ -101,14 +101,8 @@ export function useProgramDetail(slug: string) {
   function loadProgramDetail() {
     // Clear previous error
     error.value = null;
-    
-    // Check cache first
-    if (programsCache.value[slug]) {
-      program.value = programsCache.value[slug];
-      return;
-    }
 
-    programDetailSource.push(handleProgramDetailSuccess, slug);
+    programDetailSource.push(handleProgramDetailSuccess, slug.value);
   }
 
   function loadUserStatus() {
@@ -147,7 +141,7 @@ export function useProgramDetail(slug: string) {
   // Success handlers
   function handleProgramDetailSuccess(result: ProgramDetail) {
     program.value = result;
-    programsCache.value[slug] = result;
+    programsCache.value[slug.value] = result;
     error.value = null; // Clear error on success
     console.log('Program detail loaded successfully:', result);
     

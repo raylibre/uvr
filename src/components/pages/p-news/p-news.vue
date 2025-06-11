@@ -16,71 +16,53 @@
         @filter-change="handleFilterChange"
       />
 
-      <!-- Loading State for Initial Load -->
-      <div v-if="isLoading && newsItems.length === 0" class="loading-initial">
-        <div class="loading-spinner">
-          <svg class="spinner" viewBox="0 0 24 24">
-            <circle 
-              class="spinner-path" 
-              cx="12" 
-              cy="12" 
-              r="10" 
-              fill="none" 
-              stroke="currentColor" 
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-dasharray="60"
-              stroke-dashoffset="60"
+      <!-- News Content -->
+      <div class="news-content" v-loading="isLoading && newsItems.length === 0">
+        <!-- News Grid -->
+        <div v-if="newsItems.length > 0" class="news-grid">
+          <article
+            v-for="newsItem in newsItems"
+            :key="newsItem.id"
+            class="news-card"
+            @click="handleNewsClick(newsItem.id)"
+          >
+            <img
+              :src="newsItem.featured_image_url"
+              :alt="newsItem.title"
+              class="news-image"
+              @error="handleImageError"
             />
-          </svg>
+            <div class="news-content">
+              <div class="news-category">
+                <span 
+                  class="category-badge"
+                  :class="getCategoryClass(newsItem.category)"
+                >
+                  {{ getCategoryLabel(newsItem.category) }}
+                </span>
+                <span v-if="newsItem.related_project_title" class="project-link">
+                  {{ newsItem.related_project_title }}
+                </span>
+              </div>
+              <h2 class="news-title">{{ newsItem.title }}</h2>
+              <p class="news-excerpt">{{ newsItem.short_description }}</p>
+              <div class="news-meta">
+                <time class="news-date">{{ formatDate(newsItem.published_at) }}</time>
+                <span class="news-author">{{ newsItem.author_name }}</span>
+              </div>
+              <div v-if="newsItem.views_count > 0" class="news-views">
+                👁 {{ newsItem.views_count }}
+              </div>
+            </div>
+          </article>
         </div>
-        <p>Завантаження новин...</p>
-      </div>
 
-      <!-- News Grid -->
-      <div v-else-if="newsItems.length > 0" class="news-grid">
-        <article
-          v-for="newsItem in newsItems"
-          :key="newsItem.id"
-          class="news-card"
-          @click="handleNewsClick(newsItem.id)"
-        >
-          <img
-            :src="newsItem.featured_image_url"
-            :alt="newsItem.title"
-            class="news-image"
-            @error="handleImageError"
-          />
-          <div class="news-content">
-            <div class="news-category">
-              <span 
-                class="category-badge"
-                :class="getCategoryClass(newsItem.category)"
-              >
-                {{ getCategoryLabel(newsItem.category) }}
-              </span>
-              <span v-if="newsItem.related_project_title" class="project-link">
-                {{ newsItem.related_project_title }}
-              </span>
-            </div>
-            <h2 class="news-title">{{ newsItem.title }}</h2>
-            <p class="news-excerpt">{{ newsItem.short_description }}</p>
-            <div class="news-meta">
-              <time class="news-date">{{ formatDate(newsItem.published_at) }}</time>
-              <span class="news-author">{{ newsItem.author_name }}</span>
-            </div>
-            <div v-if="newsItem.views_count > 0" class="news-views">
-              👁 {{ newsItem.views_count }}
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else-if="!isLoading" class="empty-state">
-        <div class="empty-icon">📰</div>
-        <h3>Новин не знайдено</h3>
-        <p>Спробуйте змінити фільтр або повернутися пізніше</p>
+        <!-- Empty State -->
+        <div v-else-if="!isLoading" class="empty-state">
+          <div class="empty-icon">📰</div>
+          <h3>Новин не знайдено</h3>
+          <p>Спробуйте змінити фільтр або повернутися пізніше</p>
+        </div>
       </div>
 
       <!-- Load More Button -->
@@ -100,6 +82,8 @@ import { useRouter } from 'vue-router';
 import { useNewsStore } from '~/composables/use-news-store';
 import MNewsFilter from '~/components/molecules/m-news-filter';
 import MLoadMoreButton from '~/components/molecules/m-load-more-button';
+import { DEFAULT_IMAGES } from '~/constants/ui-constants';
+import { NEWS_CATEGORY_LABELS, NEWS_CATEGORY_CLASSES, NewsCategory } from '~/constants/news-constants';
 
 export default defineComponent({
   name: 'PNews',
@@ -131,7 +115,6 @@ export default defineComponent({
     };
 
     const handleNewsClick = (id: number) => {
-      // TODO: Navigate to news detail page when implemented
       router.push(`/news/${id}`);
     };
 
@@ -144,11 +127,11 @@ export default defineComponent({
     };
 
     const getCategoryLabel = (category: string) => {
-      return category === 'general' ? 'Загальні' : 'Проєкти';
+      return NEWS_CATEGORY_LABELS[category as NewsCategory] || category;
     };
 
     const getCategoryClass = (category: string) => {
-      return category === 'general' ? 'category-general' : 'category-project';
+      return NEWS_CATEGORY_CLASSES[category as NewsCategory] || 'category-default';
     };
 
     const handleImageError = (event: Event) => {
@@ -157,7 +140,7 @@ export default defineComponent({
       // Prevent infinite loop - only set fallback if not already set
       if (!target.dataset.fallbackAttempted) {
         target.dataset.fallbackAttempted = 'true';
-        target.src = '/assets/images/default-news-image.png';
+        target.src = DEFAULT_IMAGES.NEWS_PLACEHOLDER;
         
         // Remove the error listener to prevent further attempts
         target.removeEventListener('error', handleImageError);
@@ -198,21 +181,8 @@ export default defineComponent({
     }
   }
 
-  .loading-initial {
-    @apply flex flex-col items-center justify-center py-16 text-gray-500;
-
-    .loading-spinner {
-      @apply mb-4;
-
-      .spinner {
-        @apply w-8 h-8;
-        animation: spin 1s linear infinite;
-
-        .spinner-path {
-          animation: dash 1.5s ease-in-out infinite;
-        }
-      }
-    }
+  .news-content {
+    @apply min-h-96 relative;
   }
 
   .news-grid {
@@ -220,7 +190,7 @@ export default defineComponent({
   }
 
   .news-card {
-    @apply bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:transform hover:scale-105 hover:shadow-xl;
+    @apply bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg;
 
     .news-image {
       @apply w-full h-48 object-cover;
@@ -289,30 +259,6 @@ export default defineComponent({
     p {
       @apply text-gray-500;
     }
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 150;
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -35;
-  }
-  100% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -124;
   }
 }
 

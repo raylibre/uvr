@@ -11,7 +11,11 @@ export const ROUTE_NAMES = {
   ABOUT: 'ABOUT',
   PROGRAMS: 'PROGRAMS',
   PROGRAM_DETAIL: 'PROGRAM_DETAIL',
+  PROGRAM_FAMILY_SUPPORT: 'PROGRAM_FAMILY_SUPPORT',
+  PROGRAM_LEGAL_AID_VETERANS: 'PROGRAM_LEGAL_AID_VETERANS',
+  PROGRAM_PROSTHETICS_FOR_HEROES: 'PROGRAM_PROSTHETICS_FOR_HEROES',
   NEWS: 'NEWS',
+  NEWS_ARTICLE: 'NEWS_ARTICLE',
   NOT_FOUND: 'NOT_FOUND'
 } as const;
 
@@ -36,9 +40,33 @@ export const ROUTES: RouteRecordRaw[] = [
     props: true
   },
   {
+    path: '/programs/family-support-program',
+    name: ROUTE_NAMES.PROGRAM_FAMILY_SUPPORT,
+    component: () => import('~/components/pages/p-program-detail'),
+    props: () => ({ slug: 'family-support-program' })
+  },
+  {
+    path: '/programs/legal-aid-veterans',
+    name: ROUTE_NAMES.PROGRAM_LEGAL_AID_VETERANS,
+    component: () => import('~/components/pages/p-program-detail'),
+    props: () => ({ slug: 'legal-aid-veterans' })
+  },
+  {
+    path: '/programs/prosthetics-for-heroes',
+    name: ROUTE_NAMES.PROGRAM_PROSTHETICS_FOR_HEROES,
+    component: () => import('~/components/pages/p-program-detail'),
+    props: () => ({ slug: 'prosthetics-for-heroes' })
+  },
+  {
     path: '/news',
     name: ROUTE_NAMES.NEWS,
     component: () => import('~/components/pages/p-news')
+  },
+  {
+    path: '/news/:id',
+    name: ROUTE_NAMES.NEWS_ARTICLE,
+    component: () => import('~/components/pages/p-news-article'),
+    props: true
   },
   {
     path: '/leadership',

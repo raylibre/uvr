@@ -26,7 +26,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-program-card {
-  @apply bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:transform hover:scale-105 cursor-pointer flex flex-col;
+  @apply bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105 cursor-pointer flex flex-col;
   min-width: 280px;
   max-width: 320px;
   height: 400px;

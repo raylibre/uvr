@@ -1,12 +1,14 @@
 <template>
   <section class="o-public-programs-section">
     <div class="container mx-auto px-4">
-      <div class="section-header">
-        <h2 class="section-title">Наші Програми</h2>
-        <p class="section-description">
-          Ми пропонуємо різноманітні програми для підтримки ветеранів та їхніх сімей
-        </p>
-      </div>
+      <slot name="section-header">
+        <div class="section-header">
+          <h2 class="section-title">Наші Програми</h2>
+          <p class="section-description">
+            Ми пропонуємо різноманітні програми для підтримки ветеранів та їхніх сімей
+          </p>
+        </div>
+      </slot>
 
       <div v-if="isLoading" class="loading-state">
         <div class="flex justify-center items-center min-h-64">
@@ -18,9 +20,9 @@
         <div class="text-center py-16">
           <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"/>
           <p class="text-red-600 mb-4">{{ error }}</p>
-          <button class="btn btn-primary" @click="retryFetch">
+          <AButton variant="primary" @click="retryFetch">
             Спробувати знову
-          </button>
+          </AButton>
         </div>
       </div>
 
@@ -35,10 +37,14 @@
         </div>
 
         <div v-if="showViewAll" class="view-all-section">
-          <button class="btn btn-outline" @click="$emit('view-all')">
+          <AButton 
+            variant="outline" 
+            size="lg"
+            icon="fas fa-arrow-right"
+            @click="$emit('view-all')"
+          >
             Переглянути всі програми
-            <i class="fas fa-arrow-right ml-2"/>
-          </button>
+          </AButton>
         </div>
 
         <div v-if="meta" class="programs-meta">
@@ -75,12 +81,14 @@
 import { defineComponent, computed, onMounted } from 'vue';
 import { usePublicProjects } from '~/composables/use-public-projects';
 import MPublicProjectCard from '~/components/molecules/m-public-project-card';
+import AButton from '~/components/atoms/a-button';
 
 export default defineComponent({
   name: 'OPublicProgramsSection',
 
   components: {
-    MPublicProjectCard
+    MPublicProjectCard,
+    AButton
   },
 
   props: {
@@ -189,18 +197,6 @@ export default defineComponent({
           @apply block text-sm text-gray-500;
         }
       }
-    }
-  }
-
-  .btn {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200 inline-flex items-center;
-
-    &.btn-primary {
-      @apply bg-primary text-white hover:bg-primary-dark;
-    }
-
-    &.btn-outline {
-      @apply border-2 border-primary text-primary hover:bg-primary hover:text-white;
     }
   }
 }

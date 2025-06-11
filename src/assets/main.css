@@ -110,4 +110,43 @@
   .tag-secondary {
     @apply bg-gray-100 text-gray-800;
   }
+
+  /* Loading Directive Styles */
+  .sg-block-loader {
+    @apply absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-90 z-50;
+    backdrop-filter: blur(2px);
+  }
+
+  .sg-loader-spin {
+    @apply w-12 h-12 animate-spin;
+  }
+
+  .sg-loader-spin svg {
+    @apply w-full h-full;
+  }
+
+  .sg-loader-text {
+    @apply mt-3 text-sm text-gray-600 font-medium;
+  }
+
+  .loader-percentage {
+    @apply font-semibold text-primary;
+  }
+
+  /* Loading sizes */
+  .sg-block-loader.size-small .sg-loader-spin {
+    @apply w-8 h-8;
+  }
+
+  .sg-block-loader.size-small .sg-loader-text {
+    @apply text-xs mt-2;
+  }
+
+  .sg-block-loader.size-medium .sg-loader-spin {
+    @apply w-12 h-12;
+  }
+
+  .sg-block-loader.size-medium .sg-loader-text {
+    @apply text-sm mt-3;
+  }
 } 
