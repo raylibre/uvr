@@ -1,0 +1,306 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Atomic Design Guidelines
+
+This project follows Atomic Design methodology for component organization. All components must be organized into atoms, molecules, organisms, and pages with specific naming conventions and structure requirements.
+
+## Directory Structure
+
+Components are organized in the following hierarchy:
+
+```
+src/components/
+├── atoms/           # Basic building blocks (buttons, inputs, icons)
+├── molecules/       # Simple groups of atoms (forms, navigation items)
+├── organisms/       # Complex components made of molecules and atoms
+└── pages/           # Page-level components (route components)
+```
+
+## Component Organization Rules
+
+### 1. Component Directory Structure
+Every component must follow this exact structure:
+
+```
+component-name/
+├── component-name.vue    # Main component file
+└── index.ts             # Export file (MANDATORY)
+```
+
+**Example:**
+```
+a-button/
+├── a-button.vue
+└── index.ts
+```
+
+### 2. Mandatory index.ts File
+**EVERY component directory MUST include an index.ts file** with the following content:
+
+```typescript
+export { default } from './component-name.vue';
+```
+
+**Examples:**
+```typescript
+// atoms/a-button/index.ts
+export { default } from './a-button.vue';
+
+// molecules/m-modal/index.ts
+export { default } from './m-modal.vue';
+
+// organisms/o-header/index.ts
+export { default } from './o-header.vue';
+
+// pages/p-home/index.ts
+export { default } from './p-home.vue';
+```
+
+## Naming Conventions
+
+### Atoms (Prefix: `a-`)
+Basic UI elements that can't be broken down further.
+
+**Examples:**
+- `a-button` - Button component
+- `a-input` - Input field
+- `a-icon` - Icon component
+- `a-link` - Link component
+- `a-checkbox` - Checkbox component
+
+**Directory Structure:**
+```
+atoms/
+├── a-button/
+│   ├── a-button.vue
+│   └── index.ts
+├── a-input/
+│   ├── a-input.vue
+│   └── index.ts
+└── a-icon/
+    ├── a-icon.vue
+    └── index.ts
+```
+
+### Molecules (Prefix: `m-`)
+Simple groups of atoms functioning together as a unit.
+
+**Examples:**
+- `m-form-field` - Label + input + error message
+- `m-modal` - Modal dialog
+- `m-pagination` - Pagination component
+- `m-contact-form` - Contact form
+- `m-user-dropdown` - User dropdown menu
+
+**Directory Structure:**
+```
+molecules/
+├── m-form-field/
+│   ├── m-form-field.vue
+│   └── index.ts
+├── m-modal/
+│   ├── m-modal.vue
+│   └── index.ts
+└── m-pagination/
+    ├── m-pagination.vue
+    └── index.ts
+```
+
+### Organisms (Prefix: `o-`)
+Complex components composed of molecules and atoms.
+
+**Examples:**
+- `o-header` - Site header
+- `o-footer` - Site footer
+- `o-hero-section` - Hero section
+- `o-contact-section` - Contact section
+- `o-programs-section` - Programs listing section
+
+**Directory Structure:**
+```
+organisms/
+├── o-header/
+│   ├── o-header.vue
+│   └── index.ts
+├── o-footer/
+│   ├── o-footer.vue
+│   └── index.ts
+└── o-hero-section/
+    ├── o-hero-section.vue
+    └── index.ts
+```
+
+### Pages (Prefix: `p-`)
+Full page components that combine organisms, molecules, and atoms.
+
+**Examples:**
+- `p-home` - Home page
+- `p-about` - About page
+- `p-programs` - Programs page
+- `p-program-detail` - Program detail page
+- `p-not-found` - 404 page
+
+**Directory Structure:**
+```
+pages/
+├── p-home/
+│   ├── p-home.vue
+│   └── index.ts
+├── p-about/
+│   ├── p-about.vue
+│   └── index.ts
+└── p-programs/
+    ├── p-programs.vue
+    └── index.ts
+```
+
+## Import and Usage Patterns
+
+### Importing Components
+Always import components using their directory path (which resolves to index.ts):
+
+```typescript
+// ✅ Correct - imports through index.ts
+import AButton from '~/components/atoms/a-button';
+import MModal from '~/components/molecules/m-modal';
+import OHeader from '~/components/organisms/o-header';
+import PHome from '~/components/pages/p-home';
+
+// ❌ Wrong - direct .vue file import
+import AButton from '~/components/atoms/a-button/a-button.vue';
+```
+
+### Component Registration
+Register components using PascalCase names:
+
+```typescript
+import AButton from '~/components/atoms/a-button';
+import MFormField from '~/components/molecules/m-form-field';
+
+export default {
+  components: {
+    AButton,
+    MFormField
+  }
+}
+```
+
+### Template Usage
+Use components in templates with PascalCase:
+
+```vue
+<template>
+  <div>
+    <AButton @click="handleClick">
+      Click me
+    </AButton>
+    
+    <MFormField
+      v-model="formData.email"
+      label="Email"
+      type="email"
+    />
+  </div>
+</template>
+```
+
+## Component Composition Rules
+
+### Atoms
+- **Can only use:** HTML elements, Vue directives, composables
+- **Cannot use:** Other components
+- **Purpose:** Basic building blocks
+
+### Molecules  
+- **Can use:** Atoms, HTML elements, Vue directives, composables
+- **Cannot use:** Organisms, Pages
+- **Purpose:** Simple combinations of atoms
+
+### Organisms
+- **Can use:** Atoms, Molecules, HTML elements, Vue directives, composables
+- **Cannot use:** Pages
+- **Purpose:** Complex UI sections
+
+### Pages
+- **Can use:** Atoms, Molecules, Organisms, HTML elements, Vue directives, composables
+- **Purpose:** Complete page layouts
+
+## File Naming Rules
+
+1. **Component files:** Use kebab-case with appropriate prefix
+   - `a-button.vue` (not `AButton.vue` or `Button.vue`)
+   - `m-contact-form.vue` (not `ContactForm.vue`)
+
+2. **Directory names:** Match the component file name (without .vue)
+   - `a-button/` directory contains `a-button.vue`
+
+3. **Index files:** Always named `index.ts`
+
+## Best Practices
+
+### 1. Component Responsibility
+- Each component should have a single, clear responsibility
+- Atoms should be as generic and reusable as possible
+- Molecules should combine atoms for specific use cases
+- Organisms should represent distinct UI sections
+- Pages should compose organisms into complete layouts
+
+### 2. Props and Events
+- Use descriptive prop names
+- Always define prop types and defaults
+- Use kebab-case for event names
+- Document complex props with JSDoc comments
+
+### 3. Styling
+- Use scoped styles when possible
+- Follow the project's CSS/SCSS conventions
+- Use CSS classes that match component hierarchy (BEM methodology recommended)
+
+### 4. Documentation
+- Add component documentation using JSDoc comments
+- Document props, events, and slots
+- Include usage examples for complex components
+
+## Migration Guide
+
+When creating new components or refactoring existing ones:
+
+1. **Determine the appropriate level** (atom, molecule, organism, page)
+2. **Create the directory** with proper naming convention
+3. **Create the .vue file** with matching name
+4. **Create the index.ts file** with proper export
+5. **Update imports** in consuming components
+6. **Test the component** to ensure it works correctly
+
+## Anti-Patterns to Avoid
+
+❌ **Don't do this:**
+```typescript
+// Missing index.ts file
+a-button/
+└── a-button.vue
+
+// Wrong import path
+import AButton from '~/components/atoms/a-button/a-button.vue';
+
+// Wrong naming
+components/atoms/Button/  // Missing prefix
+components/atoms/a_button/  // Wrong case
+```
+
+✅ **Do this instead:**
+```typescript
+// Proper structure
+a-button/
+├── a-button.vue
+└── index.ts
+
+// Correct import
+import AButton from '~/components/atoms/a-button';
+
+// Correct naming
+components/atoms/a-button/
+```

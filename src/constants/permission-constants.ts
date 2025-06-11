@@ -1,9 +1,4 @@
-export enum UserRole {
-  ADMIN = 'admin',
-  MODERATOR = 'moderator',
-  COORDINATOR = 'coordinator',
-  USER = 'user'
-}
+import { UserRole } from './status-constants';
 
 export enum Permission {
   // Profile permissions

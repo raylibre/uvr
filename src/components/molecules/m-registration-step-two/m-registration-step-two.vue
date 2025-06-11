@@ -6,7 +6,7 @@
     <div class="form">
       <AFormDatepicker
         :id="'register-date-of-birth'"
-        v-model="dateOfBirth.value.value"
+        v-model="dateOfBirth.value.value as string"
         label="Date of Birth"
         :required="true"
         icon="fas fa-calendar"
@@ -17,7 +17,7 @@
       <div class="form-grid">
         <AFormSelect
           :id="'register-region'"
-          v-model="region.value.value"
+          v-model="region.value.value as string"
           label="Region"
           :options="[...REGIONS]"
           :required="true"
@@ -29,7 +29,7 @@
 
         <AFormSelect
           :id="'register-city'"
-          v-model="city.value.value"
+          v-model="city.value.value as string"
           label="City"
           :options="[...availableCities]"
           :required="true"
@@ -42,7 +42,7 @@
 
       <AFormSelect
         :id="'register-category'"
-        v-model="category.value.value"
+        v-model="category.value.value as string"
         label="Category"
         :options="[...USER_CATEGORIES]"
         :required="true"
@@ -53,7 +53,7 @@
 
       <AFormTextarea
         :id="'register-bio'"
-        v-model="bio.value.value"
+        v-model="bio.value.value as string"
         label="Bio (Optional)"
         :placeholder="'Tell us about yourself and your motivation...'"
         :rows="4"
@@ -88,31 +88,31 @@ export default defineComponent({
 
     // Create fields using useField with the step form context
     const dateOfBirth = useField('date_of_birth', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const region = useField('region', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const city = useField('city', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const category = useField('category', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const bio = useField('bio', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });

@@ -6,21 +6,21 @@
     <div class="form">
       <AFormTextarea
         :id="'register-address'"
-        v-model="address.value.value"
+        v-model="address.value.value as string"
         label="Full Address"
         :placeholder="'Enter your complete address...'"
         :required="true"
         :rows="3"
         icon="fas fa-home"
         :error="address.errorMessage.value"
-        @update:modelValue="address.validate"
+        @update:model-value="address.validate"
         @blur="address.validate"
       />
 
       <div class="form-grid">
         <AFormInput
           :id="'register-emergency-contact-name'"
-          v-model="emergencyContactName.value.value"
+          v-model="emergencyContactName.value.value as string"
           label="Emergency Contact Name"
           type="text"
           :required="true"
@@ -31,7 +31,7 @@
 
         <AFormInput
           :id="'register-emergency-contact-phone'"
-          v-model="emergencyContactPhone.value.value"
+          v-model="emergencyContactPhone.value.value as string"
           label="Emergency Contact Phone"
           type="tel"
           :required="true"
@@ -65,17 +65,17 @@ export default defineComponent({
 
     // Create fields using useField with the step form context
     const address = useField('address', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false
     });
 
     const emergencyContactName = useField('emergency_contact_name', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false
     });
 
     const emergencyContactPhone = useField('emergency_contact_phone', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false
     });
 

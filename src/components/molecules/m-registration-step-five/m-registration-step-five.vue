@@ -130,7 +130,7 @@
           <div class="terms__checkbox">
             <ACheckbox
               :id="'register-terms'"
-              v-model="terms.value.value"
+              v-model="terms.value.value as boolean"
               data-at="registration-terms-checkbox"
               :error="terms.errorMessage.value"
               @blur="terms.validate"
@@ -153,7 +153,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
-import type { UserCategory } from '~/types/user';
 import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
@@ -173,7 +172,7 @@ export default defineComponent({
 
     // Create terms field using useField with the step form context
     const terms = useField('terms', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });

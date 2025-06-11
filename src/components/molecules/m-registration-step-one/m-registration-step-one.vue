@@ -14,7 +14,7 @@
       <div class="form-grid">
         <AFormInput
           :id="'register-first-name'"
-          v-model="firstName.value.value"
+          v-model="firstName.value.value as string"
           label="First Name"
           type="text"
           :required="true"
@@ -25,7 +25,7 @@
 
         <AFormInput
           :id="'register-last-name'"
-          v-model="lastName.value.value"
+          v-model="lastName.value.value as string"
           label="Last Name"
           type="text"
           :required="true"
@@ -37,7 +37,7 @@
 
       <AFormInput
         :id="'register-patronymic'"
-        v-model="patronymic.value.value"
+        v-model="patronymic.value.value as string"
         label="Patronymic (Optional)"
         type="text"
         icon="fas fa-user"
@@ -47,7 +47,7 @@
 
       <AFormInput
         :id="'register-email'"
-        v-model="email.value.value"
+        v-model="email.value.value as string"
         label="Email Address"
         type="email"
         :required="true"
@@ -58,7 +58,7 @@
 
       <AFormInput
         :id="'register-phone'"
-        v-model="phone.value.value"
+        v-model="phone.value.value as string"
         label="Phone Number"
         type="tel"
         :required="true"
@@ -70,7 +70,7 @@
       <div class="form-grid">
         <AFormInput
           :id="'register-password'"
-          v-model="password.value.value"
+          v-model="password.value.value as string"
           label="Password"
           type="password"
           :required="true"
@@ -81,7 +81,7 @@
 
         <AFormInput
           :id="'register-password-confirmation'"
-          v-model="passwordConfirmation.value.value"
+          v-model="passwordConfirmation.value.value as string"
           label="Confirm Password"
           type="password"
           :required="true"
@@ -114,43 +114,43 @@ export default defineComponent({
 
     // Create fields using useField with the step form context
     const firstName = useField('first_name', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const lastName = useField('last_name', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const patronymic = useField('patronymic', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const email = useField('email', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const phone = useField('phone', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const password = useField('password', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
     const passwordConfirmation = useField('password_confirmation', undefined, {
-      form: stepForm,
+      form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });

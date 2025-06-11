@@ -1,0 +1,532 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Vue i18n Translation Guidelines
+
+This project uses Vue i18n for internationalization with a centralized translation key system. All text content must be internationalized using the established patterns and conventions.
+
+## Translation System Architecture
+
+### 1. Supported Languages
+Currently supported languages:
+- **Ukrainian (uk)** - Default language  
+- **English (en)** - Fallback language
+
+### 2. Translation Files Structure
+```
+src/i18n/
+├── index.ts              # i18n configuration
+└── locales/
+    ├── en.json          # English translations
+    └── uk.json          # Ukrainian translations
+```
+
+### 3. Translation Keys Constants
+All translation keys are centralized in `src/constants/translation-keys.ts`:
+
+```typescript
+export const T_KEYS = {
+  COMMON: {
+    BUTTONS: {
+      SEND: 'common.buttons.send',
+      LOGIN: 'common.buttons.login',
+      JOIN: 'common.buttons.join'
+    },
+    NAVIGATION: {
+      HOME: 'common.navigation.home',
+      ABOUT: 'common.navigation.aboutUs'
+    }
+  },
+  FORM: {
+    LABELS: {
+      NAME: 'form.labels.name',
+      EMAIL: 'form.labels.email'
+    }
+  }
+} as const;
+```
+
+## Translation Usage Patterns
+
+### 1. Use Translation Composable
+Always use the centralized `useTranslation` composable instead of direct `useI18n`:
+
+```typescript
+// ✅ Correct - use centralized composable
+import { useTranslation } from '~/composables/use-translation';
+
+export default defineComponent({
+  setup() {
+    const { t, T_KEYS } = useTranslation();
+    
+    return {
+      t,
+      T_KEYS
+    };
+  }
+});
+
+// ❌ Wrong - direct useI18n import
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+```
+
+### 2. Use Translation Key Constants
+Always use the `T_KEYS` constants instead of hardcoded strings:
+
+```vue
+<template>
+  <!-- ✅ Correct - using T_KEYS constants -->
+  <button>{{ t(T_KEYS.COMMON.BUTTONS.SEND) }}</button>
+  <h1>{{ t(T_KEYS.HOME.HERO.TITLE) }}</h1>
+  
+  <!-- ❌ Wrong - hardcoded translation keys -->
+  <button>{{ t('common.buttons.send') }}</button>
+  <h1>{{ t('home.hero.title') }}</h1>
+</template>
+
+<script setup lang="ts">
+import { useTranslation } from '~/composables/use-translation';
+
+const { t, T_KEYS } = useTranslation();
+</script>
+```
+
+### 3. Component Translation Patterns
+
+#### Options API Pattern:
+```typescript
+import { defineComponent } from 'vue';
+import { useTranslation } from '~/composables/use-translation';
+
+export default defineComponent({
+  name: 'MyComponent',
+  
+  setup() {
+    const { t, T_KEYS } = useTranslation();
+    
+    return {
+      t,
+      T_KEYS
+    };
+  }
+});
+```
+
+#### Composition API Pattern:
+```vue
+<script setup lang="ts">
+import { useTranslation } from '~/composables/use-translation';
+
+const { t, T_KEYS } = useTranslation();
+</script>
+```
+
+### 4. Props with Translation Keys
+For components that accept translation keys as props:
+
+```vue
+<!-- Component definition -->
+<template>
+  <button class="nav-button">
+    {{ label }}
+  </button>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from 'vue';
+import { useTranslation } from '~/composables/use-translation';
+
+export default defineComponent({
+  name: 'MHeaderNavButton',
+  
+  props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    translationKey: {
+      type: String,
+      default: ''
+    }
+  },
+  
+  setup(props) {
+    const { t } = useTranslation();
+    
+    const displayLabel = computed(() => {
+      if (props.translationKey) {
+        return t(props.translationKey);
+      }
+      return props.label;
+    });
+    
+    return {
+      label: displayLabel
+    };
+  }
+});
+</script>
+
+<!-- Usage -->
+<template>
+  <MHeaderNavButton 
+    :translation-key="T_KEYS.COMMON.NAVIGATION.HOME" 
+  />
+</template>
+```
+
+## Translation File Organization
+
+### 1. JSON Structure
+Organize translations in a hierarchical structure:
+
+```json
+{
+  "common": {
+    "buttons": {
+      "send": "Send Message",
+      "cancel": "Cancel",
+      "submit": "Submit"
+    },
+    "navigation": {
+      "home": "Home",
+      "about": "About Us"
+    },
+    "errors": {
+      "pageNotFound": "Page not found"
+    }
+  },
+  "form": {
+    "labels": {
+      "name": "Name",
+      "email": "Email"
+    },
+    "placeholders": {
+      "name": "Enter your name",
+      "email": "Enter your email"
+    },
+    "validation": {
+      "required": "{field} is required",
+      "email": "Please enter a valid email"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Welcome",
+      "description": "Description text"
+    }
+  }
+}
+```
+
+### 2. Key Naming Conventions
+- Use **camelCase** for JSON keys
+- Use **dot notation** for nested keys
+- Keep keys descriptive and contextual
+- Group related translations together
+
+```json
+{
+  "form": {
+    "labels": {                    // Group: form labels
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone Number"
+    },
+    "placeholders": {              // Group: form placeholders
+      "firstName": "Enter first name",
+      "lastName": "Enter last name"
+    },
+    "validation": {                // Group: validation messages
+      "required": "{field} is required",
+      "minLength": "Minimum {min} characters",
+      "maxLength": "Maximum {max} characters"
+    }
+  }
+}
+```
+
+### 3. Translation Key Constants Structure
+Mirror the JSON structure in TypeScript constants:
+
+```typescript
+export const T_KEYS = {
+  COMMON: {
+    BUTTONS: {
+      SEND: 'common.buttons.send',
+      CANCEL: 'common.buttons.cancel'
+    },
+    NAVIGATION: {
+      HOME: 'common.navigation.home',
+      ABOUT: 'common.navigation.about'
+    }
+  },
+  FORM: {
+    LABELS: {
+      FIRST_NAME: 'form.labels.firstName',
+      LAST_NAME: 'form.labels.lastName'
+    },
+    VALIDATION: {
+      REQUIRED: 'form.validation.required',
+      MIN_LENGTH: 'form.validation.minLength'
+    }
+  }
+} as const;
+```
+
+## Advanced Translation Features
+
+### 1. Parameterized Translations
+Use parameters for dynamic content:
+
+```json
+{
+  "form": {
+    "validation": {
+      "required": "{field} is required",
+      "minLength": "{field} must be at least {min} characters",
+      "maxLength": "{field} must not exceed {max} characters"
+    }
+  }
+}
+```
+
+Usage:
+```typescript
+// Parameterized translation
+const errorMessage = t(T_KEYS.FORM.VALIDATION.REQUIRED, { 
+  field: t(T_KEYS.FORM.LABELS.EMAIL) 
+});
+
+const lengthMessage = t(T_KEYS.FORM.VALIDATION.MIN_LENGTH, {
+  field: t(T_KEYS.FORM.LABELS.PASSWORD),
+  min: 8
+});
+```
+
+### 2. Pluralization
+Use Vue i18n pluralization features:
+
+```json
+{
+  "items": {
+    "count": "no items | one item | {count} items"
+  }
+}
+```
+
+Usage:
+```typescript
+const itemsText = t('items.count', { count: itemCount });
+```
+
+### 3. Validation Schema Translations
+For form validation with Yup:
+
+```typescript
+import { object, string } from 'yup';
+import { useTranslation } from '~/composables/use-translation';
+
+export default defineComponent({
+  setup() {
+    const { t, T_KEYS } = useTranslation();
+    
+    const validationSchema = object({
+      name: string()
+        .required(t(T_KEYS.FORM.VALIDATION.REQUIRED, { 
+          field: t(T_KEYS.FORM.LABELS.NAME) 
+        }))
+        .min(2, t(T_KEYS.FORM.VALIDATION.MIN_LENGTH, { 
+          field: t(T_KEYS.FORM.LABELS.NAME), 
+          min: 2 
+        }))
+    });
+    
+    return { validationSchema };
+  }
+});
+```
+
+## Language Switching
+
+### 1. Language Composable Usage
+Use the centralized language composable for language switching:
+
+```vue
+<script setup lang="ts">
+import { useLanguage } from '~/composables/use-language';
+
+const { 
+  currentLanguage, 
+  availableLanguages, 
+  setLanguage 
+} = useLanguage();
+
+function handleLanguageChange(languageCode: string) {
+  setLanguage(languageCode);
+}
+</script>
+```
+
+### 2. Language Persistence
+The language preference is automatically persisted in localStorage and initialized on app start:
+
+```typescript
+// Language is automatically saved and restored
+setLanguage('en'); // Saves to localStorage
+initializeLanguage(); // Restores from localStorage on app start
+```
+
+### 3. Language Switcher Component
+Use the standard language switcher component:
+
+```vue
+<template>
+  <OLangChangeBlock />
+</template>
+```
+
+## Best Practices
+
+### 1. Translation Key Management
+- **Add missing keys** to both language files when creating new translations
+- **Keep keys synchronized** between all language files
+- **Use consistent naming** following the established patterns
+- **Group related keys** logically
+
+### 2. Content Guidelines
+- **Never hardcode text** - always use translations
+- **Keep translations contextual** - provide enough context for translators
+- **Use gender-neutral language** when possible
+- **Consider cultural differences** in translations
+
+### 3. Component Translation Patterns
+```vue
+<template>
+  <div class="component">
+    <!-- Text content -->
+    <h1>{{ t(T_KEYS.SECTION.TITLE) }}</h1>
+    <p>{{ t(T_KEYS.SECTION.DESCRIPTION) }}</p>
+    
+    <!-- Form elements -->
+    <MFormField
+      :label="t(T_KEYS.FORM.LABELS.EMAIL)"
+      :placeholder="t(T_KEYS.FORM.PLACEHOLDERS.EMAIL)"
+    />
+    
+    <!-- Buttons -->
+    <AButton>
+      {{ t(T_KEYS.COMMON.BUTTONS.SUBMIT) }}
+    </AButton>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useTranslation } from '~/composables/use-translation';
+
+const { t, T_KEYS } = useTranslation();
+</script>
+```
+
+### 4. Navigation Menu Translations
+Use the established pattern for navigation menus:
+
+```typescript
+// constants/navigation-constants.ts
+export const MENU_ITEMS: MenuItem[] = [
+  {
+    name: 'HOME',
+    title: 'common.navigation.home'  // Translation key, not translated text
+  },
+  {
+    name: 'ABOUT',
+    title: 'common.navigation.aboutUs'
+  }
+];
+```
+
+## Translation Workflow
+
+### 1. Adding New Translations
+1. **Add the key** to `src/constants/translation-keys.ts`
+2. **Add translations** to all language files (`en.json`, `uk.json`)
+3. **Import and use** the translation key in components
+4. **Test** in both languages
+
+### 2. Updating Existing Translations
+1. **Update the JSON files** for the affected languages
+2. **Verify** the translation key constant exists
+3. **Test** the changes in all supported languages
+
+### 3. Missing Translation Handling
+- Default language (Ukrainian) should have all keys
+- Fallback language (English) will be used for missing keys
+- Add console warnings for missing translations in development
+
+## Anti-Patterns to Avoid
+
+❌ **Don't do this:**
+```vue
+<template>
+  <!-- Hardcoded text -->
+  <button>Send Message</button>
+  <h1>Welcome to our site</h1>
+  
+  <!-- Direct translation keys -->
+  <button>{{ t('common.buttons.send') }}</button>
+  
+  <!-- Direct useI18n usage -->
+  <script>
+  import { useI18n } from 'vue-i18n';
+  const { t } = useI18n();
+  </script>
+</template>
+```
+
+✅ **Do this instead:**
+```vue
+<template>
+  <!-- Use T_KEYS constants -->
+  <button>{{ t(T_KEYS.COMMON.BUTTONS.SEND) }}</button>
+  <h1>{{ t(T_KEYS.HOME.HERO.TITLE) }}</h1>
+</template>
+
+<script setup lang="ts">
+// Use centralized composable
+import { useTranslation } from '~/composables/use-translation';
+
+const { t, T_KEYS } = useTranslation();
+</script>
+```
+
+## Type Safety
+
+### 1. Translation Key Types
+The translation keys are strongly typed through the `as const` assertion:
+
+```typescript
+export const T_KEYS = {
+  COMMON: {
+    BUTTONS: {
+      SEND: 'common.buttons.send'
+    }
+  }
+} as const;
+```
+
+### 2. Component Props Types
+For components accepting translation keys:
+
+```typescript
+interface Props {
+  translationKey?: string;
+  label?: string;
+}
+
+const props = defineProps<Props>();
+```
+
+This ensures type safety and IntelliSense support for translation keys throughout the application.

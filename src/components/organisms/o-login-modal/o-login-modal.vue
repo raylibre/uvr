@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import { useAuthStore } from '~/composables/use-auth-store';
+import { useUserStore } from '~/composables/use-user-store';
 import { useEventBus } from '~/composables/use-event-bus';
 import { EVENTS } from '~/constants/event-bus-constants';
 import OModal from '~/components/organisms/o-modal';
@@ -71,7 +71,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { login } = useAuthStore();
+    const { login } = useUserStore();
     const { setBusListener, BUS } = useEventBus();
     const isLoading = ref(false);
     const isOpen = ref(false);

@@ -1,0 +1,291 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Constants, Maps, and Enums Organization
+
+All constants, maps, and enums should be organized in dedicated files within the `src/constants/` folder. This ensures consistency, reusability, and maintainability across the project.
+
+## File Organization Rules
+
+### 1. Location Requirements
+- **MUST** place all constants in `src/constants/` folder
+- **MUST** use kebab-case for file names
+- **MUST** use `-constants.ts` suffix for constant files
+- **MUST** group related constants in the same file
+
+### 2. File Naming Convention
+```
+src/constants/
+├── url-constants.ts          # API endpoints and routes
+├── router-constants.ts       # Route names and paths
+├── translation-keys.ts       # i18n translation keys
+├── permission-constants.ts   # User permissions and roles
+├── event-bus-constants.ts    # Event names
+├── navigation-constants.ts   # Navigation items
+├── status-constants.ts       # Status values and states
+├── validation-constants.ts   # Validation rules and messages
+└── ui-constants.ts          # UI-related constants
+```
+
+### 3. Content Organization
+
+#### Constants
+```typescript
+// ✅ Good - in src/constants/api-constants.ts
+export const API_BASE = '/api';
+export const API_VERSION = 'v1';
+export const DEFAULT_TIMEOUT = 30000;
+export const MAX_RETRY_ATTEMPTS = 3;
+
+// ❌ Bad - scattered in components
+const API_BASE = '/api'; // Don't define in components
+```
+
+#### Enums
+```typescript
+// ✅ Good - in src/constants/status-constants.ts
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  PENDING = 'pending',
+  SUSPENDED = 'suspended'
+}
+
+export enum ProjectType {
+  AI_PSYCHOLOGY = 'ai_psychology',
+  FAMILY_SUPPORT = 'family_support',
+  PROSTHETICS = 'prosthetics',
+  CIVILIAN_RETRAINING = 'civilian_retraining'
+}
+
+// ❌ Bad - defined in interfaces or components
+enum UserStatus { ... } // Don't define in interface files
+```
+
+#### Maps and Objects
+```typescript
+// ✅ Good - in src/constants/mapping-constants.ts
+export const STATUS_COLORS = {
+  [UserStatus.ACTIVE]: 'green',
+  [UserStatus.INACTIVE]: 'gray',
+  [UserStatus.PENDING]: 'yellow',
+  [UserStatus.SUSPENDED]: 'red'
+} as const;
+
+export const PROJECT_TYPE_LABELS = {
+  [ProjectType.AI_PSYCHOLOGY]: 'ШІ-психологія',
+  [ProjectType.FAMILY_SUPPORT]: 'Підтримка сімей',
+  [ProjectType.PROSTHETICS]: 'Протезування'
+} as const;
+
+// ❌ Bad - inline objects in components
+const statusColors = { active: 'green', ... }; // Don't define inline
+```
+
+## Usage Patterns
+
+### 1. Import Constants
+```typescript
+// ✅ Good - import from constants
+import { API_BASE, API_VERSION } from '~/constants/url-constants';
+import { UserStatus, ProjectType } from '~/constants/status-constants';
+import { STATUS_COLORS } from '~/constants/mapping-constants';
+
+// ❌ Bad - magic strings/numbers
+const endpoint = '/api/v1/users'; // Use constants instead
+```
+
+### 2. Use Enums for Type Safety
+```typescript
+// ✅ Good - using enums
+function getUserStatusColor(status: UserStatus): string {
+  return STATUS_COLORS[status];
+}
+
+// Usage
+const color = getUserStatusColor(UserStatus.ACTIVE);
+
+// ❌ Bad - string literals
+function getUserStatusColor(status: string): string {
+  if (status === 'active') return 'green'; // Use enum instead
+}
+```
+
+### 3. Const Assertions for Immutability
+```typescript
+// ✅ Good - use const assertion
+export const ALLOWED_FILE_TYPES = ['jpg', 'png', 'pdf'] as const;
+
+export const HTTP_STATUS_CODES = {
+  OK: 200,
+  NOT_FOUND: 404,
+  SERVER_ERROR: 500
+} as const;
+
+// ❌ Bad - mutable arrays/objects
+export const ALLOWED_FILE_TYPES = ['jpg', 'png', 'pdf']; // Can be mutated
+```
+
+### 4. Related Constants Grouping
+```typescript
+// ✅ Good - grouped related constants
+// src/constants/pagination-constants.ts
+export const DEFAULT_PAGE_SIZE = 20;
+export const MAX_PAGE_SIZE = 100;
+export const MIN_PAGE_SIZE = 5;
+
+export const PAGINATION_LIMITS = {
+  DEFAULT: DEFAULT_PAGE_SIZE,
+  MAX: MAX_PAGE_SIZE,
+  MIN: MIN_PAGE_SIZE
+} as const;
+
+// ❌ Bad - scattered across files
+// Don't split related constants into different files
+```
+
+## File Structure Examples
+
+### URL Constants File
+```typescript
+// src/constants/url-constants.ts
+export const API_BASE = '/api';
+export const V1 = '/v1';
+export const FUNCTIONS = '/functions';
+
+// Auth endpoints
+export const AUTH_LOGIN = '/auth-login';
+export const AUTH_REGISTER = '/auth-register';
+export const AUTH_LOGOUT = '/auth-logout';
+
+// Combined endpoints
+export const FUNCTIONS_V1_AUTH_LOGIN = FUNCTIONS + V1 + AUTH_LOGIN;
+export const FUNCTIONS_V1_AUTH_REGISTER = FUNCTIONS + V1 + AUTH_REGISTER;
+```
+
+### Status Constants File
+```typescript
+// src/constants/status-constants.ts
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  PENDING = 'pending'
+}
+
+export enum ParticipationStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  COMPLETED = 'completed'
+}
+
+export const STATUS_LABELS = {
+  [ParticipationStatus.PENDING]: 'На розгляді',
+  [ParticipationStatus.APPROVED]: 'Схвалено',
+  [ParticipationStatus.REJECTED]: 'Відхилено',
+  [ParticipationStatus.COMPLETED]: 'Завершено'
+} as const;
+```
+
+### Validation Constants File
+```typescript
+// src/constants/validation-constants.ts
+export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_MAX_LENGTH = 128;
+
+export const VALIDATION_PATTERNS = {
+  EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  PHONE: /^\+?[1-9]\d{1,14}$/,
+  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
+} as const;
+
+export const ERROR_MESSAGES = {
+  REQUIRED: 'Це поле обов\'язкове',
+  INVALID_EMAIL: 'Невірний формат email',
+  PASSWORD_TOO_SHORT: `Пароль повинен містити мінімум ${PASSWORD_MIN_LENGTH} символів`
+} as const;
+```
+
+## Best Practices
+
+### 1. Naming Convention
+- Use `SCREAMING_SNAKE_CASE` for primitive constants
+- Use `PascalCase` for enums
+- Use `camelCase` for objects and maps
+- Use descriptive names that indicate purpose
+
+### 2. Type Safety
+- Always use `as const` for object constants
+- Define enums with explicit string values
+- Use TypeScript's const assertions for arrays
+
+### 3. Documentation
+- Add JSDoc comments for complex constants
+- Group related constants together
+- Use clear, descriptive names
+
+### 4. Exports
+- Export individual constants, not default exports
+- Use named exports for better tree-shaking
+- Re-export from index files if needed
+
+## Common Mistakes to Avoid
+
+### ❌ Don't Do This
+```typescript
+// Don't define constants in components
+export default {
+  setup() {
+    const API_URL = 'https://api.example.com'; // Move to constants
+    
+    const statusMap = { // Move to constants
+      1: 'Active',
+      2: 'Inactive'
+    };
+  }
+}
+
+// Don't use magic numbers/strings
+if (user.status === 'active') { ... } // Use enum
+
+// Don't scatter related constants
+// file1.ts
+export const MIN_AGE = 18;
+// file2.ts  
+export const MAX_AGE = 65; // Keep together
+```
+
+### ✅ Do This Instead
+```typescript
+// src/constants/user-constants.ts
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive'
+}
+
+export const AGE_LIMITS = {
+  MIN: 18,
+  MAX: 65
+} as const;
+
+// In component
+import { UserStatus, AGE_LIMITS } from '~/constants/user-constants';
+
+if (user.status === UserStatus.ACTIVE) { ... }
+if (user.age >= AGE_LIMITS.MIN) { ... }
+```
+
+## Migration Guidelines
+
+When refactoring existing code:
+
+1. **Identify scattered constants** in components and services
+2. **Group related constants** by functionality
+3. **Create appropriate constant files** in `src/constants/`
+4. **Update imports** throughout the codebase
+5. **Replace magic strings/numbers** with named constants
+6. **Add type safety** with enums and const assertions
+
+This organization ensures maintainable, type-safe, and reusable constants throughout the application.

@@ -16,9 +16,27 @@ export interface Representative {
 export interface NewsItem {
   id: number;
   title: string;
-  excerpt: string;
-  date: string;
-  image: string;
+  short_description: string;
+  featured_image_url: string;
+  category: 'general' | 'project_related';
+  published_at: string;
+  author_name: string;
+  views_count: number;
+  related_project_id: number | null;
+  related_project_title: string | null;
+}
+
+export interface NewsListResponse {
+  news: NewsItem[];
+  pagination: {
+    limit: number;
+    offset: number;
+    has_more: boolean;
+    total_returned: number;
+  };
+  filters: {
+    category: string | null;
+  };
 }
 
 export interface HomePageData {

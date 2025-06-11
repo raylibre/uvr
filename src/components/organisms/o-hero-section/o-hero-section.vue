@@ -47,7 +47,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .o-hero-section {
   @apply relative min-h-[80vh] flex items-center;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/src/assets/images/hero-bg.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/src/assets/images/hero-background.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

@@ -1,86 +1,130 @@
-import type { LoginResponse, LoginCredentials } from '~/interfaces/auth';
-import { AxiosResponse } from 'axios';
 import apiClient from './api-client';
+import type { 
+  LoginResponse, 
+  LoginCredentials, 
+  LoginApiResponse,
+  AuthMeApiResponse,
+  AuthMeResponse 
+} from '~/interfaces/auth';
+import { AxiosResponse } from 'axios';
 import type { RegistrationPayload, ApiResponse } from '~/types/auth';
-import { FUNCTIONS_V1_AUTH_REGISTRATION } from '~/constants/url-constants.ts';
+import { 
+  FUNCTIONS_V1_AUTH_REGISTRATION, 
+  FUNCTIONS_V1_AUTH_LOGIN,
+  FUNCTIONS_V1_AUTH_ME, 
+  FUNCTIONS_V1_AUTH_LOGOUT, 
+  FUNCTIONS_V1_AUTH_REFRESH 
+} from '~/constants/url-constants';
 
-// This is a mock implementation. Replace with actual API calls.
-export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Validate credentials (mock implementation)
-  if (credentials.password === 'test123') {
-    return {
-      user: {
-        id: 1,
-        email: 'test@example.com',
-        name: 'Test User',
-        role: 'user'
-      },
-      token: 'mock-jwt-token'
-    };
-  }
-
-  throw new Error('Invalid credentials');
-}
-
-export async function register(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
-  return await apiClient.post(
-    FUNCTIONS_V1_AUTH_REGISTRATION,
-    credentials
+/**
+ * Login user with credentials
+ * This function is used with AsyncSource for proper loading states and error handling
+ */
+export async function loginUser(credentials: LoginCredentials): Promise<LoginResponse> {
+  const response: AxiosResponse<LoginApiResponse> = await apiClient.post(
+    FUNCTIONS_V1_AUTH_LOGIN,
+    {
+      login: credentials.identifier,
+      password: credentials.password,
+      remember_me: false
+    }
   );
-}
 
-// Mock implementation for registration
-export async function registerMock(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Mock validation
-  if (credentials.email === 'taken@example.com') {
-    throw new Error('Email is already taken');
-  }
-  if (credentials.phone === '+1234567890') {
-    throw new Error('Phone number is already taken');
+  if (!response.data.success || !response.data.data.success) {
+    throw new Error('Login failed');
   }
 
-  // Mock successful registration
+  const { user, session } = response.data.data.data;
+
   return {
-    user: {
-      id: Math.floor(Math.random() * 1000) + 1,
-      email: credentials.email,
-      name: credentials.email.split('@')[0],
-      role: 'user'
-    },
-    token: 'mock-jwt-token'
+    user,
+    token: session.access_token
   };
 }
 
-export class AuthApiService {
-  private static readonly BASE_PATH = '/auth';
+/**
+ * Get current user profile and data
+ * This function is used with AsyncSource for proper loading states and error handling
+ * Requires valid authentication token
+ */
+export async function getCurrentUser(): Promise<AuthMeResponse> {
+  const response: AxiosResponse<AuthMeApiResponse> = await apiClient.get(
+    FUNCTIONS_V1_AUTH_ME
+  );
 
-  /**
-   * Register a new user
-   * @param payload - Registration data
-   */
-  static async register(payload: RegistrationPayload): Promise<ApiResponse> {
-    const response: AxiosResponse<ApiResponse> = await apiClient.post(
-      `${this.BASE_PATH}/register`,
-      payload
-    );
-    return response.data;
+  if (!response.data.success) {
+    throw new Error('Failed to fetch user data');
   }
 
-  /**
-   * Check if email is available
-   * @param email - Email to check
-   */
-  static async checkEmailAvailability(email: string): Promise<boolean> {
-    const response: AxiosResponse<{ available: boolean }> = await apiClient.get(
-      `${this.BASE_PATH}/check-email`,
-      { params: { email } }
-    );
-    return response.data.available;
-  }
-} 
+  const { profile, verification_statuses, statistics, pending_applications } = response.data.data;
+
+  return {
+    profile,
+    verificationStatuses: {
+      primaryCategory: verification_statuses.primary_category,
+      additionalCategories: verification_statuses.additional_categories
+    },
+    statistics,
+    pendingApplications: pending_applications
+  };
+}
+
+/**
+ * Register new user
+ * This function is used with AsyncSource for proper loading states and error handling
+ */
+export async function registerUser(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
+  const response = await apiClient.post(
+    FUNCTIONS_V1_AUTH_REGISTRATION,
+    credentials
+  );
+  return response.data;
+}
+
+/**
+ * Logout current user
+ */
+export async function logoutUser(): Promise<void> {
+  await apiClient.post(FUNCTIONS_V1_AUTH_LOGOUT);
+}
+
+/**
+ * Refresh authentication token
+ */
+export async function refreshAuthToken(refreshToken: string): Promise<{ access_token: string; refresh_token: string }> {
+  const response = await apiClient.post(FUNCTIONS_V1_AUTH_REFRESH, {
+    refresh_token: refreshToken
+  });
+  return response.data;
+}
+
+/**
+ * Check if email is available for registration
+ */
+export async function checkEmailAvailability(email: string): Promise<boolean> {
+  const response: AxiosResponse<{ available: boolean }> = await apiClient.get(
+    '/auth/check-email',
+    { params: { email } }
+  );
+  return response.data.available;
+}
+
+/**
+ * Register user with full registration payload
+ */
+export async function registerUserWithPayload(payload: RegistrationPayload): Promise<ApiResponse> {
+  const response: AxiosResponse<ApiResponse> = await apiClient.post(
+    '/auth/register',
+    payload
+  );
+  return response.data;
+}
+
+// Legacy functions for backward compatibility - remove after refactoring all usages
+export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
+  return loginUser(credentials);
+}
+
+export async function register(credentials: { email: string; phone: string; password: string }): Promise<LoginResponse> {
+  return registerUser(credentials);
+}

@@ -72,7 +72,7 @@ export default defineComponent({
             
             const cacheKey = generateImageCacheKey(mockTeamMember);
             
-            navigator.serviceWorker.controller.postMessage({
+            navigator.serviceWorker.controller?.postMessage({
               type: 'CACHE_TEAM_IMAGE',
               url: representative.image,
               cacheKey: cacheKey
