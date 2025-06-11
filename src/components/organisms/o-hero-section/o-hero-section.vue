@@ -2,7 +2,7 @@
   <section class="o-hero-section">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>Підтримка Українських Ветеранів</h1>
+        <h1>Український Військовий Рух</h1>
         <p>Ми допомагаємо ветеранам відновити життя та повернутися до суспільства</p>
       </div>
       <div class="key-points">
