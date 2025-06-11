@@ -1,7 +1,7 @@
 <template>
   <section class="o-representatives-section">
-    <h2>Our Representatives</h2>
-    <p class="section-description">Meet our dedicated team working to support veterans</p>
+    <h2>Наші представники</h2>
+    <p class="section-description">Познайомтеся з нашою командою, яка працює на підтримку ветеранів</p>
     <div class="representatives-grid">
       <div
         v-for="representative in representatives"
@@ -69,9 +69,9 @@ export default defineComponent({
               phone: null,
               sort_order: 0
             };
-            
+
             const cacheKey = generateImageCacheKey(mockTeamMember);
-            
+
             navigator.serviceWorker.controller?.postMessage({
               type: 'CACHE_TEAM_IMAGE',
               url: representative.image,
@@ -134,7 +134,7 @@ export default defineComponent({
 
     .representative-image-placeholder {
       @apply w-48 h-48 rounded-full mx-auto bg-gray-200 flex items-center justify-center shadow-lg;
-      
+
       i {
         @apply text-6xl text-gray-400;
       }
@@ -153,4 +153,4 @@ export default defineComponent({
     }
   }
 }
-</style> 
+</style>

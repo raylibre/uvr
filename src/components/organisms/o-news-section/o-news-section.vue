@@ -1,7 +1,7 @@
 <template>
   <section class="o-news-section">
-    <h2>Latest News</h2>
-    <p class="section-description">Stay updated with our latest activities and initiatives</p>
+    <h2>Останні новини</h2>
+    <p class="section-description">Слідкуйте за нашими останніми подіями та ініціативами</p>
     <div class="news-grid">
       <article
         v-for="newsItem in newsItems"
@@ -24,10 +24,10 @@
         </div>
       </article>
     </div>
-    
+
     <!-- View All News Button -->
     <div class="view-all-container">
-      <button 
+      <button
         class="view-all-btn"
         @click="$emit('view-all-news')"
       >
@@ -136,4 +136,4 @@ export default defineComponent({
     }
   }
 }
-</style> 
+</style>

@@ -2,8 +2,8 @@
   <section class="o-hero-section">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>Supporting Ukrainian Veterans</h1>
-        <p>We are dedicated to helping veterans rebuild their lives and reintegrate into society</p>
+        <h1>Підтримка Українських Ветеранів</h1>
+        <p>Ми допомагаємо ветеранам відновити життя та повернутися до суспільства</p>
       </div>
       <div class="key-points">
         <div v-for="point in keyPoints" :key="point.title" class="key-point">
@@ -24,16 +24,16 @@ export default defineComponent({
   setup() {
     const keyPoints = [
       {
-        title: 'Comprehensive Support',
-        description: 'Providing medical, psychological, and social support to veterans'
+        title: 'Комплексна підтримка',
+        description: 'Надання медичної, психологічної та соціальної допомоги ветеранам'
       },
       {
-        title: 'Community Building',
-        description: 'Creating a strong network of veterans and supporters'
+        title: 'Формування спільноти',
+        description: 'Створення міцної мережі ветеранів та їхніх прихильників'
       },
       {
-        title: 'Professional Development',
-        description: 'Helping veterans build successful civilian careers'
+        title: 'Професійний розвиток',
+        description: 'Допомога ветеранам у побудові успішної цивільної карʼєри'
       }
     ];
 
@@ -80,4 +80,4 @@ export default defineComponent({
     }
   }
 }
-</style> 
+</style>
