@@ -1,0 +1,1 @@
+export { default } from './p-news-article.vue'; 

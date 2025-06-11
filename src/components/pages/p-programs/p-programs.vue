@@ -14,7 +14,11 @@
       :show-featured-only="false"
       :show-view-all="false"
       @project-click="handleProjectClick"
-    />
+    >
+      <template #section-header>
+        <div />
+      </template>
+    </OPublicProgramsSection>
   </div>
 </template>
 
@@ -55,7 +59,7 @@ export default defineComponent({
 
   .hero-section {
     @apply bg-gradient-to-r from-blue-600 to-blue-800;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/images/programs-hero.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/src/assets/images/programs-hero-background.png');
     background-size: cover;
     background-position: center;
   }

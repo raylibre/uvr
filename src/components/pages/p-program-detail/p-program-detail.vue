@@ -2,7 +2,7 @@
   <div class="p-program-detail">
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container">
-      <div class="flex justify-center items-center min-h-screen">
+      <div v-loading="true" class="flex justify-center items-center min-h-screen">
         <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"/>
       </div>
     </div>
@@ -248,7 +248,10 @@
               </div>
 
               <!-- Contact Info -->
-              <div class="contact-card">
+              <div
+                v-if="program.contact_email || program.contact_phone"
+                class="contact-card"
+              >
                 <h3 class="contact-title">Контакти</h3>
                 <div class="contact-list">
                   <div v-if="program.contact_email" class="contact-item">

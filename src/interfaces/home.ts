@@ -17,6 +17,7 @@ export interface NewsItem {
   id: number;
   title: string;
   short_description: string;
+  full_content?: string;
   featured_image_url: string;
   category: 'general' | 'project_related';
   published_at: string;
@@ -24,6 +25,7 @@ export interface NewsItem {
   views_count: number;
   related_project_id: number | null;
   related_project_title: string | null;
+  related_project?: number | null;
 }
 
 export interface NewsListResponse {
@@ -40,7 +42,6 @@ export interface NewsListResponse {
 }
 
 export interface HomePageData {
-  programs: Program[];
   representatives: Representative[];
   newsItems: NewsItem[];
 } 

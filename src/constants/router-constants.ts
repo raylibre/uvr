@@ -12,6 +12,7 @@ export const ROUTE_NAMES = {
   PROGRAMS: 'PROGRAMS',
   PROGRAM_DETAIL: 'PROGRAM_DETAIL',
   NEWS: 'NEWS',
+  NEWS_ARTICLE: 'NEWS_ARTICLE',
   NOT_FOUND: 'NOT_FOUND'
 } as const;
 
@@ -39,6 +40,12 @@ export const ROUTES: RouteRecordRaw[] = [
     path: '/news',
     name: ROUTE_NAMES.NEWS,
     component: () => import('~/components/pages/p-news')
+  },
+  {
+    path: '/news/:id',
+    name: ROUTE_NAMES.NEWS_ARTICLE,
+    component: () => import('~/components/pages/p-news-article'),
+    props: true
   },
   {
     path: '/leadership',

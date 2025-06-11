@@ -198,4 +198,11 @@ export const UI_TEXT = {
   NO_DATA: 'Немає даних',
   NO_RESULTS: 'Результатів не знайдено',
   TRY_AGAIN: 'Спробувати знову'
+} as const;
+
+// Default images
+export const DEFAULT_IMAGES = {
+  NEWS_PLACEHOLDER: '/assets/images/default-news-image.png',
+  PROGRAM_PLACEHOLDER: '/assets/images/programs/default-program.jpg',
+  USER_AVATAR: '/assets/images/default-avatar.png'
 } as const; 

@@ -1,6 +1,7 @@
 import apiClient from './api-client';
 import type { NewsListResponse, NewsItem } from '~/interfaces/home';
 import { FUNCTIONS_V1_NEWS_LIST, FUNCTIONS_V1_NEWS_ARTICLE } from '~/constants/url-constants';
+import { NEWS_PAGINATION } from '~/constants/news-constants';
 
 /**
  * Get news list with optional filters and pagination
@@ -20,11 +21,11 @@ export async function getNewsList(params?: {
 }
 
 /**
- * Get news for home page (limited to 3-4 items, no pagination)
+ * Get news for home page (limited to home page limit, no pagination)
  */
 export async function getHomePageNews(): Promise<NewsItem[]> {
   try {
-    const response = await getNewsList({ limit: 4, offset: 0 });
+    const response = await getNewsList({ limit: NEWS_PAGINATION.HOME_PAGE_LIMIT, offset: 0 });
     return response.news;
   } catch (error) {
     console.error('Error fetching home page news:', error);
