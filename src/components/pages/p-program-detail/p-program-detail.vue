@@ -284,7 +284,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watch, computed } from 'vue';
 import { useProgramDetail } from '~/composables/use-program-detail';
 
 export default defineComponent({
@@ -299,6 +299,8 @@ export default defineComponent({
 
   setup(props) {
     const applicationMessage = ref('');
+
+    const getSlug = computed(() => props.slug);
     
     const {
       program,
@@ -319,7 +321,7 @@ export default defineComponent({
       formatBudget,
       getProjectTypeLabel,
       formatDescription
-    } = useProgramDetail(props.slug);
+    } = useProgramDetail(getSlug);
 
     async function handleSubmitApplication() {
       try {
@@ -331,8 +333,14 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      console.log('mounted');
       loadProgramDetail();
     });
+
+    watch(() => props.slug, () => {
+      console.log('watch');
+      loadProgramDetail();
+    })
 
     return {
       program,
@@ -348,7 +356,6 @@ export default defineComponent({
       error,
       isProgramNotFound,
       applicationMessage,
-      slug: props.slug,
       loadProgramDetail,
       handleSubmitApplication,
       formatDate,

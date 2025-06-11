@@ -15,7 +15,7 @@
           <MHeaderNavButton
             v-for="item in menuItems"
             :key="item.name"
-            :to="{ name: item.name }"
+            :to="getNavigationRoute(item)"
             :translation-key="item.title"
           />
         </div>
@@ -143,7 +143,7 @@
         <MHeaderNavButton
           v-for="item in menuItems"
           :key="item.name"
-          :to="{ name: item.name }"
+          :to="getNavigationRoute(item)"
           :translation-key="item.title"
           class="mobile"
           @click="closeMobileMenu"
@@ -173,7 +173,7 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import AButton from '~/components/atoms/a-button/a-button.vue';
 import OLangChangeBlock from '~/components/organisms/o-lang-change-block';
-import { MENU_ITEMS } from '~/constants/navigation-constants';
+import { MENU_ITEMS, type MenuItem } from '~/constants/navigation-constants';
 import { useTranslation } from '~/composables/use-translation';
 import { useLanguage } from '~/composables/use-language';
 import { useEventBus } from '~/composables/use-event-bus';
@@ -201,6 +201,15 @@ export default defineComponent({
     const { BUS } = useEventBus();
     const { isAuthenticated, initialize, unreadNotificationsCount, isInitialized } = useUserStore();
     const isMobileMenuOpen = ref(false);
+
+    const getNavigationRoute = (item: MenuItem) => {
+      // If the item has a custom path, use it directly
+      if (item.path) {
+        return item.path;
+      }
+      // Otherwise, use the route name
+      return { name: item.name };
+    };
 
     const toggleMobileMenu = () => {
       isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -231,6 +240,7 @@ export default defineComponent({
       menuItems: MENU_ITEMS,
       isMobileMenuOpen,
       isAuthenticated,
+      getNavigationRoute,
       toggleMobileMenu,
       closeMobileMenu,
       handleJoin,
