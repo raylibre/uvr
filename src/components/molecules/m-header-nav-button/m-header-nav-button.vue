@@ -74,7 +74,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-header-nav-button {
-  @apply inline-flex items-center px-3 md:px-2 py-2 md:py-1.5 text-sm font-medium text-gray-700 rounded-md transition-colors;
+  @apply inline-flex items-center px-3 md:px-4 py-2 md:py-2 text-sm font-medium text-gray-700 rounded-md transition-colors;
   @apply block w-full;
 
   @screen md {

@@ -120,7 +120,7 @@ export default defineComponent({
   }
 
   .language-button {
-    @apply flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium;
+    @apply flex items-center space-x-2 px-4 py-3 text-base rounded-lg font-medium;
     @apply text-gray-700 hover:text-gray-900 hover:bg-gray-100;
     @apply border border-gray-200 bg-white shadow-sm;
     @apply transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20;

@@ -37,7 +37,7 @@
           <div v-else class="auth-buttons">
             <AButton
               variant="outline"
-              size="sm"
+              size="md"
               class="action-button action-button--join"
               @click="handleJoin"
             >
@@ -45,7 +45,7 @@
             </AButton>
             <AButton
               variant="primary"
-              size="sm"
+              size="md"
               class="action-button action-button--login"
               @click="handleLogin"
             >
@@ -265,7 +265,7 @@ export default defineComponent({
   }
 
   .header-container {
-    @apply flex items-center justify-between h-16 min-w-0;
+    @apply flex items-center justify-between h-20 min-w-0;
   }
 
   // Logo
@@ -277,7 +277,7 @@ export default defineComponent({
     }
 
     &__image {
-      @apply h-8 sm:h-10 w-auto text-primary;
+      @apply h-8 sm:h-12 w-auto text-primary;
     }
 
     &__text {

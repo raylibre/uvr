@@ -1,14 +1,14 @@
 <template>
   <div class="p-news">
-    <div class="container mx-auto px-4 py-8">
-      <!-- Page Header -->
-      <div class="page-header">
-        <h1 class="page-title">Новини</h1>
-        <p class="page-description">
+    <section class="hero-section">
+      <div class="container">
+        <h1 class="hero-title">Новини</h1>
+        <p class="hero-subtitle">
           Слідкуйте за останніми подіями та досягненнями нашої організації
         </p>
       </div>
-
+    </section>
+    <div class="container mx-auto px-4 py-8">
       <!-- News Filter -->
       <MNewsFilter
         :selected-category="selectedCategory"
@@ -169,15 +169,19 @@ export default defineComponent({
 .p-news {
   @apply min-h-screen bg-gray-50;
 
-  .page-header {
-    @apply text-center mb-12;
+  .hero-section {
+    @apply py-20 bg-gradient-to-br from-primary-light to-primary-dark text-white;
 
-    .page-title {
-      @apply text-4xl md:text-3xl font-bold text-gray-900 mb-4;
+    .container {
+      @apply max-w-6xl mx-auto px-4 text-center;
     }
 
-    .page-description {
-      @apply text-lg text-gray-600 max-w-2xl mx-auto;
+    .hero-title {
+      @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6;
+    }
+
+    .hero-subtitle {
+      @apply text-xl md:text-2xl font-light opacity-90 max-w-3xl mx-auto;
     }
   }
 
@@ -258,6 +262,21 @@ export default defineComponent({
 
     p {
       @apply text-gray-500;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 640px) {
+    .hero-section {
+      @apply py-12;
+
+      .hero-title {
+        @apply text-3xl;
+      }
+
+      .hero-subtitle {
+        @apply text-lg;
+      }
     }
   }
 }

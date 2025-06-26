@@ -96,7 +96,7 @@ export default defineComponent({
   @apply bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105 cursor-pointer flex flex-col;
   min-width: 280px;
   max-width: 320px;
-  height: 480px;
+  height: 516px;
   flex: 1 1 280px;
 
   .project-image-container {

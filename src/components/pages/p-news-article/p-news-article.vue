@@ -1,10 +1,13 @@
 <template>
   <div class="p-news-article">
     <!-- Article Content with Loading Directive -->
-    <div v-if="article || isLoading" class="article-container">
+    <div
+      v-if="article || isLoading"
+      class="article-container"
+    >
       <div class="container mx-auto px-4 py-8">
         <!-- Navigation -->
-        <div class="navigation-section">
+        <div v-if="false" class="navigation-section">
           <AButton 
             variant="outline" 
             @click="goBack"
@@ -219,7 +222,7 @@ export default defineComponent({
           }
 
           &.category-project {
-            @apply bg-green-100 text-green-800;
+            @apply bg-yellow-100 text-yellow-800;
           }
         }
 
