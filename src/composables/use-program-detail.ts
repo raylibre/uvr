@@ -122,7 +122,7 @@ export function useProgramDetail(slug: ComputedRef) {
     userStatusSource.push(handleUserStatusSuccess, program.value.id);
   }
 
-  function joinProgram(applicationMessage: string) {
+  async function joinProgram(applicationMessage: string) {
     if (!program.value || !canApply.value) {
       throw new Error('Cannot apply to this program');
     }
@@ -135,7 +135,7 @@ export function useProgramDetail(slug: ComputedRef) {
       application_message: applicationMessage
     };
 
-    joinProgramSource.push(handleJoinSuccess, request);
+    await joinProgramSource.push(handleJoinSuccess, request);
   }
 
   // Success handlers

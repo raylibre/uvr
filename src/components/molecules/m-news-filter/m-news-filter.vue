@@ -80,14 +80,20 @@ export default defineComponent({
   @apply mb-8;
 
   .filter-tabs {
-    @apply flex gap-4 border-b border-gray-200 mb-4;
+    @apply flex gap-2 md:gap-3 mb-2;
   }
 
   .filter-tab {
-    @apply px-6 py-3 text-gray-600 border-b-2 border-transparent transition-colors duration-200 hover:text-blue-600 hover:border-blue-600;
+    @apply inline-flex items-center px-3 md:px-2 py-2 md:py-1.5 text-sm font-medium text-gray-700 rounded-md transition-colors;
+    @apply block w-full md:w-auto;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
 
+    &:hover,
     &.active {
-      @apply text-blue-600 border-blue-600 font-semibold;
+      @apply bg-blue-50 text-blue-dark;
     }
   }
 

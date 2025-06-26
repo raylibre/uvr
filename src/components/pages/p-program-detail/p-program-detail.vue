@@ -11,25 +11,30 @@
     <div v-else-if="isProgramNotFound" class="not-found-container">
       <div class="not-found-content">
         <div class="not-found-icon">
-          <i class="fas fa-search text-6xl text-gray-400"/>
+          <AIcon
+            name="fa-search"
+            size="xl"
+            color="gray-400"
+            class="text-6xl"
+          />
         </div>
-        <h1 class="not-found-title">Програму не знайдено</h1>
+        <h1 class="not-found-title">{{ t(T_KEYS.PROGRAM_DETAIL.NOT_FOUND_TITLE) }}</h1>
         <p class="not-found-description">
-          На жаль, програма з адресою <code>{{ slug }}</code> не існує або була видалена.
+          {{ t('programDetail.notFoundDescription', { slug }) }}
         </p>
         <div class="not-found-actions">
           <router-link :to="{ name: 'PROGRAMS' }" class="btn btn-primary">
             <i class="fas fa-arrow-left mr-2"/>
-            Переглянути всі програми
+            {{ t(T_KEYS.COMMON.BUTTONS.VIEW_ALL_PROGRAMS) }}
           </router-link>
           <router-link :to="{ name: 'HOME' }" class="btn btn-outline">
             <i class="fas fa-home mr-2"/>
-            На головну
+            {{ t(T_KEYS.COMMON.BUTTONS.BACK_TO_HOME) }}
           </router-link>
         </div>
         <div v-if="error" class="error-details">
           <details class="error-details-expandable">
-            <summary>Технічні деталі</summary>
+            <summary>{{ t('programDetail.technicalDetails') }}</summary>
             <pre class="error-text">{{ error }}</pre>
           </details>
         </div>
@@ -48,7 +53,7 @@
             class="hero-image"
           />
           <div v-else class="hero-image-placeholder">
-            <i class="fas fa-heart text-6xl text-white"/>
+            <AIcon name="fa-heart" size="xl" color="white"/>
           </div>
           <div class="hero-overlay">
             <div class="container mx-auto px-4 py-16">
@@ -71,7 +76,7 @@
                 <!-- User Status Display -->
                 <div v-if="userStatus" class="status-card">
                   <div class="status-content" :class="`status-${userStatusColor}`">
-                    <i class="fas fa-info-circle"/>
+                    <AIcon name="fa-info-circle" size="sm" color="primary"/>
                     <div>
                       <h3>{{ userStatusText }}</h3>
                       <p v-if="statusReason">{{ statusReason }}</p>
@@ -92,31 +97,31 @@
         <div class="container mx-auto px-4 py-8">
           <div class="stats-grid">
             <div class="stat-item">
-              <i class="fas fa-users text-primary"/>
+              <AIcon name="fa-users" size="sm" color="primary"/>
               <div>
                 <span class="stat-number">{{ program.total_helped }}</span>
-                <span class="stat-label">Допомогли</span>
+                <span class="stat-label">{{ t('programDetail.stats.helped') }}</span>
               </div>
             </div>
             <div class="stat-item">
-              <i class="fas fa-user-clock text-green-500"/>
+              <AIcon name="fa-user-clock" size="sm" color="primary"/>
               <div>
                 <span class="stat-number">{{ program.current_participants }}</span>
-                <span class="stat-label">Учасників зараз</span>
+                <span class="stat-label">{{ t('programDetail.stats.currentParticipants') }}</span>
               </div>
             </div>
             <div class="stat-item">
-              <i class="fas fa-trophy text-yellow-500"/>
+              <AIcon name="fa-trophy" size="sm" color="primary"/>
               <div>
                 <span class="stat-number">{{ program.success_stories_count }}</span>
-                <span class="stat-label">Успішних історій</span>
+                <span class="stat-label">{{ t('programDetail.stats.successStories') }}</span>
               </div>
             </div>
             <div v-if="program.total_budget" class="stat-item">
-              <i class="fas fa-coins text-purple-500"/>
+              <AIcon name="fa-coins" size="sm" color="primary"/>
               <div>
                 <span class="stat-number">{{ formatBudget(program.total_budget) }}</span>
-                <span class="stat-label">Бюджет програми</span>
+                <span class="stat-label">{{ t('programDetail.stats.budget') }}</span>
               </div>
             </div>
           </div>
@@ -130,36 +135,36 @@
             <!-- Left Column - Description and Details -->
             <div class="content-left">
               <!-- Description -->
-              <div class="content-section">
-                <h2 class="section-title">Про програму</h2>
+              <MContentSection>
+                <h2 class="section-title">{{ t('programDetail.aboutSection') }}</h2>
                 <div class="prose" v-html="formatDescription(program.description)"/>
-              </div>
+              </MContentSection>
 
               <!-- Requirements -->
-              <div v-if="program.requirements.length" class="content-section">
-                <h2 class="section-title">Вимоги для участі</h2>
+              <MContentSection v-if="program.requirements.length">
+                <h2 class="section-title">{{ t('programDetail.requirementsSection') }}</h2>
                 <ul class="requirements-list">
                   <li v-for="requirement in program.requirements" :key="requirement">
-                    <i class="fas fa-check-circle text-green-500"/>
+                    <AIcon name="fa-check-circle" size="sm" color="yellow"/>
                     {{ requirement }}
                   </li>
                 </ul>
-              </div>
+              </MContentSection>
 
               <!-- Benefits -->
-              <div v-if="program.benefits.length" class="content-section">
-                <h2 class="section-title">Що ви отримаєте</h2>
+              <MContentSection v-if="program.benefits.length">
+                <h2 class="section-title">{{ t('programDetail.benefitsSection') }}</h2>
                 <ul class="benefits-list">
                   <li v-for="benefit in program.benefits" :key="benefit">
-                    <i class="fas fa-gift text-primary"/>
+                    <AIcon name="fa-gift" size="sm" color="primary"/>
                     {{ benefit }}
                   </li>
                 </ul>
-              </div>
+              </MContentSection>
 
               <!-- Gallery -->
-              <div v-if="program.gallery_images.length > 1" class="content-section">
-                <h2 class="section-title">Галерея</h2>
+              <MContentSection v-if="program.gallery_images.length > 1">
+                <h2 class="section-title">{{ t('programDetail.gallerySection') }}</h2>
                 <div class="gallery-grid">
                   <img 
                     v-for="(image, index) in program.gallery_images" 
@@ -169,30 +174,30 @@
                     class="gallery-image"
                   />
                 </div>
-              </div>
+              </MContentSection>
             </div>
 
             <!-- Right Column - Application Form and Info -->
             <div class="content-right">
               <!-- Program Info Card -->
-              <div class="info-card">
-                <h3 class="info-title">Інформація про програму</h3>
+              <MContentSection>
+                <h3 class="info-title">{{ t('programDetail.infoCard.title') }}</h3>
                 <div class="info-list">
                   <div v-if="program.duration_months" class="info-item">
-                    <i class="fas fa-calendar-alt"/>
-                    <span>Тривалість: {{ program.duration_months }} місяців</span>
+                    <AIcon name="fa-calendar-alt" size="sm"/>
+                    <span>{{ t('programDetail.infoCard.duration', { months: program.duration_months }) }}</span>
                   </div>
                   <div v-if="program.location" class="info-item">
-                    <i class="fas fa-map-marker-alt"/>
-                    <span>Локація: {{ program.location }}</span>
+                    <AIcon name="fa-map-marker-alt" size="sm"/>
+                    <span>{{ t('programDetail.infoCard.location', { location: program.location }) }}</span>
                   </div>
                   <div v-if="program.max_participants" class="info-item">
-                    <i class="fas fa-users"/>
-                    <span>Максимум учасників: {{ program.max_participants }}</span>
+                    <AIcon name="fa-users" size="sm"/>
+                    <span>{{ t('programDetail.infoCard.maxParticipants', { max: program.max_participants }) }}</span>
                   </div>
                   <div v-if="program.application_deadline" class="info-item">
-                    <i class="fas fa-clock"/>
-                    <span>Дедлайн: {{ formatDate(program.application_deadline) }}</span>
+                    <AIcon name="fa-clock" size="sm"/>
+                    <span>{{ t('programDetail.infoCard.deadline', { date: formatDate(program.application_deadline) }) }}</span>
                   </div>
                 </div>
 
@@ -206,75 +211,80 @@
                     {{ tag }}
                   </span>
                 </div>
-              </div>
+              </MContentSection>
 
               <!-- Application Form -->
-              <div v-if="isAuthenticated && canApply" class="application-card">
-                <h3 class="application-title">Подати заявку</h3>
+              <MContentSection v-if="isAuthenticated && canApply">
+                <h3 class="application-title">{{ t('programDetail.applicationForm.title') }}</h3>
                 <form class="application-form" @submit.prevent="handleSubmitApplication">
                   <div class="form-group">
                     <label for="applicationMessage" class="form-label">
-                      Повідомлення для організаторів
+                      {{ t('programDetail.applicationForm.messageLabel') }}
                     </label>
                     <textarea
                       id="applicationMessage"
                       v-model="applicationMessage"
                       class="form-textarea"
                       rows="4"
-                      placeholder="Розкажіть, чому ви хочете взяти участь у цій програмі..."
+                      :placeholder="t('programDetail.applicationForm.messagePlaceholder')"
                     />
                   </div>
-                  <button 
-                    type="submit" 
+                  <AButton 
+                    type="submit"
+                    :loading="isJoining"
                     :disabled="isJoining || !applicationMessage.trim()"
-                    class="btn btn-primary btn-full"
+                    variant="primary"
+                    size="md"
+                    class="btn-full"
                   >
-                    <span v-if="isJoining">Подаємо заявку...</span>
-                    <span v-else>Подати заявку</span>
-                  </button>
+                    <template v-if="isJoining">{{ t(T_KEYS.COMMON.BUTTONS.SENDING) }}</template>
+                    <template v-else>{{ t(T_KEYS.COMMON.BUTTONS.JOIN) }}</template>
+                  </AButton>
                 </form>
-              </div>
+              </MContentSection>
 
               <!-- Status Display for Non-Applicable Users -->
-              <div v-else-if="isAuthenticated && userStatus && !canApply" class="status-display-card">
-                <h3 class="status-title">Статус заявки</h3>
+              <MContentSection v-else-if="isAuthenticated && userStatus && !canApply">
+                <h3 class="status-title">{{ t('programDetail.statusCard.title') }}</h3>
                 <div class="status-content" :class="`status-${userStatusColor}`">
-                  <i class="fas fa-info-circle"/>
+                  <AIcon name="fa-info-circle" size="sm" color="primary"/>
                   <div>
                     <h4>{{ userStatusText }}</h4>
                     <p v-if="statusReason">{{ statusReason }}</p>
                   </div>
                 </div>
-              </div>
+              </MContentSection>
 
               <!-- Contact Info -->
-              <div
-                v-if="program.contact_email || program.contact_phone"
-                class="contact-card"
-              >
-                <h3 class="contact-title">Контакти</h3>
+              <MContentSection v-if="program.contact_email || program.contact_phone">
+                <h3 class="contact-title">{{ t('programDetail.contactCard.title') }}</h3>
                 <div class="contact-list">
                   <div v-if="program.contact_email" class="contact-item">
-                    <i class="fas fa-envelope"/>
+                    <AIcon name="fa-envelope" size="sm"/>
                     <a :href="`mailto:${program.contact_email}`">{{ program.contact_email }}</a>
                   </div>
                   <div v-if="program.contact_phone" class="contact-item">
-                    <i class="fas fa-phone"/>
+                    <AIcon name="fa-phone" size="sm"/>
                     <a :href="`tel:${program.contact_phone}`">{{ program.contact_phone }}</a>
                   </div>
                 </div>
-              </div>
+              </MContentSection>
 
               <!-- Authentication Required -->
-              <div v-if="!isAuthenticated" class="auth-required-card">
-                <h3 class="auth-title">Потрібна авторизація</h3>
+              <MContentSection v-if="!isAuthenticated">
+                <h3 class="auth-title">{{ t('programDetail.authCard.title') }}</h3>
                 <p class="auth-message">
-                  Для подачі заявки на участь у програмі необхідно увійти в систему.
+                  {{ t('programDetail.authCard.message') }}
                 </p>
-                <button class="btn btn-primary btn-full">
-                  Увійти в систему
-                </button>
-              </div>
+                <AButton 
+                  variant="primary" 
+                  size="md" 
+                  class="btn-full"
+                  @click="$emit('login')"
+                >
+                  {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
+                </AButton>
+              </MContentSection>
             </div>
           </div>
         </div>
@@ -286,9 +296,19 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, computed } from 'vue';
 import { useProgramDetail } from '~/composables/use-program-detail';
+import AIcon from '~/components/atoms/a-icon';
+import AButton from '~/components/atoms/a-button';
+import MContentSection from '~/components/molecules/m-content-section';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'PProgramDetail',
+
+  components: {
+    AIcon,
+    AButton,
+    MContentSection
+  },
 
   props: {
     slug: {
@@ -323,22 +343,19 @@ export default defineComponent({
       formatDescription
     } = useProgramDetail(getSlug);
 
+    // i18n
+    const { t, T_KEYS } = useTranslation();
+
     async function handleSubmitApplication() {
-      try {
         await joinProgram(applicationMessage.value);
         applicationMessage.value = '';
-      } catch (error) {
-        console.error('Failed to submit application:', error);
-      }
     }
 
     onMounted(() => {
-      console.log('mounted');
       loadProgramDetail();
     });
 
     watch(() => props.slug, () => {
-      console.log('watch');
       loadProgramDetail();
     })
 
@@ -361,7 +378,9 @@ export default defineComponent({
       formatDate,
       formatBudget,
       getProjectTypeLabel,
-      formatDescription
+      formatDescription,
+      t,
+      T_KEYS
     };
   }
 });
@@ -621,30 +640,11 @@ export default defineComponent({
 
   .type-badge {
     @apply inline-block px-3 py-1 rounded-full text-xs font-medium;
-
-    &.type-ai_psychology {
-      @apply bg-purple-100 text-purple-800;
-    }
-
-    &.type-family_support {
-      @apply bg-red-100 text-red-800;
-    }
-
-    &.type-prosthetics {
-      @apply bg-primary-light/20 text-primary-dark;
-    }
-
-    &.type-civilian_retraining {
-      @apply bg-green-100 text-green-800;
-    }
-
-    &.type-legal_aid {
-      @apply bg-yellow-100 text-yellow-800;
-    }
+    @apply bg-primary text-white;
   }
 
   .featured-badge {
-    @apply bg-yellow-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1;
+    @apply bg-yellow-dark text-white text-xs px-2 py-1 rounded-full flex items-center gap-1;
   }
 
   .btn {

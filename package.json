@@ -8,7 +8,8 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "cc": "hygen create component"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
@@ -44,6 +45,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "eslint-plugin-vue": "^9.33.0",
+    "hygen": "^6.2.11",
     "postcss": "^8.4.32",
     "prettier": "^3.5.3",
     "sass": "^1.69.5",

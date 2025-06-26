@@ -115,7 +115,7 @@ export default defineComponent({
     }
 
     .featured-badge {
-      @apply absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1;
+      @apply absolute top-2 right-2 bg-yellow-dark text-white text-xs px-2 py-1 rounded-full flex items-center gap-1;
     }
   }
 
@@ -147,10 +147,10 @@ export default defineComponent({
     }
 
     .project-budget {
-      @apply flex items-center gap-2 text-sm text-green-600 font-semibold mb-3;
+      @apply flex items-center gap-2 text-sm text-green font-semibold mb-3;
 
       i {
-        @apply text-green-500;
+        @apply text-green;
       }
     }
 
@@ -159,26 +159,7 @@ export default defineComponent({
       
       .type-badge {
         @apply inline-block px-3 py-1 rounded-full text-xs font-medium;
-
-        &.type-ai_psychology {
-          @apply bg-purple-100 text-purple-800;
-        }
-
-        &.type-family_support {
-          @apply bg-red-100 text-red-800;
-        }
-
-        &.type-prosthetics {
-          @apply bg-primary-light/20 text-primary-dark;
-        }
-
-        &.type-civilian_retraining {
-          @apply bg-green-100 text-green-800;
-        }
-
-        &.type-legal_aid {
-          @apply bg-yellow-100 text-yellow-800;
-        }
+        @apply bg-primary-light/20 text-primary-dark;
       }
     }
   }

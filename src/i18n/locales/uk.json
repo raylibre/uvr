@@ -107,5 +107,42 @@
       "message": "Повідомлення",
       "subscribe": "Підписатися на нашу розсилку"
     }
+  },
+  "programDetail": {
+    "notFoundTitle": "Програму не знайдено",
+    "notFoundDescription": "На жаль, програма з адресою {slug} не існує або була видалена.",
+    "technicalDetails": "Технічні деталі",
+    "stats": {
+      "helped": "Допомогли",
+      "currentParticipants": "Учасників зараз",
+      "successStories": "Успішних історій",
+      "budget": "Бюджет програми"
+    },
+    "aboutSection": "Про програму",
+    "requirementsSection": "Вимоги для участі",
+    "benefitsSection": "Що ви отримаєте",
+    "gallerySection": "Галерея",
+    "infoCard": {
+      "title": "Інформація про програму",
+      "duration": "Тривалість: {months} місяців",
+      "location": "Локація: {location}",
+      "maxParticipants": "Максимум учасників: {max}",
+      "deadline": "Дедлайн: {date}"
+    },
+    "applicationForm": {
+      "title": "Подати заявку",
+      "messageLabel": "Повідомлення для організаторів",
+      "messagePlaceholder": "Розкажіть, чому ви хочете взяти участь у цій програмі..."
+    },
+    "statusCard": {
+      "title": "Статус заявки"
+    },
+    "contactCard": {
+      "title": "Контакти"
+    },
+    "authCard": {
+      "title": "Потрібна авторизація",
+      "message": "Для подачі заявки на участь у програмі необхідно увійти в систему."
+    }
   }
 } 

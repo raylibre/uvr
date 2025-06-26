@@ -1,30 +1,15 @@
 <template>
   <div class="m-load-more-button">
-    <button
+    <AButton
       v-if="hasMore"
       class="load-more-btn"
+      variant="primary"
+      :loading="isLoading"
       :disabled="isLoading"
       @click="$emit('load-more')"
     >
-      <span v-if="!isLoading">Завантажити ще</span>
-      <span v-else class="loading-text">
-        <svg class="spinner" viewBox="0 0 24 24">
-          <circle 
-            class="spinner-path" 
-            cx="12" 
-            cy="12" 
-            r="10" 
-            fill="none" 
-            stroke="currentColor" 
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-dasharray="60"
-            stroke-dashoffset="60"
-          />
-        </svg>
-        Завантаження...
-      </span>
-    </button>
+      <span>Завантажити ще</span>
+    </AButton>
     <div v-else-if="showNoMoreMessage" class="no-more-message">
       Усі новини завантажено
     </div>
@@ -33,9 +18,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import AButton from '~/components/atoms/a-button';
 
 export default defineComponent({
   name: 'MLoadMoreButton',
+  components: { AButton },
 
   props: {
     hasMore: {
@@ -61,7 +48,7 @@ export default defineComponent({
   @apply flex justify-center items-center py-8;
 
   .load-more-btn {
-    @apply px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200;
+    @apply px-8 py-3 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200;
 
     .loading-text {
       @apply flex items-center gap-2;

@@ -173,7 +173,7 @@ export default defineComponent({
     @apply text-center mb-12;
 
     .page-title {
-      @apply text-4xl md:text-5xl font-bold text-gray-900 mb-4;
+      @apply text-4xl md:text-3xl font-bold text-gray-900 mb-4;
     }
 
     .page-description {
@@ -182,7 +182,7 @@ export default defineComponent({
   }
 
   .news-content {
-    @apply min-h-96 relative;
+    @apply min-h-60 relative;
   }
 
   .news-grid {
@@ -210,7 +210,7 @@ export default defineComponent({
           }
 
           &.category-project {
-            @apply bg-green-100 text-green-800;
+            @apply bg-yellow-100 text-yellow-800;
           }
         }
 

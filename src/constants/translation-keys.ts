@@ -292,5 +292,42 @@ export const T_KEYS = {
   DEBUG: {
     VALIDATION_DEBUG: 'debug.validationDebug',
     VALIDATE_ALL_FIELDS: 'debug.validateAllFields'
+  },
+  PROGRAM_DETAIL: {
+    NOT_FOUND_TITLE: 'programDetail.notFoundTitle',
+    NOT_FOUND_DESCRIPTION: 'programDetail.notFoundDescription',
+    TECHNICAL_DETAILS: 'programDetail.technicalDetails',
+    STATS: {
+      HELPED: 'programDetail.stats.helped',
+      CURRENT_PARTICIPANTS: 'programDetail.stats.currentParticipants',
+      SUCCESS_STORIES: 'programDetail.stats.successStories',
+      BUDGET: 'programDetail.stats.budget'
+    },
+    ABOUT_SECTION: 'programDetail.aboutSection',
+    REQUIREMENTS_SECTION: 'programDetail.requirementsSection',
+    BENEFITS_SECTION: 'programDetail.benefitsSection',
+    GALLERY_SECTION: 'programDetail.gallerySection',
+    INFO_CARD: {
+      TITLE: 'programDetail.infoCard.title',
+      DURATION: 'programDetail.infoCard.duration',
+      LOCATION: 'programDetail.infoCard.location',
+      MAX_PARTICIPANTS: 'programDetail.infoCard.maxParticipants',
+      DEADLINE: 'programDetail.infoCard.deadline'
+    },
+    APPLICATION_FORM: {
+      TITLE: 'programDetail.applicationForm.title',
+      MESSAGE_LABEL: 'programDetail.applicationForm.messageLabel',
+      MESSAGE_PLACEHOLDER: 'programDetail.applicationForm.messagePlaceholder'
+    },
+    STATUS_CARD: {
+      TITLE: 'programDetail.statusCard.title'
+    },
+    CONTACT_CARD: {
+      TITLE: 'programDetail.contactCard.title'
+    },
+    AUTH_CARD: {
+      TITLE: 'programDetail.authCard.title',
+      MESSAGE: 'programDetail.authCard.message'
+    }
   }
 } as const; 

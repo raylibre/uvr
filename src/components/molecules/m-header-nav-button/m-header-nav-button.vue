@@ -74,20 +74,16 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-header-nav-button {
-  @apply inline-flex items-center px-3 md:px-2 py-2 md:py-1.5 text-sm font-medium 
-         text-gray-700 rounded-md transition-colors hover:bg-gray-100;
-
-  // Mobile styles
+  @apply inline-flex items-center px-3 md:px-2 py-2 md:py-1.5 text-sm font-medium text-gray-700 rounded-md transition-colors;
   @apply block w-full;
 
-  // Desktop styles
   @screen md {
     @apply w-auto;
   }
 
-  // Active state
+  &:hover,
   &.is-active {
-    @apply bg-gray-100 font-bold;
+    @apply bg-blue-50 text-blue-dark;
   }
 
   .content {

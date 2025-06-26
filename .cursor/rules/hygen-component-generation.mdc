@@ -1,0 +1,27 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Component Generation with Hygen
+
+All new components **must** be created using the Hygen code generator to ensure consistency with project standards and templates.
+
+## How to Generate a Component
+
+1. Run the following command:
+   ```bash
+   npm run cc
+   ```
+   This will start the Hygen generator using the templates in the `_templates/create/component` directory.
+
+2. Follow the prompts to specify the component name and any other required details.
+
+3. The generator will scaffold the component files (e.g., `.vue`, `.scss`, `index.ts`) according to the project's conventions.
+
+## Why Use Hygen?
+- Ensures all components follow the same structure and code style
+- Reduces manual errors and setup time
+- Keeps the codebase maintainable and consistent
+
+> **Rule:** If you need to create a new component, you **must** use Hygen via `npm run cc` and never create component files manually.

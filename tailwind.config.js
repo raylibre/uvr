@@ -1,16 +1,25 @@
 /** @type {import('tailwindcss').Config} */
+import resolveConfig from 'tailwindcss/resolveConfig';
+import tailwindColors from 'tailwindcss/colors';
+
 export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: [
+    {
+      pattern: /text-(yellow|secondary|primary|red|green|blue)(-(dark|light|[0-9]{3}))?/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
+        ...tailwindColors,
         primary: {
-          DEFAULT: '#FF6B2C',
-          dark: '#E55A1F',
-          light: '#FF8B5A'
+          DEFAULT: '#134277',
+          dark: '#0F335C',
+          light: '#3B5C99'
         },
         secondary: '#1A1A1A',
         gray: {
@@ -25,16 +34,24 @@ export default {
           900: '#1A1A1A'
         },
         red: {
-          500: '#EF4444'
+          DEFAULT: '#D93535',    // vivid red
+          dark: '#B32424',       // deeper tone
+          light: '#F16969',      // softer for bg/hover
         },
         green: {
-          500: '#10B981'
+          DEFAULT: '#2D8050',    // rich green
+          dark: '#1F5C3A',       // darker tone
+          light: '#5DBA84',      // lighter, friendly
         },
         yellow: {
-          500: '#F59E0B'
+          DEFAULT: '#f6c500',
+          dark: '#cfae00',
+          light: '#fbe27c',
         },
         blue: {
-          500: '#3B82F6'
+          DEFAULT: '#134277',
+          dark: '#0F335C',
+          light: '#3B5C99',
         }
       },
       fontFamily: {

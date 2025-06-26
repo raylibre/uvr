@@ -127,5 +127,42 @@
     "form": {
       "submit": "An error occurred while submitting the form"
     }
+  },
+  "programDetail": {
+    "notFoundTitle": "Program not found",
+    "notFoundDescription": "Unfortunately, the program with the address {slug} does not exist or has been deleted.",
+    "technicalDetails": "Technical details",
+    "stats": {
+      "helped": "Helped",
+      "currentParticipants": "Current participants",
+      "successStories": "Success stories",
+      "budget": "Program budget"
+    },
+    "aboutSection": "About the program",
+    "requirementsSection": "Participation requirements",
+    "benefitsSection": "What you will get",
+    "gallerySection": "Gallery",
+    "infoCard": {
+      "title": "Program information",
+      "duration": "Duration: {months} months",
+      "location": "Location: {location}",
+      "maxParticipants": "Max participants: {max}",
+      "deadline": "Deadline: {date}"
+    },
+    "applicationForm": {
+      "title": "Apply",
+      "messageLabel": "Message for organizers",
+      "messagePlaceholder": "Tell us why you want to participate in this program..."
+    },
+    "statusCard": {
+      "title": "Application status"
+    },
+    "contactCard": {
+      "title": "Contacts"
+    },
+    "authCard": {
+      "title": "Authorization required",
+      "message": "You need to be logged in to apply for the program."
+    }
   }
 } 
