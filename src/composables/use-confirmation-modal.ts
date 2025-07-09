@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import { useEventBus } from '~/composables/use-event-bus';
-import { EVENTS } from '~/constants/event-bus-constants';
+import { useEventBus } from '~/composables/use-event-bus.ts';
+import { EVENTS } from '~/constants/event-bus-constants.ts';
 
 export interface ConfirmationModalOptions {
   title: string;
@@ -26,7 +26,7 @@ const { BUS } = useEventBus();
 export function openConfirmationModal(confirmationOptions: ConfirmationModalOptions): Promise<boolean> {
   // Only one confirmation modal can be open at a time
   if (isVisible.value) {
-    return Promise.reject(new Error('A confirmation modal is already open'));
+    return Promise.reject(false);
   }
 
   return new Promise((resolve) => {
@@ -54,15 +54,17 @@ export function openConfirmationModal(confirmationOptions: ConfirmationModalOpti
         }
         resolve(false);
       } finally {
+        console.log('here');
+        loading.value = false;
         isVisible.value = false;
         options.value = null;
       }
     };
 
     // Set up event listeners
-    const unsubscribeConfirm = () => BUS.on(EVENTS.MODAL_CONFIRM, handleConfirm);
-    const unsubscribeReject = () => BUS.on(EVENTS.MODAL_REJECT, handleReject);
-    const unsubscribeClose = () => BUS.on(EVENTS.MODAL_CLOSE, handleReject);
+    const unsubscribeConfirm = () => BUS.off(EVENTS.MODAL_CONFIRM, handleConfirm);
+    const unsubscribeReject = () => BUS.off(EVENTS.MODAL_REJECT, handleReject);
+    const unsubscribeClose = () => BUS.off(EVENTS.MODAL_CLOSE, handleReject);
 
     // Clean up event listeners when modal is closed
     const cleanup = () => {
@@ -70,7 +72,9 @@ export function openConfirmationModal(confirmationOptions: ConfirmationModalOpti
       unsubscribeReject();
       unsubscribeClose();
     };
-
+    BUS.on(EVENTS.MODAL_CONFIRM, handleConfirm);
+    BUS.on(EVENTS.MODAL_REJECT, handleReject);
+    BUS.on(EVENTS.MODAL_CLOSE, handleReject);
     BUS.on(EVENTS.MODAL_CLOSED, cleanup);
   });
 }

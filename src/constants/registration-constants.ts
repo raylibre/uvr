@@ -1,4 +1,10 @@
-import { UserCategory } from '~/types/user.d';
+import {
+  UserCategory,
+  MaritalCategory,
+  ActivityType
+} from '~/types/user.d';
+import { T_KEYS } from '~/constants/translation-keys';
+
 
 export const REGISTRATION_STEPS = [
   {
@@ -39,11 +45,23 @@ export const REGISTRATION_STEPS = [
 ] as const;
 
 export const USER_CATEGORIES = [
-  { value: UserCategory.VETERAN, label: 'Veteran' },
-  { value: UserCategory.FAMILY, label: 'Family Member' },
-  { value: UserCategory.VOLUNTEER, label: 'Volunteer' },
-  { value: UserCategory.MEDICAL, label: 'Medical Professional' },
-  { value: UserCategory.OTHER, label: 'Other' }
+  { value: UserCategory.COMBAT_PARTICIPANT, label: T_KEYS.USER_CATEGORIES_COMBAT_PARTICIPANT },
+  { value: UserCategory.FAMILY_OF_DECEASED, label: T_KEYS.USER_CATEGORIES_FAMILY_OF_DECEASED },
+  { value: UserCategory.FAMILY_OF_MISSING, label: T_KEYS.USER_CATEGORIES_FAMILY_OF_MISSING },
+  { value: UserCategory.PERSON_WITH_DISABILITY, label: T_KEYS.USER_CATEGORIES_PERSON_WITH_DISABILITY }
+] as const;
+
+export const MARITAL_CATEGORIES = [
+  { value: MaritalCategory.MARRIED, label: T_KEYS.MARITAL_STATUS_MARRIED },
+  { value: MaritalCategory.SINGLE, label: T_KEYS.MARITAL_STATUS_SINGLE },
+  { value: MaritalCategory.DIVORCED, label: T_KEYS.MARITAL_STATUS_DIVORCED },
+  { value: MaritalCategory.DIVORCED_PAYING_ALIMONY, label: T_KEYS.MARITAL_STATUS_DIVORCED_PAYING_ALIMONY }
+] as const;
+
+export const ACTIVITY_TYPES = [
+  { value: ActivityType.SOCIAL, label: T_KEYS.ACTIVITY_TYPE_SOCIAL },
+  { value: ActivityType.ECONOMIC, label: T_KEYS.ACTIVITY_TYPE_ECONOMIC },
+  { value: ActivityType.VOLUNTEER, label: T_KEYS.ACTIVITY_TYPE_VOLUNTEER }
 ] as const;
 
 export const REGIONS = [

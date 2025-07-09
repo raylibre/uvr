@@ -96,8 +96,7 @@
           <div class="notification-item">
             <dt class="notification-item__label">Notifications Enabled</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
+              <i :class="[
                 formData.notifications_enabled ? 'fas fa-check' : 'fas fa-times'
               ]"/>
             </dd>
@@ -105,8 +104,7 @@
           <div class="notification-item">
             <dt class="notification-item__label">Email Notifications</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
+              <i :class="[
                 'fas',
                 formData.email_notifications ? 'fa-check' : 'fa-times'
               ]"/>
@@ -115,8 +113,7 @@
           <div class="notification-item">
             <dt class="notification-item__label">SMS Notifications</dt>
             <dd class="notification-item__value">
-              <i
-:class="[
+              <i :class="[
                 formData.sms_notifications ? 'fas fa-check' : 'fas fa-times'
               ]"/>
             </dd>
@@ -157,6 +154,7 @@ import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-const
 import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useRegistrationData } from '~/composables/use-registration-data';
+import { useTranslation } from '~/composables/use-translation.ts';
 
 export default defineComponent({
   name: 'MRegistrationStepFive',
@@ -168,6 +166,7 @@ export default defineComponent({
   setup() {
     const { getStepForm } = useRegistrationValidation();
     const { formData } = useRegistrationData();
+    const { t } = useTranslation();
     const stepForm = getStepForm(5);
 
     // Create terms field using useField with the step form context
@@ -187,7 +186,8 @@ export default defineComponent({
     };
 
     const getCategoryLabel = (category: string) => {
-      return USER_CATEGORIES.find(c => c.value === category)?.label || category;
+      const key = USER_CATEGORIES.find(c => c.value === category)?.label || ''
+      return t(key) || category;
     };
 
     const getRegionLabel = (region: string) => {

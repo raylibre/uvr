@@ -9,6 +9,7 @@
 
     <OLoginModal />
     <ORegisterModal />
+    <OConfirmationModal />
   </div>
 </template>
 
@@ -18,11 +19,13 @@ import OHeader from '~/components/organisms/o-header/o-header.vue';
 import OLoginModal from '~/components/organisms/o-login-modal';
 import { useEventBus } from '~/composables/use-event-bus';
 import ORegisterModal from '~/components/organisms/o-register-modal/o-register-modal.vue';
+import OConfirmationModal from '~/components/organisms/o-confirmation-modal';
 
 export default defineComponent({
   name: 'App',
 
   components: {
+    OConfirmationModal,
     ORegisterModal,
     OLoginModal,
     OHeader,

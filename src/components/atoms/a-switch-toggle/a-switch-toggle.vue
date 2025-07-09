@@ -1,21 +1,21 @@
 <template>
-  <div class="switch-field" data-at="switch-toggle">
-    <button
-      :id="id"
-      type="button"
-      :class="[
-        'switch',
-        modelValue ? 'is-active' : 'is-inactive',
-        disabled ? 'is-disabled' : '',
-        error ? 'has-error' : ''
-      ]"
-      :disabled="disabled"
-      :aria-checked="modelValue"
-      @click="toggle"
-    >
-      <span class="switch__handle" :class="{ 'is-active': modelValue }" />
-    </button>
-    <p v-if="error" :id="`${id}-error`" class="error-message">{{ error }}</p>
+  <div class="a-switch-toggle" :class="{ 'is-disabled': disabled }">
+    <div class="switch-container">
+      <button
+        type="button"
+        class="switch"
+        :class="{ 'is-active': modelValue, 'has-error': error }"
+        :disabled="disabled"
+        @click="toggle"
+        :aria-checked="modelValue"
+        role="switch"
+      >
+        <span class="switch__track">
+          <span class="switch__thumb" />
+        </span>
+      </button>
+    </div>
+    <div v-if="error" class="error-message">{{ error }}</div>
   </div>
 </template>
 
@@ -24,15 +24,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ASwitchToggle',
-
   props: {
     modelValue: {
       type: Boolean,
       default: false
-    },
-    id: {
-      type: String,
-      required: true
     },
     disabled: {
       type: Boolean,
@@ -43,9 +38,7 @@ export default defineComponent({
       default: ''
     }
   },
-
   emits: ['update:modelValue'],
-
   setup(props, { emit }) {
     const toggle = () => {
       if (!props.disabled) {
@@ -60,66 +53,83 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../../styles/mixins';
 
-.switch-field {
+.a-switch-toggle {
   display: inline-flex;
   flex-direction: column;
-}
-
-.switch {
-  position: relative;
-  display: inline-flex;
-  height: spacing('6');
-  width: spacing('11');
-  flex-shrink: 0;
-  cursor: pointer;
-  border-radius: radius('full');
-  border: 2px solid transparent;
-  transition: all duration('normal') timing('ease-in-out');
-
-  &:focus {
-    @include focus-ring;
-  }
-
-  &.is-active {
-    background-color: $color-primary;
-  }
-
-  &.is-inactive {
-    background-color: $color-gray-200;
-  }
+  align-items: flex-start;
 
   &.is-disabled {
-    @include disabled-state;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
-  &.has-error {
-    @include error-state;
+  .switch-container {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &__track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-gray-300);
+      border-radius: 34px;
+      transition: background-color 0.2s ease;
+    }
+
+    &__thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    &.is-active {
+      .switch__track {
+        @apply bg-primary;
+      }
+
+      .switch__thumb {
+        transform: translateX(20px);
+      }
+    }
+
+    &.has-error {
+      .switch__track {
+        border: 1px solid var(--color-red);
+      }
+    }
+  }
+
+  .error-message {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--color-red);
   }
 }
-
-.switch__handle {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  height: calc(#{spacing('6')} - 8px);
-  width: calc(#{spacing('6')} - 8px);
-  background-color: white;
-  border-radius: radius('full');
-  box-shadow: shadow('sm');
-  transform: translateX(0);
-  transition: transform duration('normal') timing('ease-in-out');
-
-  &.is-active {
-    transform: translateX(#{spacing('5')});
-  }
-}
-
-.error-message {
-  margin-top: spacing('1');
-  font-size: size('sm');
-  color: $color-red-500;
-}
-</style> 
+</style>

@@ -1,4 +1,23 @@
 {
+  "user": {
+    "categories": {
+      "combatParticipant": "Combat Participant",
+      "familyOfDeceased": "Family of Deceased",
+      "familyOfMissing": "Family of Missing Person",
+      "personWithDisability": "Person with Disability"
+    },
+    "maritalStatus": {
+      "married": "Married",
+      "single": "Single",
+      "divorced": "Divorced",
+      "divorcedPayingAlimony": "Divorced Paying Alimony"
+    },
+    "activityTypes": {
+      "social": "Social",
+      "economic": "Economic",
+      "volunteer": "Volunteer"
+    }
+  },
   "common": {
     "buttons": {
       "submit": "Submit",
@@ -107,7 +126,9 @@
       "email": "Email",
       "subject": "Subject",
       "message": "Message",
-      "subscribe": "Subscribe to our newsletter"
+      "subscribe": "Subscribe to our newsletter",
+      "hasMinorChildren": "Presence of minor children",
+      "minorChildrenCount": "Number of minor children"
     },
     "placeholders": {
       "name": "Enter your name",

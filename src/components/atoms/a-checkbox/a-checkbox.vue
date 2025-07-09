@@ -1,5 +1,5 @@
 <template>
-  <div class="checkbox" data-at="checkbox">
+  <div class="a-checkbox" data-at="checkbox">
     <div class="checkbox__container">
       <div class="checkbox__input-wrapper">
         <input
@@ -98,18 +98,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.checkbox {
+.a-checkbox {
   @apply w-full;
 
-  &__container {
-    @apply relative flex items-start;
+  .checkbox__container {
+    @apply relative flex items-center;
   }
 
-  &__input-wrapper {
+  .checkbox__input-wrapper {
     @apply flex h-5 items-center;
   }
 
-  &__input {
+  .checkbox__input {
     @apply h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary;
 
     &--error {
@@ -125,11 +125,11 @@ export default defineComponent({
     }
   }
 
-  &__content {
+  .checkbox__content {
     @apply ml-3;
   }
 
-  &__label {
+  .checkbox__label {
     @apply text-sm font-medium text-gray-700;
 
     &--interactive {
@@ -137,15 +137,15 @@ export default defineComponent({
     }
   }
 
-  &__required {
+  .checkbox__required {
     @apply text-red-500;
   }
 
-  &__description {
+  .checkbox__description {
     @apply text-sm text-gray-500;
   }
 
-  &__error {
+  .checkbox__error {
     @apply mt-1 text-sm text-red-600;
   }
 }

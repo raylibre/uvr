@@ -4,6 +4,7 @@
       as="div"
       data-at="o-modal"
       class="o-modal"
+      :static="preventClose"
       @close="handleClose"
     >
       <!-- Backdrop -->

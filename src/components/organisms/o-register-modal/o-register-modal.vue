@@ -2,8 +2,10 @@
   <OModal
     v-model="isOpen"
     :full-screen="true"
+    :preventClose="true"
     class="o-register-modal"
     content-class="register-modal"
+    @close="handleClose"
   >
     <div class="layout">
       <!-- Left sidebar with steps - Hidden on mobile/tablet, visible on desktop -->
@@ -113,6 +115,7 @@ import { defineComponent, ref, computed, watch } from 'vue';
 import { Form as VForm } from 'vee-validate';
 import { useEventBus } from '~/composables/use-event-bus';
 import { useRegistrationForm } from '~/composables/use-registration-form';
+import { openConfirmationModal } from '~/composables/use-confirmation-modal';
 import { EVENTS } from '~/constants/event-bus-constants';
 import OModal from '~/components/organisms/o-modal';
 import AButton from '~/components/atoms/a-button';
@@ -177,7 +180,33 @@ export default defineComponent({
       }
     };
 
-    const handleClose = () => {
+    const hasUnsavedChanges = () => {
+      // Check if any field in the form has been filled out
+      const data = formData.value;
+
+      // Check if any field has a value
+      return Object.values(data).some(value => {
+        if (typeof value === 'string') return value.trim() !== '';
+        if (typeof value === 'boolean') return value === true;
+        return value !== undefined && value !== null;
+      });
+    };
+
+    const handleClose = async () => {
+      // If there are unsaved changes, show confirmation modal
+      if (hasUnsavedChanges()) {
+        const confirmed = await openConfirmationModal({
+          title: 'Unsaved Changes',
+          text: 'You have unsaved changes. Are you sure you want to close this form?',
+          confirmButtonText: 'Yes, Close',
+          rejectButtonText: 'Cancel'
+        });
+
+        if (!confirmed) {
+          return; // User canceled, don't close the modal
+        }
+      }
+
       isOpen.value = false;
       resetForm();
       document.body.style.overflow = '';
@@ -221,6 +250,7 @@ export default defineComponent({
       submitButtonText,
       isLoading,
       totalSteps,
+      handleClose,
       handleSubmitButtonClick,
       goToStep,
       handleCancelButtonClick,
@@ -321,11 +351,11 @@ export default defineComponent({
       }
 
       .is-completed & {
-        @apply bg-green-500 text-white;
+        @apply bg-yellow-dark text-white;
       }
 
       .is-available & {
-        @apply bg-blue-100 text-blue-600;
+        @apply bg-blue-100 text-primary-light;
       }
 
       .is-locked & {
@@ -345,11 +375,11 @@ export default defineComponent({
       }
 
       &.is-completed {
-        @apply text-green-600;
+        @apply text-yellow;
       }
 
       &.is-available {
-        @apply text-blue-600;
+        @apply text-primary-light;
       }
 
       &.is-locked {
@@ -433,7 +463,7 @@ export default defineComponent({
     // On mobile, reverse order so primary action is at top
     @media (max-width: 640px) {
       @apply flex-col-reverse;
-      
+
       .action-button-submit {
         @apply mb-2;
       }
@@ -455,4 +485,3 @@ export default defineComponent({
   }
 }
 </style> 
-

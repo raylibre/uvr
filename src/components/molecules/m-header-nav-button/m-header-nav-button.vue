@@ -50,8 +50,8 @@ export default defineComponent({
 
     const isActive = computed(() => {
       if (typeof props.to === 'string') {
-        return props.exact 
-          ? route.path === props.to
+        return props.exact
+          ? route.fullPath === props.to
           : route.path.startsWith(props.to);
       }
       return props.to.name === route.name;

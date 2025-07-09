@@ -1,9 +1,21 @@
 export enum UserCategory {
-  VETERAN = 'VETERAN',
-  FAMILY = 'FAMILY',
-  VOLUNTEER = 'VOLUNTEER',
-  MEDICAL = 'MEDICAL',
-  OTHER = 'OTHER'
+  COMBAT_PARTICIPANT = 'COMBAT_PARTICIPANT',
+  FAMILY_OF_DECEASED = 'FAMILY_OF_DECEASED',
+  FAMILY_OF_MISSING = 'FAMILY_OF_MISSING',
+  PERSON_WITH_DISABILITY = 'PERSON_WITH_DISABILITY'
+}
+
+export enum MaritalCategory {
+  MARRIED = 'MARRIED',
+  SINGLE = 'SINGLE',
+  DIVORCED = 'DIVORCED',
+  DIVORCED_PAYING_ALIMONY = 'DIVORCED_PAYING_ALIMONY'
+}
+
+export enum ActivityType {
+  SOCIAL = 'SOCIAL',
+  ECONOMIC = 'ECONOMIC',
+  VOLUNTEER = 'VOLUNTEER'
 }
 
 export interface UserProfile {
@@ -21,12 +33,15 @@ export interface UserProfile {
   region: string;
   city: string;
   category: UserCategory;
+  activity_type: ActivityType;
   bio?: string;
 
   // Step 3 - Emergency Info
   address: string;
   emergency_contact_name: string;
   emergency_contact_phone: string;
+  has_minor_children: boolean;
+  minor_children_count?: number;
 
   // Step 4 - Notifications
   notifications_enabled: boolean;

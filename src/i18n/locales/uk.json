@@ -1,4 +1,23 @@
 {
+  "user": {
+    "categories": {
+      "combatParticipant": "Учасник бойових дій",
+      "familyOfDeceased": "Член родини загиблого",
+      "familyOfMissing": "Член родини зниклого безвісти",
+      "personWithDisability": "Особа з інвалідністю"
+    },
+    "maritalStatus": {
+      "married": "Одружений",
+      "single": "Неодружений",
+      "divorced": "Розведений",
+      "divorcedPayingAlimony": "Розведений сплачує аліменти"
+    },
+    "activityTypes": {
+      "social": "Соціяльна",
+      "economic": "Економічна",
+      "volunteer": "Волонтер"
+    }
+  },
   "common": {
     "buttons": {
       "submit": "Надіслати",
@@ -107,7 +126,9 @@
       "email": "Електронна пошта",
       "subject": "Тема",
       "message": "Повідомлення",
-      "subscribe": "Підписатися на нашу розсилку"
+      "subscribe": "Підписатися на нашу розсилку",
+      "hasMinorChildren": "Наявність неповнолітніх дітей",
+      "minorChildrenCount": "Кількість неповнолітніх дітей"
     }
   },
   "programDetail": {

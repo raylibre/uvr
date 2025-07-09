@@ -18,7 +18,11 @@ interface StepTwoForm {
   region: string;
   city: string;
   category: string;
+  marital: string;
+  activity_type: string;
   bio?: string;
+  has_minor_children: boolean;
+  minor_children_count?: string | number;
 }
 
 interface StepThreeForm {
@@ -44,9 +48,9 @@ interface AllFormData extends StepOneForm, StepTwoForm, StepThreeForm, StepFourF
 const stepOneSchema = yup.object({
   first_name: yup.string().required('First name is required').min(2, 'First name must be at least 2 characters'),
   last_name: yup.string().required('Last name is required').min(2, 'Last name must be at least 2 characters'),
-  patronymic: yup.string().optional(),
+  patronymic: yup.string().required('Patronymic is required').min(2, 'Patronymic must be at least 2 characters'),
   email: yup.string().required('Email is required').email('Please enter a valid email address'),
-  phone: yup.string().required('Phone number is required').matches(/^[+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number'),
+  phone: yup.string().required('Phone number is required').matches(/^\+?[0-9\s\-()]{7,20}$/, 'Please enter a valid phone number'),
   password: yup.string()
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters')
@@ -63,13 +67,25 @@ const stepTwoSchema = yup.object({
   region: yup.string().required('Region is required'),
   city: yup.string().required('City is required'),
   category: yup.string().required('Category is required'),
-  bio: yup.string().optional()
+  marital: yup.string().required('Marital is required'),
+  activity_type: yup.string().required('Activity type is required'),
+  bio: yup.string().optional(),
+  has_minor_children: yup.boolean().default(false),
+  minor_children_count: yup.mixed().test('conditional-required', 'Number of minor children is required', function(value) {
+    // If has_minor_children is true, require a value
+    if (this.parent.has_minor_children) {
+      if (!value) return false;
+      const numValue = Number(value);
+      if (isNaN(numValue) || numValue < 1 || numValue > 20) return false;
+    }
+    return true;
+  })
 });
 
 const stepThreeSchema = yup.object({
   address: yup.string().required('Address is required').min(10, 'Please provide a complete address'),
-  emergency_contact_name: yup.string().required('Emergency contact name is required').min(2, 'Name must be at least 2 characters'),
-  emergency_contact_phone: yup.string().required('Emergency contact phone is required').matches(/^[+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number')
+  emergency_contact_name: yup.string(),
+  emergency_contact_phone: yup.string()
 });
 
 const stepFourSchema = yup.object({
@@ -92,24 +108,28 @@ const globalPersistentData = reactive<Partial<AllFormData>>({
   phone: '',
   password: '',
   password_confirmation: '',
-  
+
   // Step 2 defaults
   date_of_birth: '',
   region: '',
   city: '',
   category: '',
+  marital: '',
+  activity_type: '',
   bio: '',
-  
+
   // Step 3 defaults
   address: '',
   emergency_contact_name: '',
   emergency_contact_phone: '',
-  
+  has_minor_children: false,
+  minor_children_count: undefined,
+
   // Step 4 defaults
   notifications_enabled: true,
   email_notifications: false,
   sms_notifications: false,
-  
+
   // Step 5 defaults
   terms: false
 });
@@ -118,7 +138,7 @@ const globalPersistentData = reactive<Partial<AllFormData>>({
 const getStepInitialValues = (step: number): Record<string, unknown> => {
   const stepFields = {
     1: ['first_name', 'last_name', 'patronymic', 'email', 'phone', 'password', 'password_confirmation'],
-    2: ['date_of_birth', 'region', 'city', 'category', 'bio'],
+    2: ['date_of_birth', 'region', 'city', 'category', 'marital', 'activity_type', 'bio', 'has_minor_children', 'minor_children_count'],
     3: ['address', 'emergency_contact_name', 'emergency_contact_phone'],
     4: ['notifications_enabled', 'email_notifications', 'sms_notifications'],
     5: ['terms']
@@ -126,11 +146,11 @@ const getStepInitialValues = (step: number): Record<string, unknown> => {
 
   const fields = stepFields[step as keyof typeof stepFields] || [];
   const initialValues: Record<string, unknown> = {};
-  
+
   fields.forEach(field => {
     initialValues[field] = globalPersistentData[field as keyof typeof globalPersistentData];
   });
-  
+
   return initialValues;
 };
 
@@ -233,7 +253,7 @@ export const useRegistrationValidation = () => {
   const syncPersistentDataToCurrentStep = (step: number): void => {
     const form = getStepForm(step);
     const stepInitialValues = getStepInitialValues(step);
-    
+
     // Use setValues with silent option to prevent validation triggering
     form.setValues(stepInitialValues as never, false);
   };
@@ -241,10 +261,10 @@ export const useRegistrationValidation = () => {
   // Validate step and return validation result (for sidebar status)
   const validateStepForCompletion = async (step: number): Promise<boolean> => {
     const form = getStepForm(step);
-    
+
     // First sync current values to persistent storage
     syncCurrentStepToPersistentData(step);
-    
+
     // Get the validation schema for this step
     const schemas = {
       1: stepOneSchema,
@@ -253,10 +273,10 @@ export const useRegistrationValidation = () => {
       4: stepFourSchema,
       5: stepFiveSchema
     };
-    
+
     const schema = schemas[step as keyof typeof schemas];
     if (!schema) return false;
-    
+
     try {
       // Validate the current form values directly with yup schema
       await schema.validate(form.values, { abortEarly: false });
@@ -269,22 +289,24 @@ export const useRegistrationValidation = () => {
   const resetStep = (step: number): void => {
     const form = getStepForm(step);
     form.resetForm();
-    
+
     // Also clear persistent data for this step
     const stepFields = {
       1: ['first_name', 'last_name', 'patronymic', 'email', 'phone', 'password', 'password_confirmation'],
-      2: ['date_of_birth', 'region', 'city', 'category', 'bio'],
+      2: ['date_of_birth', 'region', 'city', 'category', 'marital', 'activity_type', 'bio', 'has_minor_children', 'minor_children_count'],
       3: ['address', 'emergency_contact_name', 'emergency_contact_phone'],
       4: ['notifications_enabled', 'email_notifications', 'sms_notifications'],
       5: ['terms']
     };
-    
+
     const fields = stepFields[step as keyof typeof stepFields] || [];
     fields.forEach(field => {
       if (field === 'notifications_enabled') {
         (globalPersistentData as any)[field] = true;
-      } else if (field === 'terms' || field === 'email_notifications' || field === 'sms_notifications') {
+      } else if (field === 'terms' || field === 'email_notifications' || field === 'sms_notifications' || field === 'has_minor_children') {
         (globalPersistentData as any)[field] = false;
+      } else if (field === 'minor_children_count') {
+        (globalPersistentData as any)[field] = undefined;
       } else {
         (globalPersistentData as any)[field] = '';
       }
@@ -295,7 +317,7 @@ export const useRegistrationValidation = () => {
     Object.values(globalFormState).forEach(form => {
       form.resetForm();
     });
-    
+
     // Reset persistent data to defaults
     Object.assign(globalPersistentData, {
       first_name: '',
@@ -309,10 +331,14 @@ export const useRegistrationValidation = () => {
       region: '',
       city: '',
       category: '',
+      marital: '',
+      activity_type: '',
       bio: '',
       address: '',
       emergency_contact_name: '',
       emergency_contact_phone: '',
+      has_minor_children: false,
+      minor_children_count: undefined,
       notifications_enabled: true,
       email_notifications: false,
       sms_notifications: false,

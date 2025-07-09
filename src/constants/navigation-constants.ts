@@ -17,7 +17,7 @@ export const MENU_ITEMS: MenuItem[] = [
     name: ROUTE_NAMES.HOME,
     title: 'common.navigation.structure',
     exact: true,
-    path: '/'
+    path: '/#structure'
   },
   {
     name: 'NEWS',

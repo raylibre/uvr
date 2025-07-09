@@ -41,14 +41,63 @@
       </div>
 
       <AFormSelect
+        :id="'marital-category'"
+        v-model="marital.value.value as string"
+        label="Marital"
+        :options="userMaritalList"
+        :required="true"
+        icon="fas fa-users"
+        :error="marital.errorMessage.value"
+        @blur="marital.validate"
+      />
+
+      <div class="minor-children-section">
+        <div class="checkbox-container">
+          <ACheckbox
+            :id="'register-has-minor-children'"
+            v-model="hasMinorChildren.value.value as boolean"
+            :label="t(T_KEYS.FORM.LABELS.HAS_MINOR_CHILDREN)"
+            data-at="has-minor-children-checkbox"
+            :error="hasMinorChildren.errorMessage.value"
+            @blur="hasMinorChildren.validate"
+          />
+        </div>
+
+        <div v-if="hasMinorChildren.value.value" class="children-count-container">
+          <AFormInput
+            :id="'register-minor-children-count'"
+            v-model="minorChildrenCount.value.value as string"
+            :label="t(T_KEYS.FORM.LABELS.MINOR_CHILDREN_COUNT)"
+            type="number"
+            icon="fas fa-child"
+            :error="minorChildrenCount.errorMessage.value"
+            @blur="minorChildrenCount.validate"
+            min="1"
+            max="20"
+          />
+        </div>
+      </div>
+
+      <AFormSelect
         :id="'register-category'"
         v-model="category.value.value as string"
         label="Category"
-        :options="[...USER_CATEGORIES]"
+        :options="userCategoriesList"
         :required="true"
         icon="fas fa-users"
         :error="category.errorMessage.value"
         @blur="category.validate"
+      />
+
+      <AFormSelect
+        :id="'register-activity-type'"
+        v-model="activityType.value.value as string"
+        label="Activity Type"
+        :options="userActivityTypesList"
+        :required="true"
+        icon="fas fa-running"
+        :error="activityType.errorMessage.value"
+        @blur="activityType.validate"
       />
 
       <AFormTextarea
@@ -65,13 +114,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, watch } from 'vue';
 import { useField } from 'vee-validate';
-import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
+import {
+  CITIES,
+  REGIONS,
+  USER_CATEGORIES,
+  MARITAL_CATEGORIES,
+  ACTIVITY_TYPES
+} from '~/constants/registration-constants';
 import AFormSelect from '~/components/atoms/a-form-select';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
 import AFormDatepicker from '~/components/atoms/a-form-datepicker';
+import AFormInput from '~/components/atoms/a-form-input';
+import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { useTranslation } from '~/composables/use-translation.ts';
+import { T_KEYS } from '~/constants/translation-keys';
 
 export default defineComponent({
   name: 'MRegistrationStepTwo',
@@ -79,11 +138,14 @@ export default defineComponent({
   components: {
     AFormSelect,
     AFormTextarea,
-    AFormDatepicker
+    AFormDatepicker,
+    AFormInput,
+    ACheckbox
   },
 
   setup() {
     const { getStepForm } = useRegistrationValidation();
+    const { t } = useTranslation();
     const stepForm = getStepForm(2);
 
     // Create fields using useField with the step form context
@@ -111,16 +173,72 @@ export default defineComponent({
       validateOnMount: false
     });
 
+    const marital = useField('marital', undefined, {
+      form: stepForm as any,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const activityType = useField('activity_type', undefined, {
+      form: stepForm as any,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
     const bio = useField('bio', undefined, {
       form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
+    const hasMinorChildren = useField('has_minor_children', undefined, {
+      form: stepForm as any,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    const minorChildrenCount = useField('minor_children_count', undefined, {
+      form: stepForm as any,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
+    // Reset minor_children_count when has_minor_children is unchecked
+    watch(() => hasMinorChildren.value.value, (hasChildren) => {
+      if (!hasChildren && minorChildrenCount.value.value) {
+        minorChildrenCount.value.value = undefined;
+      }
+    });
+
     // Computed for available cities based on selected region
     const availableCities = computed(() => {
       if (!region.value.value) return [];
       return CITIES[region.value.value as keyof typeof CITIES] || [];
+    });
+    const userCategoriesList = computed(() => {
+      return USER_CATEGORIES.map(item => {
+        return {
+          ...item,
+          label: t(item.label)
+        }
+      });
+    });
+    const userMaritalList = computed(() => {
+      return MARITAL_CATEGORIES.map(item => {
+        return {
+          ...item,
+          label: t(item.label)
+        }
+      });
+    });
+
+    const userActivityTypesList = computed(() => {
+      return ACTIVITY_TYPES.map(item => {
+        return {
+          ...item,
+          label: t(item.label)
+        }
+      });
     });
 
     const handleRegionChange = () => {
@@ -135,7 +253,12 @@ export default defineComponent({
         region.validate(),
         city.validate(),
         category.validate(),
-        bio.validate()
+        marital.validate(),
+        activityType.validate(),
+        bio.validate(),
+        hasMinorChildren.validate(),
+        // Only validate minor_children_count if has_minor_children is checked
+        ...(hasMinorChildren.value.value ? [minorChildrenCount.validate()] : [])
       ]);
       return results.every(result => result.valid);
     };
@@ -146,11 +269,19 @@ export default defineComponent({
       city,
       category,
       bio,
-      USER_CATEGORIES,
+      marital,
+      activityType,
+      hasMinorChildren,
+      minorChildrenCount,
+      userMaritalList,
+      userCategoriesList,
+      userActivityTypesList,
       REGIONS,
       availableCities,
       handleRegionChange,
-      validateAll
+      validateAll,
+      t,
+      T_KEYS
     };
   }
 });
@@ -175,6 +306,18 @@ export default defineComponent({
   .form-grid {
     // Mobile: Single column, Tablet+: Two columns
     @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
+  }
+
+  .minor-children-section {
+    @apply mt-4 sm:mt-6 space-y-4;
+  }
+
+  .checkbox-container {
+    @apply bg-gray-50 rounded-lg p-4;
+  }
+
+  .children-count-container {
+    @apply mt-4 max-w-xs;
   }
 }
 </style>

@@ -1,4 +1,15 @@
 export const T_KEYS = {
+  USER_CATEGORIES_COMBAT_PARTICIPANT: 'user.categories.combatParticipant',
+  USER_CATEGORIES_FAMILY_OF_DECEASED: 'user.categories.familyOfDeceased',
+  USER_CATEGORIES_FAMILY_OF_MISSING: 'user.categories.familyOfMissing',
+  USER_CATEGORIES_PERSON_WITH_DISABILITY: 'user.categories.personWithDisability',
+  MARITAL_STATUS_MARRIED: 'user.maritalStatus.married',
+  MARITAL_STATUS_SINGLE: 'user.maritalStatus.single',
+  MARITAL_STATUS_DIVORCED: 'user.maritalStatus.divorced',
+  MARITAL_STATUS_DIVORCED_PAYING_ALIMONY: 'user.maritalStatus.divorcedPayingAlimony',
+  ACTIVITY_TYPE_SOCIAL: 'user.activityTypes.social',
+  ACTIVITY_TYPE_ECONOMIC: 'user.activityTypes.economic',
+  ACTIVITY_TYPE_VOLUNTEER: 'user.activityTypes.volunteer',
   COMMON: {
     BUTTONS: {
       SEND: 'common.buttons.send',
@@ -75,6 +86,8 @@ export const T_KEYS = {
       FULL_ADDRESS: 'form.labels.fullAddress',
       EMERGENCY_CONTACT_NAME: 'form.labels.emergencyContactName',
       EMERGENCY_CONTACT_PHONE: 'form.labels.emergencyContactPhone',
+      HAS_MINOR_CHILDREN: 'form.labels.hasMinorChildren',
+      MINOR_CHILDREN_COUNT: 'form.labels.minorChildrenCount',
       BIO: 'form.labels.bio'
     },
     PLACEHOLDERS: {

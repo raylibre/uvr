@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindColors from 'tailwindcss/colors';
 
 export default {

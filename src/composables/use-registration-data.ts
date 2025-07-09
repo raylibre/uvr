@@ -4,7 +4,7 @@ import { REGISTRATION_STEPS } from '~/constants/registration-constants';
 import { useRegistrationValidation } from './use-registration-validation';
 
 // Global shared registration state - created once and reused across all components
-const globalCurrentStep = ref(1);
+const globalCurrentStep = ref(4);
 const globalIsLoading = ref(false);
 const globalSteps = reactive<RegistrationStep[]>([...REGISTRATION_STEPS]);
 

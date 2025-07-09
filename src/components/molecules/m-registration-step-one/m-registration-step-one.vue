@@ -13,17 +13,6 @@
     <div class="form">
       <div class="form-grid">
         <AFormInput
-          :id="'register-first-name'"
-          v-model="firstName.value.value as string"
-          label="First Name"
-          type="text"
-          :required="true"
-          icon="fas fa-user"
-          :error="firstName.errorMessage.value"
-          @blur="firstName.validate"
-        />
-
-        <AFormInput
           :id="'register-last-name'"
           v-model="lastName.value.value as string"
           label="Last Name"
@@ -33,14 +22,26 @@
           :error="lastName.errorMessage.value"
           @blur="lastName.validate"
         />
+
+        <AFormInput
+          :id="'register-first-name'"
+          v-model="firstName.value.value as string"
+          label="First Name"
+          type="text"
+          :required="true"
+          icon="fas fa-user"
+          :error="firstName.errorMessage.value"
+          @blur="firstName.validate"
+        />
       </div>
 
       <AFormInput
         :id="'register-patronymic'"
         v-model="patronymic.value.value as string"
-        label="Patronymic (Optional)"
+        label="Patronymic"
         type="text"
         icon="fas fa-user"
+        :required="true"
         :error="patronymic.errorMessage.value"
         @blur="patronymic.validate"
       />
