@@ -78,11 +78,18 @@ export default defineComponent({
 
 <style scoped>
 .o-hero-section {
-  @apply relative min-h-[80vh] flex items-center;
+  @apply relative flex items-center py-6; /* Add vertical padding for mobile */
+  min-height: 100vh;
   background: linear-gradient(to right, var(--color-yellow-light) 0%, var(--color-primary-dark) 75%);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+}
+
+@screen md {
+  .o-hero-section {
+    @apply min-h-[80vh] py-0; /* Restore original min-height and remove extra padding for desktop */
+  }
 }
 
 .hero-content {
@@ -94,12 +101,18 @@ export default defineComponent({
 }
 
 .hero-logo-img {
-  max-width: 350px;
+  max-width: 220px; /* Smaller logo for mobile */
   width: 100%;
   height: auto;
   display: block;
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   will-change: transform;
+}
+
+@screen md {
+  .hero-logo-img {
+    max-width: 350px;
+  }
 }
 
 .key-points {
@@ -109,6 +122,11 @@ export default defineComponent({
 .key-point {
   @apply bg-white/90 p-6 rounded-lg;
   transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s cubic-bezier(0.4,0,0.2,1);
+  margin-bottom: 1rem;
+}
+
+.key-point:last-child {
+  margin-bottom: 0;
 }
 
 .key-point:hover {
