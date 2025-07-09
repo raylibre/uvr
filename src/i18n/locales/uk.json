@@ -13,6 +13,8 @@
     },
     "navigation": {
       "home": "Головна",
+      "structure": "Наша Структура",
+      "programs": "Наші Програми",
       "leadership": "Керівництво",
       "legalHelp": "Юридична Допомога",
       "prosthetics": "Протезування",

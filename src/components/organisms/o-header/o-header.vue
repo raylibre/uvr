@@ -12,12 +12,39 @@
 
         <!-- Desktop Navigation -->
         <div class="nav-desktop">
-          <MHeaderNavButton
-            v-for="item in menuItems"
-            :key="item.name"
-            :to="getNavigationRoute(item)"
-            :translation-key="item.title"
-          />
+          <template v-for="item in menuItems" :key="item.name">
+            <div v-if="item.children" class="nav-dropdown-wrapper" v-click-outside="() => closeDropdown(item.name)"
+                 @mouseenter="openDropdown(item.name)" @mouseleave="closeDropdown(item.name)">
+              <MHeaderNavButton
+                :to="item.path || { name: item.name }"
+                :translation-key="item.title"
+                @click="toggleDropdown(item.name)"
+                :class="{ 'is-dropdown-open': isDropdownOpen(item.name) }"
+              >
+                <template #dropdown-indicator>
+                  <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.85a.75.75 0 01-1.02 0l-4.25-3.85a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                  </svg>
+                </template>
+              </MHeaderNavButton>
+              <div v-if="isDropdownOpen(item.name)" class="nav-dropdown-menu">
+                <MHeaderNavButton
+                  v-for="child in item.children"
+                  :key="child.name"
+                  :to="child.path || { name: child.name }"
+                  :translation-key="child.title"
+                  class="dropdown-item"
+                  @click="closeDropdown(item.name)"
+                />
+              </div>
+            </div>
+            <MHeaderNavButton
+              v-else
+              :to="getNavigationRoute(item)"
+              :exact="item.exact"
+              :translation-key="item.title"
+            />
+          </template>
         </div>
 
         <!-- Action Buttons with Language Switcher -->
@@ -140,21 +167,40 @@
       :class="{ 'is-open': isMobileMenuOpen }"
     >
       <div class="mobile-menu__content">
-        <MHeaderNavButton
-          v-for="item in menuItems"
-          :key="item.name"
-          :to="getNavigationRoute(item)"
-          :translation-key="item.title"
-          class="mobile"
-          @click="closeMobileMenu"
-        />
-
+        <template v-for="item in menuItems" :key="item.name">
+          <div v-if="item.children" class="mobile-nav-dropdown">
+            <MHeaderNavButton
+              :to="item.path || { name: item.name }"
+              :translation-key="item.title"
+              class="mobile"
+              @click="closeMobileMenu"
+              :exact="true"
+            />
+            <div class="mobile-dropdown-menu">
+              <MHeaderNavButton
+                v-for="child in item.children"
+                :key="child.name"
+                :to="child.path || { name: child.name }"
+                :translation-key="child.title"
+                class="mobile dropdown-item"
+                @click="closeMobileMenu"
+              />
+            </div>
+          </div>
+          <MHeaderNavButton
+            v-else
+            :to="getNavigationRoute(item)"
+            :exact="item.exact"
+            :translation-key="item.title"
+            class="mobile"
+            @click="closeMobileMenu"
+          />
+        </template>
         <div class="mobile-menu__actions">
           <!-- Mobile Language Switcher -->
           <div class="mobile-menu__language">
             <OLangChangeBlock />
           </div>
-
           <!-- Mobile Authentication Section -->
           <div v-if="isAuthenticated" class="mobile-menu__user">
             <MUserDropdown />
@@ -182,6 +228,7 @@ import { EVENTS } from '~/constants/event-bus-constants';
 import { ROUTE_NAMES } from '~/constants/router-constants';
 import MHeaderNavButton from '~/components/molecules/m-header-nav-button';
 import MUserDropdown from '~/components/molecules/m-user-dropdown';
+import clickOutside from '~/directives/click-outside';
 
 export default defineComponent({
   name: 'OHeader',
@@ -193,7 +240,9 @@ export default defineComponent({
     OLangChangeBlock,
     MUserDropdown
   },
-
+  directives: {
+    clickOutside
+  },
   setup() {
     const { t, T_KEYS } = useTranslation();
     const { initializeLanguage } = useLanguage();
@@ -201,6 +250,11 @@ export default defineComponent({
     const { BUS } = useEventBus();
     const { isAuthenticated, initialize, unreadNotificationsCount, isInitialized } = useUserStore();
     const isMobileMenuOpen = ref(false);
+    const dropdownOpen = ref<string | null>(null);
+    const openDropdown = (name: string) => { dropdownOpen.value = name; };
+    const closeDropdown = (name: string) => { if (dropdownOpen.value === name) dropdownOpen.value = null; };
+    const toggleDropdown = (name: string) => { dropdownOpen.value = dropdownOpen.value === name ? null : name; };
+    const isDropdownOpen = (name: string) => dropdownOpen.value === name;
 
     const getNavigationRoute = (item: MenuItem) => {
       // If the item has a custom path, use it directly
@@ -247,7 +301,11 @@ export default defineComponent({
       handleLogin,
       ROUTE_NAMES,
       unreadNotificationsCount,
-      isInitialized
+      isInitialized,
+      openDropdown,
+      closeDropdown,
+      toggleDropdown,
+      isDropdownOpen
     };
   }
 });
@@ -288,6 +346,35 @@ export default defineComponent({
   // Desktop Navigation
   .nav-desktop {
     @apply hidden lg:ml-6 lg:flex lg:space-x-2;
+  }
+
+  .nav-dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+    .dropdown-arrow {
+      margin-left: 0.25rem;
+      vertical-align: middle;
+      transition: transform 0.2s;
+    }
+    &.is-dropdown-open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+  }
+  .nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 0.5rem;
+    z-index: 100;
+    padding: 0.5rem 0;
+    .dropdown-item {
+      width: 100%;
+      text-align: left;
+      padding-left: 1.5rem;
+    }
   }
 
   // Action Buttons with Language Switcher
@@ -391,6 +478,23 @@ export default defineComponent({
 
       .button-row {
         @apply flex space-x-2 space-y-0;
+      }
+    }
+  }
+
+  .mobile-nav-dropdown {
+    .dropdown-arrow {
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      transition: transform 0.2s;
+    }
+    &.is-dropdown-open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .mobile-dropdown-menu {
+      padding-left: 1.5rem;
+      .dropdown-item {
+        padding-left: 1.5rem;
       }
     }
   }
