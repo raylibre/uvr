@@ -49,7 +49,49 @@
           >
             <i class="fas fa-chevron-left"/>
           </button>
-          <h3 class="month-year">{{ currentMonthYear }}</h3>
+          <div class="month-year-container">
+            <h3 class="month">{{ currentMonth }}</h3>
+            <div class="year-selector">
+              <button 
+                type="button" 
+                class="year" 
+                @click="toggleYearSelector"
+              >
+                {{ currentYear }}
+                <i class="fas fa-chevron-down ml-1" :class="{ 'rotate-180': showYearSelector }"/>
+              </button>
+              <div v-if="showYearSelector" class="year-dropdown">
+                <div class="year-dropdown-content">
+                  <button 
+                    type="button"
+                    class="year-nav-button"
+                    @click="changeYearRange(-10)"
+                  >
+                    <i class="fas fa-chevron-up"/>
+                  </button>
+                  <div class="years-grid">
+                    <button
+                      v-for="year in availableYears"
+                      :key="year"
+                      type="button"
+                      class="year-option"
+                      :class="{ 'is-selected': year === currentYear }"
+                      @click="selectYear(year)"
+                    >
+                      {{ year }}
+                    </button>
+                  </div>
+                  <button 
+                    type="button"
+                    class="year-nav-button"
+                    @click="changeYearRange(10)"
+                  >
+                    <i class="fas fa-chevron-down"/>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <button 
             type="button"
             class="nav-button"
@@ -65,7 +107,7 @@
               {{ day }}
             </div>
           </div>
-          
+
           <div class="days">
             <button
               v-for="day in calendarDays"
@@ -165,44 +207,62 @@ export default defineComponent({
   setup(props, { emit }) {
     const isOpen = ref(false);
     const currentDate = ref(new Date());
+    const showYearSelector = ref(false);
+    const yearRangeStart = ref(Math.floor(currentDate.value.getFullYear() / 10) * 10);
 
     const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
     const formattedValue = computed(() => {
       if (!props.modelValue) return '';
       const date = new Date(props.modelValue);
       if (isNaN(date.getTime())) return '';
-      
+
       const day = date.getDate().toString().padStart(2, '0');
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const year = date.getFullYear();
-      
+
       return `${day}.${month}.${year}`;
     });
 
+    const currentMonth = computed(() => {
+      return monthNames[currentDate.value.getMonth()];
+    });
+
+    const currentYear = computed(() => {
+      return currentDate.value.getFullYear();
+    });
+
+    const availableYears = computed(() => {
+      const years = [];
+      for (let i = 0; i < 10; i++) {
+        years.push(yearRangeStart.value + i);
+      }
+      return years;
+    });
+
     const currentMonthYear = computed(() => {
-      const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-      return `${monthNames[currentDate.value.getMonth()]} ${currentDate.value.getFullYear()}`;
+      return `${currentMonth.value} ${currentYear.value}`;
     });
 
     const calendarDays = computed((): CalendarDay[] => {
       const days: CalendarDay[] = [];
       const year = currentDate.value.getFullYear();
       const month = currentDate.value.getMonth();
-      
+
       // Get first day of the month and how many days in month
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
       const firstDayWeekday = firstDay.getDay();
       const daysInMonth = lastDay.getDate();
-      
+
       // Get previous month's last days
       const prevMonth = new Date(year, month - 1, 0);
       const daysInPrevMonth = prevMonth.getDate();
-      
+
       for (let i = firstDayWeekday - 1; i >= 0; i--) {
         const date = daysInPrevMonth - i;
         const fullDate = new Date(year, month - 1, date);
@@ -216,7 +276,7 @@ export default defineComponent({
           fullDate
         });
       }
-      
+
       // Current month days
       for (let date = 1; date <= daysInMonth; date++) {
         const fullDate = new Date(year, month, date);
@@ -230,11 +290,11 @@ export default defineComponent({
           fullDate
         });
       }
-      
+
       // Next month's first days
       const totalCells = 42; // 6 rows × 7 days
       const remainingCells = totalCells - days.length;
-      
+
       for (let date = 1; date <= remainingCells; date++) {
         const fullDate = new Date(year, month + 1, date);
         days.push({
@@ -247,7 +307,7 @@ export default defineComponent({
           fullDate
         });
       }
-      
+
       return days;
     });
 
@@ -266,7 +326,7 @@ export default defineComponent({
     const toggleDatepicker = () => {
       if (props.disabled) return;
       isOpen.value = !isOpen.value;
-      
+
       if (isOpen.value && props.modelValue) {
         const selectedDate = new Date(props.modelValue);
         if (!isNaN(selectedDate.getTime())) {
@@ -321,26 +381,56 @@ export default defineComponent({
       }
     };
 
+    const toggleYearSelector = () => {
+      showYearSelector.value = !showYearSelector.value;
+    };
+
+    const changeYearRange = (change: number) => {
+      yearRangeStart.value += change;
+    };
+
+    const selectYear = (year: number) => {
+      currentDate.value = new Date(year, currentDate.value.getMonth(), 1);
+      showYearSelector.value = false;
+    };
+
+    // Close year selector when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showYearSelector.value && !target.closest('.year-selector')) {
+        showYearSelector.value = false;
+      }
+    };
+
     onMounted(() => {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('click', handleClickOutside);
     });
 
     onUnmounted(() => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('click', handleClickOutside);
     });
 
     return {
       isOpen,
       formattedValue,
       currentMonthYear,
+      currentMonth,
+      currentYear,
       calendarDays,
       weekdays,
+      showYearSelector,
+      availableYears,
       toggleDatepicker,
       closeDatepicker,
       previousMonth,
       nextMonth,
       selectDate,
-      selectToday
+      selectToday,
+      toggleYearSelector,
+      changeYearRange,
+      selectYear
     };
   }
 });
@@ -407,8 +497,51 @@ export default defineComponent({
       @apply p-1 rounded hover:bg-gray-100 text-gray-600 hover:text-gray-800;
     }
 
-    .month-year {
+    .month-year-container {
+      @apply flex flex-col items-center;
+    }
+
+    .month {
       @apply text-lg font-semibold text-gray-900;
+    }
+
+    .year-selector {
+      @apply relative;
+
+      .year {
+        @apply flex items-center text-sm font-medium text-gray-600 hover:text-gray-800 py-1 px-2 rounded hover:bg-gray-100;
+      }
+
+      .rotate-180 {
+        transform: rotate(180deg);
+      }
+
+      .year-dropdown {
+        @apply absolute z-10 mt-1 bg-white rounded-md shadow-lg overflow-hidden;
+        width: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        .year-dropdown-content {
+          @apply flex flex-col;
+        }
+
+        .year-nav-button {
+          @apply p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100;
+        }
+
+        .years-grid {
+          @apply grid grid-cols-3 gap-1 p-2;
+        }
+
+        .year-option {
+          @apply text-sm text-gray-700 hover:bg-gray-100 py-1 px-2 rounded;
+
+          &.is-selected {
+            @apply bg-primary text-white font-semibold;
+          }
+        }
+      }
     }
   }
 

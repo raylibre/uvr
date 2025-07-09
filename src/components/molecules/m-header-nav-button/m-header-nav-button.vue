@@ -8,7 +8,7 @@
     <div class="content">
       <!-- Main content - either label or custom content -->
       <slot>
-        <span class="label">{{ label }}</span>
+        <span class="label">{{ displayLabel }}</span>
       </slot>
 
       <!-- Dropdown indicator if needed in future -->
@@ -66,7 +66,7 @@ export default defineComponent({
 
     return {
       isActive,
-      label: displayLabel
+      displayLabel
     };
   }
 });
