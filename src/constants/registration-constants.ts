@@ -9,36 +9,36 @@ import { T_KEYS } from '~/constants/translation-keys';
 export const REGISTRATION_STEPS = [
   {
     id: 1,
-    title: 'Personal Details',
-    description: 'Provide your personal details',
+    title: T_KEYS.AUTH.REGISTER.STEPS.STEP1.TITLE,
+    description: T_KEYS.AUTH.REGISTER.STEPS.STEP1.DESCRIPTION,
     icon: 'fas fa-user',
     isCompleted: false
   },
   {
     id: 2,
-    title: 'Demographics',
-    description: 'Tell us about yourself',
+    title: T_KEYS.AUTH.REGISTER.STEPS.STEP2.TITLE,
+    description: T_KEYS.AUTH.REGISTER.STEPS.STEP2.DESCRIPTION,
     icon: 'fas fa-info-circle',
     isCompleted: false
   },
   {
     id: 3,
-    title: 'Emergency Info',
-    description: 'Emergency contact information',
+    title: T_KEYS.AUTH.REGISTER.STEPS.STEP3.TITLE,
+    description: T_KEYS.AUTH.REGISTER.STEPS.STEP3.DESCRIPTION,
     icon: 'fas fa-phone-alt',
     isCompleted: false
   },
   {
     id: 4,
-    title: 'Notifications',
-    description: 'Set your notification preferences',
+    title: T_KEYS.AUTH.REGISTER.STEPS.STEP4.TITLE,
+    description: T_KEYS.AUTH.REGISTER.STEPS.STEP4.DESCRIPTION,
     icon: 'fas fa-bell',
     isCompleted: false
   },
   {
     id: 5,
-    title: 'Confirmation',
-    description: 'Review and confirm your details',
+    title: T_KEYS.AUTH.REGISTER.STEPS.STEP5.TITLE,
+    description: T_KEYS.AUTH.REGISTER.STEPS.STEP5.DESCRIPTION,
     icon: 'fas fa-check-circle',
     isCompleted: false
   }

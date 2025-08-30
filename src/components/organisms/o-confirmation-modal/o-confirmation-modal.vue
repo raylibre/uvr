@@ -13,16 +13,16 @@
       <div class="confirmation-actions">
         <AButton
           variant="outline"
-          @click="handleReject"
           :disabled="loading"
+          @click="handleReject"
         >
           {{ options?.rejectButtonText || 'Cancel' }}
         </AButton>
 
         <AButton
           variant="primary"
-          @click="handleConfirm"
           :loading="loading"
+          @click="handleConfirm"
         >
           {{ options?.confirmButtonText || 'Confirm' }}
         </AButton>

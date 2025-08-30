@@ -10,8 +10,8 @@
         <div v-if="false" class="navigation-section">
           <AButton 
             variant="outline" 
-            @click="goBack"
             icon="fas fa-arrow-left"
+            @click="goBack"
           >
             Повернутися до новин
           </AButton>
@@ -70,8 +70,8 @@
       <p>Можливо, стаття була видалена або переміщена</p>
       <AButton 
         variant="primary" 
-        @click="goBack"
         icon="fas fa-arrow-left"
+        @click="goBack"
       >
         Повернутися до новин
       </AButton>

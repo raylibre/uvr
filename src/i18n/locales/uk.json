@@ -28,7 +28,21 @@
       "getInTouch": "Зв'язатися з нами",
       "ourServices": "Наші послуги",
       "join": "Приєднатись",
-      "login": "Увійти"
+      "login": "Увійти",
+      "cancel": "Скасувати",
+      "continue": "Продовжити",
+      "back": "Назад",
+      "finish": "Завершити",
+      "next": "Далі",
+      "previous": "Попередній",
+      "retry": "Спробувати знову",
+      "today": "Сьогодні",
+      "profile": "Профіль",
+      "settings": "Налаштування",
+      "logout": "Вийти",
+      "uploadFiles": "Завантажити файли",
+      "viewAll": "Переглянути всі",
+      "viewAllPrograms": "Переглянути всі програми"
     },
     "navigation": {
       "home": "Головна",
@@ -44,6 +58,22 @@
       "legalAidVeterans": "Юридична допомога ветеранам",
       "prostheticsForHeroes": "Протези для героїв",
       "news": "Новини"
+    },
+    "labels": {
+      "or": "або",
+      "close": "Закрити",
+      "client": "Клієнт",
+      "duration": "Тривалість",
+      "yes": "Так",
+      "no": "Ні",
+      "enabled": "Увімкнено",
+      "disabled": "Вимкнено",
+      "dragAndDrop": "Перетягніть файли сюди"
+    },
+    "errors": {
+      "pageNotFound": "Сторінку не знайдено",
+      "generalError": "Виникла помилка",
+      "formSubmitError": "Помилка при відправці форми"
     }
   },
   "home": {
@@ -127,8 +157,120 @@
       "subject": "Тема",
       "message": "Повідомлення",
       "subscribe": "Підписатися на нашу розсилку",
-      "hasMinorChildren": "Наявність неповнолітніх дітей",
-      "minorChildrenCount": "Кількість неповнолітніх дітей"
+      "firstName": "Ім'я",
+      "lastName": "Прізвище",
+      "patronymic": "По батькові",
+      "emailAddress": "Електронна пошта",
+      "phoneNumber": "Номер телефону",
+      "password": "Пароль",
+      "confirmPassword": "Підтвердити пароль",
+      "dateOfBirth": "Дата народження",
+      "region": "Область",
+      "city": "Місто",
+      "category": "Категорія",
+      "fullAddress": "Повна адреса",
+      "emergencyContactName": "Ім'я контактної особи для надзвичайних ситуацій",
+      "emergencyContactPhone": "Телефон контактної особи для надзвичайних ситуацій",
+      "hasMinorChildren": "Маєте неповнолітніх дітей?",
+      "minorChildrenCount": "Кількість неповнолітніх дітей",
+      "bio": "Біографія"
+    },
+    "placeholders": {
+      "enterYourName": "Введіть ваше ім'я",
+      "enterYourEmail": "Введіть вашу електронну пошту"
+    },
+    "validation": {
+      "required": "{field} є обов'язковим",
+      "email": "Будь ласка, введіть дійсну електронну пошту",
+      "minLength": "{field} має бути принаймні {min} символів",
+      "firstNameRequired": "Ім'я є обов'язковим",
+      "lastNameRequired": "Прізвище є обов'язковим",
+      "patronymicRequired": "По батькові є обов'язковим",
+      "emailRequired": "Електронна пошта є обов'язковою",
+      "phoneRequired": "Номер телефону є обов'язковим",
+      "passwordRequired": "Пароль є обов'язковим",
+      "passwordConfirmationRequired": "Підтвердження пароля є обов'язковим",
+      "dateOfBirthRequired": "Дата народження є обов'язковою",
+      "regionRequired": "Область є обов'язковою",
+      "cityRequired": "Місто є обов'язковим",
+      "categoryRequired": "Категорія є обов'язковою",
+      "addressRequired": "Адреса є обов'язковою",
+      "firstNameMinLength": "Ім'я має бути принаймні 2 символи",
+      "lastNameMinLength": "Прізвище має бути принаймні 2 символи",
+      "patronymicMinLength": "По батькові має бути принаймні 2 символи",
+      "emailInvalid": "Будь ласка, введіть дійсну електронну пошту",
+      "phoneInvalid": "Будь ласка, введіть дійсний номер телефону",
+      "passwordMinLength": "Пароль має бути принаймні 8 символів",
+      "passwordsDoNotMatch": "Паролі не збігаються"
+    }
+  },
+  "auth": {
+    "register": {
+      "title": "Новий обліковий запис",
+      "newAccount": "Новий обліковий запис",
+      "completeRegistration": "Завершити реєстрацію",
+      "unsavedChanges": "Незбережені зміни",
+      "unsavedChangesText": "У вас є незбережені зміни. Ви впевнені, що хочете закрити цю форму?",
+      "yesClose": "Так, закрити",
+      "stepProgress": "Крок {current} з {total}",
+      "steps": {
+        "step1": {
+          "title": "Особисті дані",
+          "description": "Надайте ваші особисті дані для створення облікового запису."
+        },
+        "step2": {
+          "title": "Демографічні дані",
+          "description": "Розкажіть нам про себе"
+        },
+        "step3": {
+          "title": "Контактна інформація для надзвичайних ситуацій",
+          "description": "Надайте вашу адресу та контактні дані для надзвичайних ситуацій."
+        },
+        "step4": {
+          "title": "Налаштування сповіщень",
+          "description": "Налаштуйте ваші уподобання щодо сповіщень"
+        },
+        "step5": {
+          "title": "Підтвердження",
+          "description": "Перегляньте та підтвердьте ваші дані"
+        }
+      },
+      "labels": {
+        "maritalStatus": "Сімейний стан",
+        "activityType": "Тип діяльності",
+        "bioOptional": "Біографія (необов'язково)"
+      },
+      "placeholders": {
+        "enterAddress": "Введіть вашу повну адресу...",
+        "bioMotivation": "Розкажіть про себе та вашу мотивацію..."
+      },
+      "notifications": {
+        "enableNotifications": "Увімкнути сповіщення",
+        "enableDescription": "Отримувати важливі оновлення про ваш обліковий запис та наші послуги",
+        "emailNotifications": "Email сповіщення",
+        "emailDescription": "Отримувати оновлення на електронну пошту",
+        "smsNotifications": "SMS сповіщення",
+        "smsDescription": "Отримувати оновлення через SMS",
+        "notificationsEnabled": "Сповіщення увімкнено",
+        "changeSettings": "Ви можете змінити ці налаштування в будь-який час у налаштуваннях вашого облікового запису."
+      },
+      "terms": {
+        "agreeTo": "Я підтверджую, що вся надана інформація є точною, і я погоджуюся з",
+        "termsOfService": "Умовами обслуговування",
+        "and": "та",
+        "privacyPolicy": "Політикою конфіденційності"
+      },
+      "review": {
+        "title": "Перегляньте вашу інформацію",
+        "description": "Будь ласка, перегляньте ваші реєстраційні дані перед відправкою.",
+        "personalInfo": "Особиста інформація",
+        "demographics": "Демографічні дані",
+        "emergencyContact": "Контакт для надзвичайних ситуацій",
+        "notificationPreferences": "Налаштування сповіщень",
+        "contactName": "Ім'я контакту",
+        "contactPhone": "Телефон контакту",
+        "address": "Адреса"
+      }
     }
   },
   "programDetail": {

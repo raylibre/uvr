@@ -17,6 +17,11 @@ export const T_KEYS = {
       JOIN: 'common.buttons.join',
       LOGIN: 'common.buttons.login',
       CANCEL: 'common.buttons.cancel',
+      CONTINUE: 'common.buttons.continue',
+      BACK: 'common.buttons.back',
+      FINISH: 'common.buttons.finish',
+      NEXT: 'common.buttons.next',
+      PREVIOUS: 'common.buttons.previous',
       GET_IN_TOUCH: 'common.buttons.getInTouch',
       OUR_SERVICES: 'common.buttons.ourServices',
       BACK_TO_HOME: 'common.buttons.backToHome',
@@ -24,9 +29,6 @@ export const T_KEYS = {
       RETRY: 'common.buttons.retry',
       VIEW_ALL_PROGRAMS: 'common.buttons.viewAllPrograms',
       SUBMIT: 'common.buttons.submit',
-      NEXT: 'common.buttons.next',
-      PREVIOUS: 'common.buttons.previous',
-      FINISH: 'common.buttons.finish',
       UPLOAD_FILES: 'common.buttons.uploadFiles',
       TODAY: 'common.buttons.today',
       PROFILE: 'common.buttons.profile',
@@ -42,11 +44,6 @@ export const T_KEYS = {
       ABOUT_US: 'common.navigation.aboutUs',
       OPEN_MAIN_MENU: 'common.navigation.openMainMenu'
     },
-    ERRORS: {
-      PAGE_NOT_FOUND: 'common.errors.pageNotFound',
-      GENERAL_ERROR: 'common.errors.generalError',
-      FORM_SUBMIT_ERROR: 'common.errors.formSubmitError'
-    },
     LABELS: {
       OR: 'common.labels.or',
       DRAG_AND_DROP: 'common.labels.dragAndDrop',
@@ -57,6 +54,11 @@ export const T_KEYS = {
       NO: 'common.labels.no',
       ENABLED: 'common.labels.enabled',
       DISABLED: 'common.labels.disabled'
+    },
+    ERRORS: {
+      PAGE_NOT_FOUND: 'common.errors.pageNotFound',
+      GENERAL_ERROR: 'common.errors.generalError',
+      FORM_SUBMIT_ERROR: 'common.errors.formSubmitError'
     },
     STATS: {
       TOTAL_PROGRAMS: 'common.stats.totalPrograms',
@@ -107,7 +109,25 @@ export const T_KEYS = {
       NAME_REQUIRED: 'form.validation.nameRequired',
       EMAIL_REQUIRED: 'form.validation.emailRequired',
       SUBJECT_REQUIRED: 'form.validation.subjectRequired',
-      MESSAGE_REQUIRED: 'form.validation.messageRequired'
+      MESSAGE_REQUIRED: 'form.validation.messageRequired',
+      FIRST_NAME_REQUIRED: 'form.validation.firstNameRequired',
+      LAST_NAME_REQUIRED: 'form.validation.lastNameRequired',
+      PATRONYMIC_REQUIRED: 'form.validation.patronymicRequired',
+      PHONE_REQUIRED: 'form.validation.phoneRequired',
+      PASSWORD_REQUIRED: 'form.validation.passwordRequired',
+      PASSWORD_CONFIRMATION_REQUIRED: 'form.validation.passwordConfirmationRequired',
+      DATE_OF_BIRTH_REQUIRED: 'form.validation.dateOfBirthRequired',
+      REGION_REQUIRED: 'form.validation.regionRequired',
+      CITY_REQUIRED: 'form.validation.cityRequired',
+      CATEGORY_REQUIRED: 'form.validation.categoryRequired',
+      ADDRESS_REQUIRED: 'form.validation.addressRequired',
+      FIRST_NAME_MIN_LENGTH: 'form.validation.firstNameMinLength',
+      LAST_NAME_MIN_LENGTH: 'form.validation.lastNameMinLength',
+      PATRONYMIC_MIN_LENGTH: 'form.validation.patronymicMinLength',
+      EMAIL_INVALID: 'form.validation.emailInvalid',
+      PHONE_INVALID: 'form.validation.phoneInvalid',
+      PASSWORD_MIN_LENGTH: 'form.validation.passwordMinLength',
+      PASSWORDS_DO_NOT_MATCH: 'form.validation.passwordsDoNotMatch'
     }
   },
   PAGES: {
@@ -240,6 +260,11 @@ export const T_KEYS = {
     REGISTER: {
       TITLE: 'auth.register.title',
       NEW_ACCOUNT: 'auth.register.newAccount',
+      COMPLETE_REGISTRATION: 'auth.register.completeRegistration',
+      UNSAVED_CHANGES: 'auth.register.unsavedChanges',
+      UNSAVED_CHANGES_TEXT: 'auth.register.unsavedChangesText',
+      YES_CLOSE: 'auth.register.yesClose',
+      STEP_PROGRESS: 'auth.register.stepProgress',
       EMAIL_LABEL: 'auth.register.emailLabel',
       PHONE_LABEL: 'auth.register.phoneLabel',
       PASSWORD_LABEL: 'auth.register.passwordLabel',
@@ -267,6 +292,15 @@ export const T_KEYS = {
           DESCRIPTION: 'auth.register.steps.step5.description'
         }
       },
+      LABELS: {
+        MARITAL_STATUS: 'auth.register.labels.maritalStatus',
+        ACTIVITY_TYPE: 'auth.register.labels.activityType',
+        BIO_OPTIONAL: 'auth.register.labels.bioOptional'
+      },
+      PLACEHOLDERS: {
+        ENTER_ADDRESS: 'auth.register.placeholders.enterAddress',
+        BIO_MOTIVATION: 'auth.register.placeholders.bioMotivation'
+      },
       NOTIFICATIONS: {
         ENABLE_NOTIFICATIONS: 'auth.register.notifications.enableNotifications',
         ENABLE_DESCRIPTION: 'auth.register.notifications.enableDescription',
@@ -274,18 +308,23 @@ export const T_KEYS = {
         EMAIL_DESCRIPTION: 'auth.register.notifications.emailDescription',
         SMS_NOTIFICATIONS: 'auth.register.notifications.smsNotifications',
         SMS_DESCRIPTION: 'auth.register.notifications.smsDescription',
-        NOTIFICATIONS_ENABLED: 'auth.register.notifications.notificationsEnabled'
-      },
-      REVIEW: {
-        CONTACT_NAME: 'auth.register.review.contactName',
-        CONTACT_PHONE: 'auth.register.review.contactPhone',
-        ADDRESS: 'auth.register.review.address'
+        NOTIFICATIONS_ENABLED: 'auth.register.notifications.notificationsEnabled',
+        CHANGE_SETTINGS: 'auth.register.notifications.changeSettings'
       },
       TERMS: {
         AGREE_TO: 'auth.register.terms.agreeTo',
         TERMS_OF_SERVICE: 'auth.register.terms.termsOfService',
         AND: 'auth.register.terms.and',
         PRIVACY_POLICY: 'auth.register.terms.privacyPolicy'
+      },
+      REVIEW: {
+        PERSONAL_INFO: 'auth.register.review.personalInfo',
+        DEMOGRAPHICS: 'auth.register.review.demographics',
+        EMERGENCY_CONTACT: 'auth.register.review.emergencyContact',
+        NOTIFICATION_PREFERENCES: 'auth.register.review.notificationPreferences',
+        CONTACT_NAME: 'auth.register.review.contactName',
+        CONTACT_PHONE: 'auth.register.review.contactPhone',
+        ADDRESS: 'auth.register.review.address'
       },
       ERRORS: {
         EMAIL_REQUIRED: 'auth.register.errors.emailRequired',

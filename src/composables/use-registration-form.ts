@@ -2,10 +2,12 @@ import { computed } from 'vue';
 import { useEventBus } from './use-event-bus';
 import { useUserStore } from './use-user-store';
 import { useRegistrationData } from './use-registration-data';
+import { useTranslation } from './use-translation';
 import { EVENTS } from '~/constants/event-bus-constants';
 import type { UserProfile } from '~/types/user.d';
 
 export const useRegistrationForm = () => {
+  const { T_KEYS } = useTranslation();
   const { register } = useUserStore();
   const { BUS } = useEventBus();
   const {
@@ -26,7 +28,7 @@ export const useRegistrationForm = () => {
   const totalSteps = computed(() => steps.length);
 
   const submitButtonText = computed(() => {
-    return currentStep.value < totalSteps.value ? 'Continue' : 'Complete Registration';
+    return currentStep.value < totalSteps.value ? T_KEYS.COMMON.BUTTONS.CONTINUE : T_KEYS.AUTH.REGISTER.COMPLETE_REGISTRATION;
   });
 
   const canGoToNextStep = computed(() => {

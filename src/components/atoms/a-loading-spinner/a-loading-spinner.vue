@@ -1,6 +1,6 @@
 <template>
   <div class="a-loading-spinner" :class="sizeClass">
-    <div class="spinner"></div>
+    <div class="spinner"/>
     <p v-if="text" class="loading-text">{{ text }}</p>
   </div>
 </template>

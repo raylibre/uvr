@@ -1,14 +1,14 @@
 <template>
   <div class="m-registration-step-four" data-at="registration-step-four">
-    <h2 class="title">Notification Preferences</h2>
-    <p class="description">Choose how you would like to receive updates and notifications.</p>
+    <h2 class="title">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP4.TITLE) }}</h2>
+    <p class="description">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP4.DESCRIPTION) }}</p>
 
     <div class="form">
       <div class="settings-card">
         <div class="settings-item">
           <div class="settings-item__content">
-            <h3 class="settings-item__title">Enable Notifications</h3>
-            <p class="settings-item__description">Receive important updates about your account and our services</p>
+            <h3 class="settings-item__title">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.ENABLE_NOTIFICATIONS) }}</h3>
+            <p class="settings-item__description">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.ENABLE_DESCRIPTION) }}</p>
           </div>
           <ASwitchToggle
             :id="'register-notifications-enabled'"
@@ -24,8 +24,8 @@
             :class="{ 'is-disabled': !notificationsEnabled.value.value }"
           >
             <div class="settings-item__content">
-              <h4 class="settings-item__subtitle">Email Notifications</h4>
-              <p class="settings-item__description">Receive updates via email</p>
+              <h4 class="settings-item__subtitle">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.EMAIL_NOTIFICATIONS) }}</h4>
+              <p class="settings-item__description">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.EMAIL_DESCRIPTION) }}</p>
             </div>
             <ASwitchToggle
               :id="'register-email-notifications'"
@@ -41,8 +41,8 @@
             :class="{ 'is-disabled': !notificationsEnabled.value.value }"
           >
             <div class="settings-item__content">
-              <h4 class="settings-item__subtitle">SMS Notifications</h4>
-              <p class="settings-item__description">Receive updates via SMS</p>
+              <h4 class="settings-item__subtitle">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.SMS_NOTIFICATIONS) }}</h4>
+              <p class="settings-item__description">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.SMS_DESCRIPTION) }}</p>
             </div>
             <ASwitchToggle
               :id="'register-sms-notifications'"
@@ -58,7 +58,7 @@
       <div class="info-box">
         <p class="info-box__content">
           <i class="info-box__icon fas fa-info-circle"/>
-          You can change these preferences at any time in your account settings.
+          {{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.CHANGE_SETTINGS) }}
         </p>
       </div>
     </div>
@@ -70,6 +70,7 @@ import { defineComponent, watch } from 'vue';
 import { useField } from 'vee-validate';
 import ASwitchToggle from '~/components/atoms/a-switch-toggle';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'MRegistrationStepFour',
@@ -79,6 +80,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, T_KEYS } = useTranslation();
     const { getStepForm } = useRegistrationValidation();
     const stepForm = getStepForm(4);
 
@@ -120,6 +122,8 @@ export default defineComponent({
     };
 
     return {
+      t,
+      T_KEYS,
       notificationsEnabled,
       emailNotifications,
       smsNotifications,

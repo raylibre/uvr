@@ -2,7 +2,7 @@
   <OModal
     v-model="isOpen"
     :full-screen="true"
-    :preventClose="true"
+    :prevent-close="true"
     class="o-register-modal"
     content-class="register-modal"
     @close="handleClose"
@@ -11,7 +11,7 @@
       <!-- Left sidebar with steps - Hidden on mobile/tablet, visible on desktop -->
       <div class="sidebar hidden lg:flex">
         <div class="header">
-          <h1 class="header__title">New Account</h1>
+          <h1 class="header__title">{{ t(T_KEYS.AUTH.REGISTER.NEW_ACCOUNT) }}</h1>
         </div>
 
         <nav class="nav">
@@ -45,9 +45,9 @@
                     'is-locked': !canNavigateToStep(step.id)
                   }"
                 >
-                  {{ step.title }}
+                  {{ t(step.title) }}
                 </p>
-                <p class="step__description">{{ step.description }}</p>
+                <p class="step__description">{{ t(step.description) }}</p>
               </div>
             </div>
           </button>
@@ -65,7 +65,7 @@
             />
           </div>
           <p class="progress-text">
-            Step {{ currentStep }} of {{ totalSteps }}: {{ steps[currentStep - 1]?.title }}
+            {{ t(T_KEYS.AUTH.REGISTER.STEP_PROGRESS, { current: currentStep, total: totalSteps }) }}: {{ t(steps[currentStep - 1]?.title) }}
           </p>
         </div>
 
@@ -83,7 +83,7 @@
             class="action-button-cancel"
             @click="handleCancelButtonClick"
           >
-            Cancel
+            {{ t(T_KEYS.COMMON.BUTTONS.CANCEL) }}
           </AButton>
           <AButton
             v-if="currentStep > 1"
@@ -92,7 +92,7 @@
             @click="handleBackButtonClick"
           >
             <i class="fas fa-arrow-left mr-2" />
-            Back
+            {{ t(T_KEYS.COMMON.BUTTONS.BACK) }}
           </AButton>
           <AButton
             variant="primary"
@@ -100,7 +100,7 @@
             class="action-button-submit"
             @click="handleSubmitButtonClick"
           >
-            {{ submitButtonText }}
+            {{ t(submitButtonText) }}
             <i v-if="currentStep < totalSteps" class="fas fa-arrow-right ml-2" />
             <i v-else class="fas fa-check ml-2" />
           </AButton>
@@ -116,6 +116,7 @@ import { Form as VForm } from 'vee-validate';
 import { useEventBus } from '~/composables/use-event-bus';
 import { useRegistrationForm } from '~/composables/use-registration-form';
 import { openConfirmationModal } from '~/composables/use-confirmation-modal';
+import { useTranslation } from '~/composables/use-translation';
 import { EVENTS } from '~/constants/event-bus-constants';
 import OModal from '~/components/organisms/o-modal';
 import AButton from '~/components/atoms/a-button';
@@ -139,6 +140,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, T_KEYS } = useTranslation();
     const { setBusListener } = useEventBus();
     const {
       formData,
@@ -196,10 +198,10 @@ export default defineComponent({
       // If there are unsaved changes, show confirmation modal
       if (hasUnsavedChanges()) {
         const confirmed = await openConfirmationModal({
-          title: 'Unsaved Changes',
-          text: 'You have unsaved changes. Are you sure you want to close this form?',
-          confirmButtonText: 'Yes, Close',
-          rejectButtonText: 'Cancel'
+          title: t(T_KEYS.AUTH.REGISTER.UNSAVED_CHANGES),
+          text: t(T_KEYS.AUTH.REGISTER.UNSAVED_CHANGES_TEXT),
+          confirmButtonText: t(T_KEYS.AUTH.REGISTER.YES_CLOSE),
+          rejectButtonText: t(T_KEYS.COMMON.BUTTONS.CANCEL)
         });
 
         if (!confirmed) {
@@ -241,6 +243,8 @@ export default defineComponent({
     });
 
     return {
+      t,
+      T_KEYS,
       isOpen,
       currentStep,
       currentStepRef,

@@ -6,9 +6,9 @@
         class="switch"
         :class="{ 'is-active': modelValue, 'has-error': error }"
         :disabled="disabled"
-        @click="toggle"
         :aria-checked="modelValue"
         role="switch"
+        @click="toggle"
       >
         <span class="switch__track">
           <span class="switch__thumb" />

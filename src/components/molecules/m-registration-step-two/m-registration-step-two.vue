@@ -1,16 +1,16 @@
 <template>
   <div class="m-registration-step-two">
-    <h2 class="title">Demographics</h2>
-    <p class="description">Tell us more about yourself to help us better understand your needs.</p>
+    <h2 class="title">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP2.TITLE) }}</h2>
+    <p class="description">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP2.DESCRIPTION) }}</p>
 
     <div class="form">
       <AFormDatepicker
         :id="'register-date-of-birth'"
         v-model="dateOfBirth.value.value as string"
-        label="Date of Birth"
+        :label="t(T_KEYS.FORM.LABELS.DATE_OF_BIRTH)"
         :required="true"
         icon="fas fa-calendar"
-        :error="dateOfBirth.errorMessage.value"
+        :error="dateOfBirth.errorMessage.value ? translateValidationError(dateOfBirth.errorMessage.value) : ''"
         @blur="dateOfBirth.validate"
       />
 
@@ -18,11 +18,11 @@
         <AFormSelect
           :id="'register-region'"
           v-model="region.value.value as string"
-          label="Region"
+          :label="t(T_KEYS.FORM.LABELS.REGION)"
           :options="[...REGIONS]"
           :required="true"
           icon="fas fa-map-marker-alt"
-          :error="region.errorMessage.value"
+          :error="region.errorMessage.value ? translateValidationError(region.errorMessage.value) : ''"
           @blur="region.validate"
           @update:model-value="handleRegionChange"
         />
@@ -30,12 +30,12 @@
         <AFormSelect
           :id="'register-city'"
           v-model="city.value.value as string"
-          label="City"
+          :label="t(T_KEYS.FORM.LABELS.CITY)"
           :options="[...availableCities]"
           :required="true"
           icon="fas fa-city"
           :disabled="!region.value.value"
-          :error="city.errorMessage.value"
+          :error="city.errorMessage.value ? translateValidationError(city.errorMessage.value) : ''"
           @blur="city.validate"
         />
       </div>
@@ -43,11 +43,11 @@
       <AFormSelect
         :id="'marital-category'"
         v-model="marital.value.value as string"
-        label="Marital"
+        :label="t(T_KEYS.AUTH.REGISTER.LABELS.MARITAL_STATUS)"
         :options="userMaritalList"
         :required="true"
         icon="fas fa-users"
-        :error="marital.errorMessage.value"
+        :error="marital.errorMessage.value ? translateValidationError(marital.errorMessage.value) : ''"
         @blur="marital.validate"
       />
 
@@ -58,7 +58,7 @@
             v-model="hasMinorChildren.value.value as boolean"
             :label="t(T_KEYS.FORM.LABELS.HAS_MINOR_CHILDREN)"
             data-at="has-minor-children-checkbox"
-            :error="hasMinorChildren.errorMessage.value"
+            :error="hasMinorChildren.errorMessage.value ? translateValidationError(hasMinorChildren.errorMessage.value) : ''"
             @blur="hasMinorChildren.validate"
           />
         </div>
@@ -70,10 +70,10 @@
             :label="t(T_KEYS.FORM.LABELS.MINOR_CHILDREN_COUNT)"
             type="number"
             icon="fas fa-child"
-            :error="minorChildrenCount.errorMessage.value"
-            @blur="minorChildrenCount.validate"
+            :error="minorChildrenCount.errorMessage.value ? translateValidationError(minorChildrenCount.errorMessage.value) : ''"
             min="1"
             max="20"
+            @blur="minorChildrenCount.validate"
           />
         </div>
       </div>
@@ -81,32 +81,32 @@
       <AFormSelect
         :id="'register-category'"
         v-model="category.value.value as string"
-        label="Category"
+        :label="t(T_KEYS.FORM.LABELS.CATEGORY)"
         :options="userCategoriesList"
         :required="true"
         icon="fas fa-users"
-        :error="category.errorMessage.value"
+        :error="category.errorMessage.value ? translateValidationError(category.errorMessage.value) : ''"
         @blur="category.validate"
       />
 
       <AFormSelect
         :id="'register-activity-type'"
         v-model="activityType.value.value as string"
-        label="Activity Type"
+        :label="t(T_KEYS.AUTH.REGISTER.LABELS.ACTIVITY_TYPE)"
         :options="userActivityTypesList"
         :required="true"
         icon="fas fa-running"
-        :error="activityType.errorMessage.value"
+        :error="activityType.errorMessage.value ? translateValidationError(activityType.errorMessage.value) : ''"
         @blur="activityType.validate"
       />
 
       <AFormTextarea
         :id="'register-bio'"
         v-model="bio.value.value as string"
-        label="Bio (Optional)"
-        :placeholder="'Tell us about yourself and your motivation...'"
+        :label="t(T_KEYS.AUTH.REGISTER.LABELS.BIO_OPTIONAL)"
+        :placeholder="t(T_KEYS.AUTH.REGISTER.PLACEHOLDERS.BIO_MOTIVATION)"
         :rows="4"
-        :error="bio.errorMessage.value"
+        :error="bio.errorMessage.value ? translateValidationError(bio.errorMessage.value) : ''"
         @blur="bio.validate"
       />
     </div>
@@ -144,7 +144,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
+    const { getStepForm, translateValidationError } = useRegistrationValidation();
     const { t } = useTranslation();
     const stepForm = getStepForm(2);
 
@@ -281,7 +281,8 @@ export default defineComponent({
       handleRegionChange,
       validateAll,
       t,
-      T_KEYS
+      T_KEYS,
+      translateValidationError
     };
   }
 });

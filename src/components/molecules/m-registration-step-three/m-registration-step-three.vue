@@ -1,18 +1,18 @@
 <template>
   <div class="m-registration-step-three" data-at="registration-step-three">
-    <h2 class="title">Emergency Contact Information</h2>
-    <p class="description">Please provide your address and emergency contact details.</p>
+    <h2 class="title">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP3.TITLE) }}</h2>
+    <p class="description">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP3.DESCRIPTION) }}</p>
 
     <div class="form">
       <AFormTextarea
         :id="'register-address'"
         v-model="address.value.value as string"
-        label="Full Address"
-        :placeholder="'Enter your complete address...'"
+        :label="t(T_KEYS.FORM.LABELS.FULL_ADDRESS)"
+        :placeholder="t(T_KEYS.AUTH.REGISTER.PLACEHOLDERS.ENTER_ADDRESS)"
         :required="true"
         :rows="3"
         icon="fas fa-home"
-        :error="address.errorMessage.value"
+        :error="address.errorMessage.value ? translateValidationError(address.errorMessage.value) : ''"
         @update:model-value="address.validate"
         @blur="address.validate"
       />
@@ -21,20 +21,20 @@
         <AFormInput
           :id="'register-emergency-contact-name'"
           v-model="emergencyContactName.value.value as string"
-          label="Emergency Contact Name"
+          :label="t(T_KEYS.FORM.LABELS.EMERGENCY_CONTACT_NAME)"
           type="text"
           icon="fas fa-user-shield"
-          :error="emergencyContactName.errorMessage.value"
+          :error="emergencyContactName.errorMessage.value ? translateValidationError(emergencyContactName.errorMessage.value) : ''"
           @blur="emergencyContactName.validate"
         />
 
         <AFormInput
           :id="'register-emergency-contact-phone'"
           v-model="emergencyContactPhone.value.value as string"
-          label="Emergency Contact Phone"
+          :label="t(T_KEYS.FORM.LABELS.EMERGENCY_CONTACT_PHONE)"
           type="tel"
           icon="fas fa-phone-alt"
-          :error="emergencyContactPhone.errorMessage.value"
+          :error="emergencyContactPhone.errorMessage.value ? translateValidationError(emergencyContactPhone.errorMessage.value) : ''"
           @blur="emergencyContactPhone.validate"
         />
       </div>
@@ -48,6 +48,7 @@ import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'MRegistrationStepThree',
@@ -58,7 +59,8 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
+    const { t, T_KEYS } = useTranslation();
+    const { getStepForm, translateValidationError } = useRegistrationValidation();
     const stepForm = getStepForm(3);
 
     // Create fields using useField with the step form context
@@ -90,10 +92,13 @@ export default defineComponent({
     };
 
     return {
+      t,
+      T_KEYS,
       address,
       emergencyContactName,
       emergencyContactPhone,
-      validateAll
+      validateAll,
+      translateValidationError
     };
   }
 });

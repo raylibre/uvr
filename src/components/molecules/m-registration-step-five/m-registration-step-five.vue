@@ -1,34 +1,34 @@
 <template>
   <div class="m-registration-step-five" data-at="registration-step-five">
-    <h2 class="title">Review Your Information</h2>
-    <p class="description">Please review your registration details before submitting.</p>
+    <h2 class="title">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP5.TITLE) }}</h2>
+    <p class="description">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP5.DESCRIPTION) }}</p>
 
     <div class="sections">
       <!-- Personal Information -->
       <div class="section">
         <h3 class="section__title">
           <i class="section__icon fas fa-user"/>
-          Personal Information
+          {{ t(T_KEYS.AUTH.REGISTER.REVIEW.PERSONAL_INFO) }}
         </h3>
         <dl class="info-grid">
           <div class="info-item">
-            <dt class="info-item__label">First Name</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.FIRST_NAME) }}</dt>
             <dd class="info-item__value">{{ formData.first_name }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Last Name</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.LAST_NAME) }}</dt>
             <dd class="info-item__value">{{ formData.last_name }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Email</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.EMAIL_ADDRESS) }}</dt>
             <dd class="info-item__value">{{ formData.email }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Phone</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.PHONE_NUMBER) }}</dt>
             <dd class="info-item__value">{{ formData.phone }}</dd>
           </div>
           <div v-if="formData.patronymic" class="info-item">
-            <dt class="info-item__label">Patronymic</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.PATRONYMIC) }}</dt>
             <dd class="info-item__value">{{ formData.patronymic }}</dd>
           </div>
         </dl>
@@ -38,27 +38,27 @@
       <div class="section">
         <h3 class="section__title">
           <i class="section__icon fas fa-info-circle"/>
-          Demographics
+          {{ t(T_KEYS.AUTH.REGISTER.REVIEW.DEMOGRAPHICS) }}
         </h3>
         <dl class="info-grid">
           <div class="info-item">
-            <dt class="info-item__label">Date of Birth</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.DATE_OF_BIRTH) }}</dt>
             <dd class="info-item__value">{{ formatDate(formData.date_of_birth ?? '') }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Category</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.CATEGORY) }}</dt>
             <dd class="info-item__value">{{ getCategoryLabel(formData.category ?? '') }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Region</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.REGION) }}</dt>
             <dd class="info-item__value">{{ getRegionLabel(formData.region ?? '') }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">City</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.CITY) }}</dt>
             <dd class="info-item__value">{{ getCityLabel(formData.region ?? '', formData.city ?? '') }}</dd>
           </div>
           <div v-if="formData.bio" class="info-item info-item--full">
-            <dt class="info-item__label">Bio</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.BIO) }}</dt>
             <dd class="info-item__value">{{ formData.bio }}</dd>
           </div>
         </dl>
@@ -68,19 +68,19 @@
       <div class="section">
         <h3 class="section__title">
           <i class="section__icon fas fa-phone-alt"/>
-          Emergency Contact
+          {{ t(T_KEYS.AUTH.REGISTER.REVIEW.EMERGENCY_CONTACT) }}
         </h3>
         <dl class="info-grid">
           <div class="info-item info-item--full">
-            <dt class="info-item__label">Address</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.AUTH.REGISTER.REVIEW.ADDRESS) }}</dt>
             <dd class="info-item__value">{{ formData.address }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Contact Name</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.AUTH.REGISTER.REVIEW.CONTACT_NAME) }}</dt>
             <dd class="info-item__value">{{ formData.emergency_contact_name }}</dd>
           </div>
           <div class="info-item">
-            <dt class="info-item__label">Contact Phone</dt>
+            <dt class="info-item__label">{{ t(T_KEYS.AUTH.REGISTER.REVIEW.CONTACT_PHONE) }}</dt>
             <dd class="info-item__value">{{ formData.emergency_contact_phone }}</dd>
           </div>
         </dl>
@@ -90,30 +90,33 @@
       <div class="section">
         <h3 class="section__title">
           <i class="section__icon fas fa-bell"/>
-          Notification Preferences
+          {{ t(T_KEYS.AUTH.REGISTER.REVIEW.NOTIFICATION_PREFERENCES) }}
         </h3>
         <dl class="notification-list">
           <div class="notification-item">
-            <dt class="notification-item__label">Notifications Enabled</dt>
+            <dt class="notification-item__label">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.NOTIFICATIONS_ENABLED) }}</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 formData.notifications_enabled ? 'fas fa-check' : 'fas fa-times'
               ]"/>
             </dd>
           </div>
           <div class="notification-item">
-            <dt class="notification-item__label">Email Notifications</dt>
+            <dt class="notification-item__label">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.EMAIL_NOTIFICATIONS) }}</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 'fas',
                 formData.email_notifications ? 'fa-check' : 'fa-times'
               ]"/>
             </dd>
           </div>
           <div class="notification-item">
-            <dt class="notification-item__label">SMS Notifications</dt>
+            <dt class="notification-item__label">{{ t(T_KEYS.AUTH.REGISTER.NOTIFICATIONS.SMS_NOTIFICATIONS) }}</dt>
             <dd class="notification-item__value">
-              <i :class="[
+              <i
+:class="[
                 formData.sms_notifications ? 'fas fa-check' : 'fas fa-times'
               ]"/>
             </dd>
@@ -129,16 +132,16 @@
               :id="'register-terms'"
               v-model="terms.value.value as boolean"
               data-at="registration-terms-checkbox"
-              :error="terms.errorMessage.value"
+              :error="terms.errorMessage.value ? translateValidationError(terms.errorMessage.value) : ''"
               @blur="terms.validate"
             />
           </div>
           <div class="terms__content">
             <label for="register-terms" class="terms__label">
-              I confirm that all the information provided is accurate and I agree to the
-              <a href="#" class="terms__link">Terms of Service</a>
-              and
-              <a href="#" class="terms__link">Privacy Policy</a>
+              {{ t(T_KEYS.AUTH.REGISTER.TERMS.AGREE_TO) }}
+              <a href="#" class="terms__link">{{ t(T_KEYS.AUTH.REGISTER.TERMS.TERMS_OF_SERVICE) }}</a>
+              {{ t(T_KEYS.AUTH.REGISTER.TERMS.AND) }}
+              <a href="#" class="terms__link">{{ t(T_KEYS.AUTH.REGISTER.TERMS.PRIVACY_POLICY) }}</a>
             </label>
           </div>
         </div>
@@ -154,7 +157,7 @@ import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-const
 import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useRegistrationData } from '~/composables/use-registration-data';
-import { useTranslation } from '~/composables/use-translation.ts';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'MRegistrationStepFive',
@@ -164,9 +167,9 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
+    const { t, T_KEYS } = useTranslation();
+    const { getStepForm, translateValidationError } = useRegistrationValidation();
     const { formData } = useRegistrationData();
-    const { t } = useTranslation();
     const stepForm = getStepForm(5);
 
     // Create terms field using useField with the step form context
@@ -207,13 +210,16 @@ export default defineComponent({
     };
 
     return {
+      t,
+      T_KEYS,
       formData,
       terms,
       validateAll,
       formatDate,
       getCategoryLabel,
       getRegionLabel,
-      getCityLabel
+      getCityLabel,
+      translateValidationError
     };
   }
 });

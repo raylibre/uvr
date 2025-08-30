@@ -17,7 +17,7 @@
       />
 
       <!-- News Content -->
-      <div class="news-content" v-loading="isLoading && newsItems.length === 0">
+      <div v-loading="isLoading && newsItems.length === 0" class="news-content">
         <!-- News Grid -->
         <div v-if="newsItems.length > 0" class="news-grid">
           <article

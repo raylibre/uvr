@@ -13,16 +13,25 @@
         <!-- Desktop Navigation -->
         <div class="nav-desktop">
           <template v-for="item in menuItems" :key="item.name">
-            <div v-if="item.children" class="nav-dropdown-wrapper" v-click-outside="() => closeDropdown(item.name)"
-                 @mouseenter="openDropdown(item.name)" @mouseleave="closeDropdown(item.name)">
+            <div
+v-if="item.children"
+v-click-outside="() => closeDropdown(item.name)"
+class="nav-dropdown-wrapper"
+                 @mouseenter="openDropdown(item.name)"
+@mouseleave="closeDropdown(item.name)">
               <MHeaderNavButton
                 :to="item.path || { name: item.name }"
                 :translation-key="item.title"
-                @click="toggleDropdown(item.name)"
                 :class="{ 'is-dropdown-open': isDropdownOpen(item.name) }"
+                @click="toggleDropdown(item.name)"
               >
                 <template #dropdown-indicator>
-                  <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+class="dropdown-arrow"
+width="16"
+height="16"
+viewBox="0 0 20 20"
+fill="currentColor">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.85a.75.75 0 01-1.02 0l-4.25-3.85a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                   </svg>
                 </template>
@@ -173,8 +182,8 @@
               :to="item.path || { name: item.name }"
               :translation-key="item.title"
               class="mobile"
-              @click="closeMobileMenu"
               :exact="true"
+              @click="closeMobileMenu"
             />
             <div class="mobile-dropdown-menu">
               <MHeaderNavButton

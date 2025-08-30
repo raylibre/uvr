@@ -28,7 +28,21 @@
       "getInTouch": "Get in Touch",
       "ourServices": "Our Services",
       "join": "Join Us",
-      "login": "Login"
+      "login": "Login",
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "back": "Back",
+      "finish": "Finish",
+      "next": "Next",
+      "previous": "Previous",
+      "retry": "Retry",
+      "today": "Today",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout",
+      "uploadFiles": "Upload Files",
+      "viewAll": "View All",
+      "viewAllPrograms": "View All Programs"
     },
     "navigation": {
       "home": "Home",
@@ -44,6 +58,22 @@
       "legalAidVeterans": "Legal Aid for Veterans",
       "prostheticsForHeroes": "Prosthetics for Heroes",
       "news": "News"
+    },
+    "labels": {
+      "or": "or",
+      "close": "Close",
+      "client": "Client",
+      "duration": "Duration",
+      "yes": "Yes",
+      "no": "No",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "dragAndDrop": "Drag and drop files here"
+    },
+    "errors": {
+      "pageNotFound": "Page not found",
+      "generalError": "An error occurred",
+      "formSubmitError": "Error submitting form"
     }
   },
   "home": {
@@ -127,19 +157,124 @@
       "subject": "Subject",
       "message": "Message",
       "subscribe": "Subscribe to our newsletter",
-      "hasMinorChildren": "Presence of minor children",
-      "minorChildrenCount": "Number of minor children"
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "patronymic": "Patronymic",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "dateOfBirth": "Date of Birth",
+      "region": "Region",
+      "city": "City",
+      "category": "Category",
+      "fullAddress": "Full Address",
+      "emergencyContactName": "Emergency Contact Name",
+      "emergencyContactPhone": "Emergency Contact Phone",
+      "hasMinorChildren": "Do you have minor children?",
+      "minorChildrenCount": "Number of minor children",
+      "bio": "Bio"
     },
     "placeholders": {
       "name": "Enter your name",
       "email": "Enter your email",
       "subject": "Enter message subject",
-      "message": "Enter your message"
+      "message": "Enter your message",
+      "enterYourName": "Enter your name",
+      "enterYourEmail": "Enter your email"
     },
     "validation": {
       "required": "{field} is required",
       "email": "Please enter a valid email",
-      "minLength": "{field} must be at least {min} characters"
+      "minLength": "{field} must be at least {min} characters",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "patronymicRequired": "Patronymic is required",
+      "emailRequired": "Email is required",
+      "phoneRequired": "Phone number is required",
+      "passwordRequired": "Password is required",
+      "passwordConfirmationRequired": "Password confirmation is required",
+      "dateOfBirthRequired": "Date of birth is required",
+      "regionRequired": "Region is required",
+      "cityRequired": "City is required",
+      "categoryRequired": "Category is required",
+      "addressRequired": "Address is required",
+      "firstNameMinLength": "First name must be at least 2 characters",
+      "lastNameMinLength": "Last name must be at least 2 characters",
+      "patronymicMinLength": "Patronymic must be at least 2 characters",
+      "emailInvalid": "Please enter a valid email address",
+      "phoneInvalid": "Please enter a valid phone number",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match"
+    }
+  },
+  "auth": {
+    "register": {
+      "title": "New Account",
+      "newAccount": "New Account",
+      "completeRegistration": "Complete Registration",
+      "unsavedChanges": "Unsaved Changes",
+      "unsavedChangesText": "You have unsaved changes. Are you sure you want to close this form?",
+      "yesClose": "Yes, Close",
+      "stepProgress": "Step {current} of {total}",
+      "steps": {
+        "step1": {
+          "title": "Personal Details",
+          "description": "Please provide your personal information to create your account."
+        },
+        "step2": {
+          "title": "Demographics",
+          "description": "Tell us about yourself"
+        },
+        "step3": {
+          "title": "Emergency Contact Information",
+          "description": "Please provide your address and emergency contact details."
+        },
+        "step4": {
+          "title": "Notifications",
+          "description": "Set your notification preferences"
+        },
+        "step5": {
+          "title": "Confirmation",
+          "description": "Review and confirm your details"
+        }
+      },
+      "labels": {
+        "maritalStatus": "Marital Status",
+        "activityType": "Activity Type",
+        "bioOptional": "Bio (Optional)"
+      },
+      "placeholders": {
+        "enterAddress": "Enter your complete address...",
+        "bioMotivation": "Tell us about yourself and your motivation..."
+      },
+      "notifications": {
+        "enableNotifications": "Enable Notifications",
+        "enableDescription": "Receive important updates about your account and our services",
+        "emailNotifications": "Email Notifications",
+        "emailDescription": "Receive updates via email",
+        "smsNotifications": "SMS Notifications",
+        "smsDescription": "Receive updates via SMS",
+        "notificationsEnabled": "Notifications Enabled",
+        "changeSettings": "You can change these preferences at any time in your account settings."
+      },
+      "terms": {
+        "agreeTo": "I confirm that all the information provided is accurate and I agree to the",
+        "termsOfService": "Terms of Service",
+        "and": "and",
+        "privacyPolicy": "Privacy Policy"
+      },
+      "review": {
+        "title": "Review Your Information",
+        "description": "Please review your registration details before submitting.",
+        "personalInfo": "Personal Information",
+        "demographics": "Demographics",
+        "emergencyContact": "Emergency Contact",
+        "notificationPreferences": "Notification Preferences",
+        "contactName": "Contact Name",
+        "contactPhone": "Contact Phone",
+        "address": "Address"
+      }
     }
   },
   "errors": {

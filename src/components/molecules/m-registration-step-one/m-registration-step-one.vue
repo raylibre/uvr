@@ -1,7 +1,7 @@
 <template>
   <div class="m-registration-step-one">
-    <h2 class="title">Personal Details</h2>
-    <p class="description">Please provide your personal information to create your account.</p>
+    <h2 class="title">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP1.TITLE) }}</h2>
+    <p class="description">{{ t(T_KEYS.AUTH.REGISTER.STEPS.STEP1.DESCRIPTION) }}</p>
 
     <!-- Debug section (remove in production) -->
     <div v-if="showDebug" class="debug-section">
@@ -15,22 +15,22 @@
         <AFormInput
           :id="'register-last-name'"
           v-model="lastName.value.value as string"
-          label="Last Name"
+          :label="t(T_KEYS.FORM.LABELS.LAST_NAME)"
           type="text"
           :required="true"
           icon="fas fa-user"
-          :error="lastName.errorMessage.value"
+          :error="lastName.errorMessage.value ? translateValidationError(lastName.errorMessage.value) : ''"
           @blur="lastName.validate"
         />
 
         <AFormInput
           :id="'register-first-name'"
           v-model="firstName.value.value as string"
-          label="First Name"
+          :label="t(T_KEYS.FORM.LABELS.FIRST_NAME)"
           type="text"
           :required="true"
           icon="fas fa-user"
-          :error="firstName.errorMessage.value"
+          :error="firstName.errorMessage.value ? translateValidationError(firstName.errorMessage.value) : ''"
           @blur="firstName.validate"
         />
       </div>
@@ -38,33 +38,33 @@
       <AFormInput
         :id="'register-patronymic'"
         v-model="patronymic.value.value as string"
-        label="Patronymic"
+        :label="t(T_KEYS.FORM.LABELS.PATRONYMIC)"
         type="text"
         icon="fas fa-user"
         :required="true"
-        :error="patronymic.errorMessage.value"
+        :error="patronymic.errorMessage.value ? translateValidationError(patronymic.errorMessage.value) : ''"
         @blur="patronymic.validate"
       />
 
       <AFormInput
         :id="'register-email'"
         v-model="email.value.value as string"
-        label="Email Address"
+        :label="t(T_KEYS.FORM.LABELS.EMAIL_ADDRESS)"
         type="email"
         :required="true"
         icon="fas fa-envelope"
-        :error="email.errorMessage.value"
+        :error="email.errorMessage.value ? translateValidationError(email.errorMessage.value) : ''"
         @blur="email.validate"
       />
 
       <AFormInput
         :id="'register-phone'"
         v-model="phone.value.value as string"
-        label="Phone Number"
+        :label="t(T_KEYS.FORM.LABELS.PHONE_NUMBER)"
         type="tel"
         :required="true"
         icon="fas fa-phone"
-        :error="phone.errorMessage.value"
+        :error="phone.errorMessage.value ? translateValidationError(phone.errorMessage.value) : ''"
         @blur="phone.validate"
       />
 
@@ -72,22 +72,22 @@
         <AFormInput
           :id="'register-password'"
           v-model="password.value.value as string"
-          label="Password"
+          :label="t(T_KEYS.FORM.LABELS.PASSWORD)"
           type="password"
           :required="true"
           icon="fas fa-lock"
-          :error="password.errorMessage.value"
+          :error="password.errorMessage.value ? translateValidationError(password.errorMessage.value) : ''"
           @blur="password.validate"
         />
 
         <AFormInput
           :id="'register-password-confirmation'"
           v-model="passwordConfirmation.value.value as string"
-          label="Confirm Password"
+          :label="t(T_KEYS.FORM.LABELS.CONFIRM_PASSWORD)"
           type="password"
           :required="true"
           icon="fas fa-lock"
-          :error="passwordConfirmation.errorMessage.value"
+          :error="passwordConfirmation.errorMessage.value ? translateValidationError(passwordConfirmation.errorMessage.value) : ''"
           @blur="passwordConfirmation.validate"
         />
       </div>
@@ -100,6 +100,7 @@ import { defineComponent, computed, ref } from 'vue';
 import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'MRegistrationStepOne',
@@ -109,7 +110,8 @@ export default defineComponent({
   },
 
   setup() {
-    const { getStepForm } = useRegistrationValidation();
+    const { t, T_KEYS } = useTranslation();
+    const { getStepForm, translateValidationError } = useRegistrationValidation();
     const stepForm = getStepForm(1);
     const showDebug = ref(false);
 
@@ -201,6 +203,8 @@ export default defineComponent({
     };
 
     return {
+      t,
+      T_KEYS,
       firstName,
       lastName,
       patronymic,
@@ -210,7 +214,8 @@ export default defineComponent({
       passwordConfirmation,
       validateAll,
       showDebug,
-      debugInfo
+      debugInfo,
+      translateValidationError
     };
   }
 });

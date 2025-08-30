@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup';
+import { useTranslation } from './use-translation';
 
 // Step-specific form interfaces
 interface StepOneForm {
@@ -44,7 +45,7 @@ interface StepFiveForm {
 // Combined form data interface
 interface AllFormData extends StepOneForm, StepTwoForm, StepThreeForm, StepFourForm, StepFiveForm {}
 
-// Validation schemas for each step
+// Validation schemas for each step (using English as base, will be overridden with translations)
 const stepOneSchema = yup.object({
   first_name: yup.string().required('First name is required').min(2, 'First name must be at least 2 characters'),
   last_name: yup.string().required('Last name is required').min(2, 'Last name must be at least 2 characters'),
@@ -67,7 +68,7 @@ const stepTwoSchema = yup.object({
   region: yup.string().required('Region is required'),
   city: yup.string().required('City is required'),
   category: yup.string().required('Category is required'),
-  marital: yup.string().required('Marital is required'),
+  marital: yup.string().required('Marital status is required'),
   activity_type: yup.string().required('Activity type is required'),
   bio: yup.string().optional(),
   has_minor_children: yup.boolean().default(false),
@@ -95,7 +96,7 @@ const stepFourSchema = yup.object({
 });
 
 const stepFiveSchema = yup.object({
-  terms: yup.boolean().required().oneOf([true], 'You must accept the terms and conditions')
+  terms: yup.boolean().required('You must accept the terms and conditions').oneOf([true], 'You must accept the terms and conditions')
 });
 
 // Global persistent data storage - this maintains data across navigation
@@ -215,6 +216,40 @@ const setupFormWatchers = () => {
 setupFormWatchers();
 
 export const useRegistrationValidation = () => {
+  const { t, T_KEYS } = useTranslation();
+
+  // Function to translate validation error messages
+  const translateValidationError = (errorMessage: string): string => {
+    const errorMap: Record<string, string> = {
+      'First name is required': t(T_KEYS.FORM.VALIDATION.FIRST_NAME_REQUIRED),
+      'Last name is required': t(T_KEYS.FORM.VALIDATION.LAST_NAME_REQUIRED),
+      'Patronymic is required': t(T_KEYS.FORM.VALIDATION.PATRONYMIC_REQUIRED),
+      'Email is required': t(T_KEYS.FORM.VALIDATION.EMAIL_REQUIRED),
+      'Phone number is required': t(T_KEYS.FORM.VALIDATION.PHONE_REQUIRED),
+      'Password is required': t(T_KEYS.FORM.VALIDATION.PASSWORD_REQUIRED),
+      'Password confirmation is required': t(T_KEYS.FORM.VALIDATION.PASSWORD_CONFIRMATION_REQUIRED),
+      'Date of birth is required': t(T_KEYS.FORM.VALIDATION.DATE_OF_BIRTH_REQUIRED),
+      'Region is required': t(T_KEYS.FORM.VALIDATION.REGION_REQUIRED),
+      'City is required': t(T_KEYS.FORM.VALIDATION.CITY_REQUIRED),
+      'Category is required': t(T_KEYS.FORM.VALIDATION.CATEGORY_REQUIRED),
+      'Address is required': t(T_KEYS.FORM.VALIDATION.ADDRESS_REQUIRED),
+      'Marital status is required': t(T_KEYS.FORM.VALIDATION.REQUIRED),
+      'Activity type is required': t(T_KEYS.FORM.VALIDATION.REQUIRED),
+      'First name must be at least 2 characters': t(T_KEYS.FORM.VALIDATION.FIRST_NAME_MIN_LENGTH),
+      'Last name must be at least 2 characters': t(T_KEYS.FORM.VALIDATION.LAST_NAME_MIN_LENGTH),
+      'Patronymic must be at least 2 characters': t(T_KEYS.FORM.VALIDATION.PATRONYMIC_MIN_LENGTH),
+      'Please enter a valid email address': t(T_KEYS.FORM.VALIDATION.EMAIL_INVALID),
+      'Please enter a valid phone number': t(T_KEYS.FORM.VALIDATION.PHONE_INVALID),
+      'Password must be at least 8 characters': t(T_KEYS.FORM.VALIDATION.PASSWORD_MIN_LENGTH),
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number': t(T_KEYS.FORM.VALIDATION.PASSWORD_MIN_LENGTH),
+      'Passwords must match': t(T_KEYS.FORM.VALIDATION.PASSWORDS_DO_NOT_MATCH),
+      'Number of minor children is required': t(T_KEYS.FORM.VALIDATION.REQUIRED),
+      'Please provide a complete address': t(T_KEYS.FORM.VALIDATION.REQUIRED),
+      'You must accept the terms and conditions': t(T_KEYS.FORM.VALIDATION.REQUIRED)
+    };
+    return errorMap[errorMessage] || errorMessage;
+  };
+
   // Helper functions that operate on the global state
   const getStepForm = (step: number) => {
     const stepKey = `step${step}` as keyof typeof globalFormState;
@@ -390,6 +425,7 @@ export const useRegistrationValidation = () => {
     resetAllForms,
     getStepErrors,
     isStepValid,
-    debugGlobalState
+    debugGlobalState,
+    translateValidationError
   };
 }; 
