@@ -1,14 +1,15 @@
 ### Регистрация пользователя с multipart/form-data
 POST https://btbmqvawpokfwptcrmem.supabase.co/functions/v1/auth-register
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="data"
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "phone": "+380501234567",
+  "email": "testuser@example.com",
+  "phone": "+380501334513",
   "password": "TestPassword123!",
   "first_name": "Тест",
   "last_name": "Тестовий",
@@ -17,11 +18,15 @@ Content-Type: application/json
   "gender": "male",
   "region": "kyiv",
   "city": "Київ",
+  "address": "вул. Тестова, 1, кв. 1",
   "category": "active_veteran",
   "marital_status": "single",
   "activity_type": "social",
   "have_minor_children": false,
   "minor_children_number": 0,
+  "notifications_enabled": true,
+  "email_notifications": true,
+  "sms_notifications": false,
   "documents_metadata": [
     {
       "type": "veteran_certificate",
@@ -37,6 +42,7 @@ Content-Type: application/json
     }
   ]
 }
+
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="document_0"; filename="veteran_cert.pdf"
 Content-Type: application/pdf
