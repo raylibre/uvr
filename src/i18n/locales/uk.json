@@ -74,6 +74,12 @@
       "pageNotFound": "Сторінку не знайдено",
       "generalError": "Виникла помилка",
       "formSubmitError": "Помилка при відправці форми"
+    },
+    "datepicker": {
+      "today": "Сьогодні",
+      "cancel": "Скасувати",
+      "selectDate": "Оберіть дату",
+      "clearDate": "Очистити дату"
     }
   },
   "home": {

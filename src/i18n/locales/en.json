@@ -74,6 +74,12 @@
       "pageNotFound": "Page not found",
       "generalError": "An error occurred",
       "formSubmitError": "Error submitting form"
+    },
+    "datepicker": {
+      "today": "Today",
+      "cancel": "Cancel",
+      "selectDate": "Select date",
+      "clearDate": "Clear date"
     }
   },
   "home": {

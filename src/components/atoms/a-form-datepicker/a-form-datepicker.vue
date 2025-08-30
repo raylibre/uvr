@@ -132,14 +132,14 @@
             class="cancel-button"
             @click="closeDatepicker"
           >
-            Cancel
+            {{ $t('common.datepicker.cancel') }}
           </button>
           <button 
             type="button"
             class="today-button"
             @click="selectToday"
           >
-            Today
+            {{ $t('common.datepicker.today') }}
           </button>
         </div>
       </div>
@@ -151,6 +151,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { UKRAINIAN_MONTHS, UKRAINIAN_DAYS_SHORT } from '../../../constants/datetime-constants';
 
 interface CalendarDay {
   date: number;
@@ -205,16 +207,24 @@ export default defineComponent({
   emits: ['update:modelValue', 'blur'],
 
   setup(props, { emit }) {
+    const { locale } = useI18n();
     const isOpen = ref(false);
     const currentDate = ref(new Date());
     const showYearSelector = ref(false);
     const yearRangeStart = ref(Math.floor(currentDate.value.getFullYear() / 10) * 10);
 
-    const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    const weekdays = computed(() => {
+      return locale.value === 'uk' 
+        ? UKRAINIAN_DAYS_SHORT 
+        : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    });
+    
+    const monthNames = computed(() => {
+      return locale.value === 'uk' 
+        ? UKRAINIAN_MONTHS 
+        : ['January', 'February', 'March', 'April', 'May', 'June',
+           'July', 'August', 'September', 'October', 'November', 'December'];
+    });
 
     const formattedValue = computed(() => {
       if (!props.modelValue) return '';
@@ -229,7 +239,7 @@ export default defineComponent({
     });
 
     const currentMonth = computed(() => {
-      return monthNames[currentDate.value.getMonth()];
+      return monthNames.value[currentDate.value.getMonth()];
     });
 
     const currentYear = computed(() => {
@@ -420,6 +430,7 @@ export default defineComponent({
       currentYear,
       calendarDays,
       weekdays,
+      monthNames,
       showYearSelector,
       availableYears,
       toggleDatepicker,
