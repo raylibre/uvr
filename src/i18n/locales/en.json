@@ -225,12 +225,12 @@
       "stepProgress": "Step {current} of {total}",
       "steps": {
         "step1": {
-          "title": "Personal Details",
-          "description": "Please provide your personal information to create your account."
+          "title": "Account Details",
+          "description": "Please provide account information to create your account."
         },
         "step2": {
-          "title": "Demographics",
-          "description": "Tell us about yourself"
+          "title": "Personal Details",
+          "description": "Please provide your personal information."
         },
         "step3": {
           "title": "Emergency Contact Information",

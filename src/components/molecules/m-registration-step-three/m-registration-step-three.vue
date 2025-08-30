@@ -28,11 +28,10 @@
           @blur="emergencyContactName.validate"
         />
 
-        <AFormInput
+        <APhoneInput
           :id="'register-emergency-contact-phone'"
           v-model="emergencyContactPhone.value.value as string"
           :label="t(T_KEYS.FORM.LABELS.EMERGENCY_CONTACT_PHONE)"
-          type="tel"
           icon="fas fa-phone-alt"
           :error="emergencyContactPhone.errorMessage.value ? translateValidationError(emergencyContactPhone.errorMessage.value) : ''"
           @blur="emergencyContactPhone.validate"
@@ -46,6 +45,7 @@
 import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
+import APhoneInput from '~/components/atoms/a-phone-input';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useTranslation } from '~/composables/use-translation';
@@ -55,6 +55,7 @@ export default defineComponent({
 
   components: {
     AFormInput,
+    APhoneInput,
     AFormTextarea
   },
 

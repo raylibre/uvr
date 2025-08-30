@@ -4,6 +4,13 @@ import {
   ActivityType
 } from '~/types/user.d';
 import { T_KEYS } from '~/constants/translation-keys';
+import {
+  getRegionsForDropdown,
+  getCitiesForDropdown,
+  getRegionOptions,
+  getCityOptions,
+  UKRAINE_REGION_LABELS
+} from '~/constants/geographic-constants';
 
 
 export const REGISTRATION_STEPS = [
@@ -64,28 +71,18 @@ export const ACTIVITY_TYPES = [
   { value: ActivityType.VOLUNTEER, label: T_KEYS.ACTIVITY_TYPE_VOLUNTEER }
 ] as const;
 
-export const REGIONS = [
-  { value: 'kyiv', label: 'Kyiv' },
-  { value: 'lviv', label: 'Lviv' },
-  { value: 'kharkiv', label: 'Kharkiv' },
-  { value: 'odesa', label: 'Odesa' },
-  { value: 'dnipro', label: 'Dnipro' }
-] as const;
+// Use dynamic functions from geographic constants for comprehensive Ukrainian data
+export const getRegionsForRegistration = getRegionsForDropdown;
 
-// Add more cities based on selected region
-export const CITIES = {
-  kyiv: [
-    { value: 'kyiv-city', label: 'Kyiv City' },
-    { value: 'brovary', label: 'Brovary' },
-    { value: 'irpin', label: 'Irpin' }
-  ],
-  lviv: [
-    { value: 'lviv-city', label: 'Lviv City' },
-    { value: 'drohobych', label: 'Drohobych' },
-    { value: 'stryi', label: 'Stryi' }
-  ]
-  // Add more regions and cities
-} as const;
+export const getCitiesForRegion = getCitiesForDropdown;
+
+// Backward-compatible constants for components expecting arrays
+export const REGIONS = getRegionOptions();
+
+// Legacy CITIES structure: map every region key to its city options
+export const CITIES: Record<string, Array<{ value: string; label: string; disabled?: boolean }>> = Object.fromEntries(
+  Object.keys(UKRAINE_REGION_LABELS).map((regionKey) => [regionKey, getCityOptions(regionKey)])
+);
 
 export const GENDER_OPTIONS = [
   { value: 'male', label: 'registration.gender.male' },

@@ -20,6 +20,7 @@
           v-model="region.value.value as string"
           :label="t(T_KEYS.FORM.LABELS.REGION)"
           :options="[...REGIONS]"
+          :placeholder="t(T_KEYS.FORM.LABELS.REGION)"
           :required="true"
           icon="fas fa-map-marker-alt"
           :error="region.errorMessage.value ? translateValidationError(region.errorMessage.value) : ''"
@@ -36,6 +37,7 @@
           icon="fas fa-city"
           :disabled="!region.value.value"
           :error="city.errorMessage.value ? translateValidationError(city.errorMessage.value) : ''"
+          :placeholder="!region.value.value ? 'Select region first' : 'Select city'"
           @blur="city.validate"
         />
       </div>
@@ -117,11 +119,11 @@
 import { defineComponent, computed, watch } from 'vue';
 import { useField } from 'vee-validate';
 import {
-  CITIES,
   REGIONS,
   USER_CATEGORIES,
   MARITAL_CATEGORIES,
-  ACTIVITY_TYPES
+  ACTIVITY_TYPES,
+  getCitiesForRegion
 } from '~/constants/registration-constants';
 import AFormSelect from '~/components/atoms/a-form-select';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
@@ -213,7 +215,7 @@ export default defineComponent({
     // Computed for available cities based on selected region
     const availableCities = computed(() => {
       if (!region.value.value) return [];
-      return CITIES[region.value.value as keyof typeof CITIES] || [];
+      return getCitiesForRegion(region.value.value as string);
     });
     const userCategoriesList = computed(() => {
       return USER_CATEGORIES.map(item => {
@@ -242,8 +244,11 @@ export default defineComponent({
     });
 
     const handleRegionChange = () => {
-      // Clear city when region changes
+      // Clear and reset city when region changes
       city.value.value = '';
+      if (typeof (city as any).resetField === 'function') {
+        (city as any).resetField();
+      }
     };
 
     // Expose validation method for external triggering

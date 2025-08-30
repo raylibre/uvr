@@ -51,7 +51,7 @@ const stepOneSchema = yup.object({
   last_name: yup.string().required('Last name is required').min(2, 'Last name must be at least 2 characters'),
   patronymic: yup.string().required('Patronymic is required').min(2, 'Patronymic must be at least 2 characters'),
   email: yup.string().required('Email is required').email('Please enter a valid email address'),
-  phone: yup.string().required('Phone number is required').matches(/^\+?[0-9\s\-()]{7,20}$/, 'Please enter a valid phone number'),
+  phone: yup.string().required('Phone number is required').matches(/^\+380\d{9}$/, 'Введіть дійсний український номер телефону (+380XXXXXXXXX)'),
   password: yup.string()
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters')
@@ -86,7 +86,7 @@ const stepTwoSchema = yup.object({
 const stepThreeSchema = yup.object({
   address: yup.string().required('Address is required').min(10, 'Please provide a complete address'),
   emergency_contact_name: yup.string(),
-  emergency_contact_phone: yup.string()
+  emergency_contact_phone: yup.string().matches(/^\+380\d{9}$/, 'Введіть дійсний український номер телефону (+380XXXXXXXXX)')
 });
 
 const stepFourSchema = yup.object({

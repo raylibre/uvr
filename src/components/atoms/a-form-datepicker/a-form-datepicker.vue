@@ -14,7 +14,7 @@
         :id="id"
         :value="formattedValue"
         type="text"
-        :placeholder="placeholder || 'dd.mm.yyyy'"
+        :placeholder="placeholder"
         :required="required"
         :disabled="disabled"
         readonly

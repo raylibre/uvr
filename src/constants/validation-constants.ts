@@ -13,6 +13,7 @@ export const FIELD_LIMITS = {
   EMAIL_MAX: 255,
   PHONE_MIN: 10,
   PHONE_MAX: 15,
+  UKRAINIAN_PHONE_LENGTH: 13, // +380XXXXXXXXX = 13 characters
   PASSWORD_MIN: 8,
   PASSWORD_MAX: 128,
   MESSAGE_MIN: 10,
@@ -59,6 +60,8 @@ export const VALIDATION_MESSAGES = {
   REQUIRED: 'Це поле є обов\'язковим',
   EMAIL_INVALID: 'Введіть дійсну електронну адресу',
   PHONE_INVALID: 'Введіть дійсний номер телефону',
+  PHONE_INVALID_UA: 'Введіть дійсний український номер телефону (+380XXXXXXXXX)',
+  UKRAINIAN_PHONE_INVALID: 'Введіть дійсний український номер телефону (+380XXXXXXXXX)',
   PASSWORD_TOO_SHORT: `Пароль повинен містити принаймні ${FIELD_LIMITS.PASSWORD_MIN} символів`,
   PASSWORD_TOO_WEAK: 'Пароль повинен містити принаймні одну велику літеру, одну малу літеру, одну цифру та один спеціальний символ',
   PASSWORDS_NOT_MATCH: 'Паролі не співпадають',

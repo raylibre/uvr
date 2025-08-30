@@ -57,11 +57,10 @@
         @blur="email.validate"
       />
 
-      <AFormInput
+      <APhoneInput
         :id="'register-phone'"
         v-model="phone.value.value as string"
         :label="t(T_KEYS.FORM.LABELS.PHONE_NUMBER)"
-        type="tel"
         :required="true"
         icon="fas fa-phone"
         :error="phone.errorMessage.value ? translateValidationError(phone.errorMessage.value) : ''"
@@ -99,6 +98,7 @@
 import { defineComponent, computed, ref } from 'vue';
 import { useField } from 'vee-validate';
 import AFormInput from '~/components/atoms/a-form-input';
+import APhoneInput from '~/components/atoms/a-phone-input';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useTranslation } from '~/composables/use-translation';
 
@@ -106,7 +106,8 @@ export default defineComponent({
   name: 'MRegistrationStepOne',
 
   components: {
-    AFormInput
+    AFormInput,
+    APhoneInput
   },
 
   setup() {
