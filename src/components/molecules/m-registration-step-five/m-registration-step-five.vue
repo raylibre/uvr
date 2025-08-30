@@ -57,9 +57,15 @@
             <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.CITY) }}</dt>
             <dd class="info-item__value">{{ getCityLabel(formData.region ?? '', formData.city ?? '') }}</dd>
           </div>
-          <div v-if="formData.bio" class="info-item info-item--full">
-            <dt class="info-item__label">{{ t(T_KEYS.FORM.LABELS.BIO) }}</dt>
-            <dd class="info-item__value">{{ formData.bio }}</dd>
+          <div v-if="(formData.documents?.length || 0) > 0" class="info-item info-item--full">
+            <dt class="info-item__label">{{ t(T_KEYS.DOCUMENTS.TITLE) }}</dt>
+            <dd class="info-item__value">
+              <ul class="list-disc ml-5 space-y-1">
+                <li v-for="doc in (formData.documents || [])" :key="doc.type">
+                  {{ getDocTypeLabel(doc.type) }} — {{ (doc.files || []).length }} file(s)
+                </li>
+              </ul>
+            </dd>
           </div>
         </dl>
       </div>
@@ -153,7 +159,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useField } from 'vee-validate';
-import { USER_CATEGORIES, REGIONS, CITIES } from '~/constants/registration-constants';
+import { USER_CATEGORIES, REGIONS, CITIES, DOCUMENT_TYPES } from '~/constants/registration-constants';
 import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useRegistrationData } from '~/composables/use-registration-data';
@@ -201,6 +207,11 @@ export default defineComponent({
       return CITIES[region as keyof typeof CITIES]?.find(c => c.value === city)?.label || city;
     };
 
+    const getDocTypeLabel = (type: string) => {
+      const entry = DOCUMENT_TYPES.find(d => d.value === type);
+      return entry ? t(entry.label) : type;
+    };
+
     // Expose validation method for external triggering
     const validateAll = async () => {
       const results = await Promise.all([
@@ -219,6 +230,7 @@ export default defineComponent({
       getCategoryLabel,
       getRegionLabel,
       getCityLabel,
+      getDocTypeLabel,
       translateValidationError
     };
   }

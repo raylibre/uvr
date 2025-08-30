@@ -1,10 +1,13 @@
 {
   "user": {
     "categories": {
-      "combatParticipant": "Combat Participant",
-      "familyOfDeceased": "Family of Deceased",
-      "familyOfMissing": "Family of Missing Person",
-      "personWithDisability": "Person with Disability"
+      "familyWithoutFather": "Family Without Father",
+      "volunteer": "Volunteer",
+      "activeMilitary": "Active Military",
+      "activeVeteran": "Active Veteran",
+      "retiredVeteran": "Retired Veteran",
+      "combatDisabled": "Combat-Disabled Veteran",
+      "homelessFamily": "Homeless Family"
     },
     "maritalStatus": {
       "married": "Married",
@@ -173,6 +176,7 @@
       "dateOfBirth": "Date of Birth",
       "region": "Region",
       "city": "City",
+      "gender": "Gender",
       "category": "Category",
       "fullAddress": "Full Address",
       "emergencyContactName": "Emergency Contact Name",
@@ -248,11 +252,29 @@
       "labels": {
         "maritalStatus": "Marital Status",
         "activityType": "Activity Type",
-        "bioOptional": "Bio (Optional)"
+        "bioOptional": "Bio (Optional)",
+        "documents": "Documents"
       },
       "placeholders": {
         "enterAddress": "Enter your complete address...",
         "bioMotivation": "Tell us about yourself and your motivation..."
+      },
+      "documents": {
+        "title": "Documents",
+        "add": "Add document",
+        "selectType": "Select document type",
+        "types": {
+          "volunteerCertificate": "Volunteer Certificate",
+          "militaryId": "Military ID",
+          "veteranCertificate": "Veteran Certificate",
+          "disabilityCertificate": "Disability Certificate",
+          "deathCertificate": "Death Certificate",
+          "marriageCertificate": "Marriage Certificate",
+          "birthCertificate": "Birth Certificate",
+          "displacementCertificate": "Displacement Certificate",
+          "passport": "Passport",
+          "other": "Other"
+        }
       },
       "notifications": {
         "enableNotifications": "Enable Notifications",
@@ -283,6 +305,12 @@
       }
     }
   },
+  "registration": {
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    }
+  },
   "errors": {
     "404": {
       "title": "404",
@@ -290,6 +318,13 @@
     },
     "form": {
       "submit": "An error occurred while submitting the form"
+    }
+  },
+  "upload": {
+    "errors": {
+      "maxSize": "File size exceeds {size}",
+      "fileType": "File type not accepted",
+      "maxFiles": "You can upload up to {max} files"
     }
   },
   "programDetail": {

@@ -4,7 +4,8 @@ import {
   loginUser, 
   registerUser, 
   logoutUser, 
-  getCurrentUser 
+  getCurrentUser, 
+  registerUserMultipart
 } from '~/services/api/auth-api-service';
 import type { 
   User, 
@@ -34,6 +35,7 @@ export function useUserStore() {
   // Create AsyncSource instances for auth operations
   const loginSource = reactive(new AsyncSource(loginUser, handleApiError));
   const registerSource = reactive(new AsyncSource(registerUser, handleApiError));
+  const registerFullSource = reactive(new AsyncSource(registerUserMultipart, handleApiError));
   const logoutSource = reactive(new AsyncSource(logoutUser, handleApiError));
   const currentUserSource = reactive(new AsyncSource(getCurrentUser, handleAuthMeError));
 
@@ -74,7 +76,7 @@ export function useUserStore() {
 
   // Loading states
   const isLoginLoading = computed(() => loginSource.isLoading);
-  const isRegisterLoading = computed(() => registerSource.isLoading);
+  const isRegisterLoading = computed(() => registerSource.isLoading || registerFullSource.isLoading);
   const isLogoutLoading = computed(() => logoutSource.isLoading);
   const isCurrentUserLoading = computed(() => currentUserSource.isLoading);
   const isLoading = computed(() => 
@@ -89,8 +91,18 @@ export function useUserStore() {
     loginSource.push(handleLoginSuccess, credentials);
   };
 
-  const register = (credentials: { email: string; phone: string; password: string }) => {
-    registerSource.push(handleRegisterSuccess, credentials);
+  const register = (payload: any) => {
+    // If minimal payload (email/phone/password only), use simple register
+    if (
+      payload &&
+      typeof payload === 'object' &&
+      Object.keys(payload).every((k) => ['email', 'phone', 'password'].includes(k))
+    ) {
+      registerSource.push(handleRegisterSuccess, payload);
+    } else {
+      // Full registration with documents (multipart)
+      registerFullSource.push(handleRegisterSuccess, payload);
+    }
   };
 
   const logout = () => {

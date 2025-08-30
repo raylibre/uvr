@@ -83,6 +83,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { useTranslation } from '~/composables/use-translation';
+import { T_KEYS } from '~/constants/translation-keys';
 
 export default defineComponent({
   name: 'AFileUpload',
@@ -133,20 +135,22 @@ export default defineComponent({
   emits: ['update:modelValue', 'error'],
 
   setup(props, { emit }) {
+    const { t } = useTranslation();
     const isDragging = ref(false);
     const fileInput = ref<HTMLInputElement | null>(null);
 
     const fileTypeText = computed(() => {
-      if (!props.accept) return 'All file types accepted';
+      if (!props.accept) return t('common.labels.dragAndDrop') ? t('common.labels.dragAndDrop') : 'All file types accepted';
+      // Keep simple display text; localization for validation errors below
       return `Accepted file types: ${props.accept.split(',').join(', ')}`;
     });
 
     const validateFile = (file: File): string | null => {
       if (props.maxSize && file.size > props.maxSize) {
-        return `File size exceeds ${formatFileSize(props.maxSize)}`;
+        return t(T_KEYS.UPLOAD.ERRORS.MAX_SIZE, { size: formatFileSize(props.maxSize) });
       }
       if (props.accept && !props.accept.split(',').some(type => file.type.match(type.trim()))) {
-        return 'File type not accepted';
+        return t(T_KEYS.UPLOAD.ERRORS.FILE_TYPE);
       }
       return null;
     };

@@ -43,6 +43,15 @@ export const useRegistrationForm = () => {
     try {
       isLoading.value = true;
 
+      // Ensure current (final) step is validated and marked completed
+      const currentValid = await validateCurrentStep();
+      if (!currentValid) {
+        BUS.emit(EVENTS.FAILED_REGISTER, { error: 'Please complete all required fields in this step' });
+        return false;
+      }
+      // Mark current step as completed to satisfy overall completion check
+      steps[currentStep.value - 1].isCompleted = true;
+
       // Validate all steps before submitting
       let allStepsValid = true;
       for (let i = 1; i <= totalSteps.value; i++) {

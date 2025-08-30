@@ -1,10 +1,13 @@
 {
   "user": {
     "categories": {
-      "combatParticipant": "Учасник бойових дій",
-      "familyOfDeceased": "Член родини загиблого",
-      "familyOfMissing": "Член родини зниклого безвісти",
-      "personWithDisability": "Особа з інвалідністю"
+      "familyWithoutFather": "Сім'я без батька",
+      "volunteer": "Волонтер",
+      "activeMilitary": "Військовослужбовець",
+      "activeVeteran": "Ветеран, що служить",
+      "retiredVeteran": "Ветеран у відставці",
+      "combatDisabled": "Інвалід війни",
+      "homelessFamily": "Бездомна сім'я"
     },
     "maritalStatus": {
       "married": "Одружений",
@@ -13,7 +16,7 @@
       "divorcedPayingAlimony": "Розведений сплачує аліменти"
     },
     "activityTypes": {
-      "social": "Соціяльна",
+      "social": "Соціальна",
       "economic": "Економічна",
       "volunteer": "Волонтер"
     }
@@ -173,6 +176,7 @@
       "dateOfBirth": "Дата народження",
       "region": "Область",
       "city": "Місто",
+      "gender": "Стать",
       "category": "Категорія",
       "fullAddress": "Повна адреса",
       "emergencyContactName": "Ім'я контактної особи для надзвичайних ситуацій",
@@ -244,11 +248,29 @@
       "labels": {
         "maritalStatus": "Сімейний стан",
         "activityType": "Тип діяльності",
-        "bioOptional": "Біографія (необов'язково)"
+        "bioOptional": "Біографія (необов'язково)",
+        "documents": "Документи"
       },
       "placeholders": {
         "enterAddress": "Введіть вашу повну адресу...",
         "bioMotivation": "Розкажіть про себе та вашу мотивацію..."
+      },
+      "documents": {
+        "title": "Документи",
+        "add": "Додати документ",
+        "selectType": "Оберіть тип документу",
+        "types": {
+          "volunteerCertificate": "Посвідчення волонтера",
+          "militaryId": "Військовий квиток",
+          "veteranCertificate": "Посвідчення ветерана",
+          "disabilityCertificate": "Довідка про інвалідність",
+          "deathCertificate": "Свідоцтво про смерть",
+          "marriageCertificate": "Свідоцтво про шлюб",
+          "birthCertificate": "Свідоцтво про народження",
+          "displacementCertificate": "Довідка ВПО",
+          "passport": "Паспорт",
+          "other": "Інше"
+        }
       },
       "notifications": {
         "enableNotifications": "Увімкнути сповіщення",
@@ -277,6 +299,12 @@
         "contactPhone": "Телефон контакту",
         "address": "Адреса"
       }
+    }
+  },
+  "registration": {
+    "gender": {
+      "male": "Чоловіча",
+      "female": "Жіноча"
     }
   },
   "programDetail": {
@@ -316,4 +344,12 @@
       "message": "Для подачі заявки на участь у програмі необхідно увійти в систему."
     }
   }
-} 
+  ,
+  "upload": {
+    "errors": {
+      "maxSize": "Розмір файлу перевищує {size}",
+      "fileType": "Неприпустимий тип файлу",
+      "maxFiles": "Ви можете завантажити не більше {max} файлів"
+    }
+  }
+}

@@ -82,6 +82,77 @@ export async function registerUser(credentials: { email: string; phone: string; 
 }
 
 /**
+ * Register user with multipart/form-data including documents
+ * Expects payload fields similar to the multi-step form and a documents array
+ */
+export async function registerUserMultipart(payload: Record<string, any>): Promise<LoginResponse> {
+  const formData = new FormData();
+
+  // Clone and extract documents
+  const { documents = [], ...rest } = payload || {};
+
+  // Build documents metadata and append files
+  const documents_metadata: Array<{ type: string; category: string; filename: string; index: number }> = [];
+  let fileIndex = 0;
+  const userCategory = rest.category;
+
+  (documents as Array<{ type: string; files: File[] }>).forEach((doc) => {
+    (doc.files || []).forEach((file) => {
+      documents_metadata.push({
+        type: doc.type,
+        category: userCategory,
+        filename: file.name,
+        index: fileIndex
+      });
+      formData.append(`document_${fileIndex}`, file);
+      fileIndex += 1;
+    });
+  });
+
+  // Normalize and map fields to match server expectations (see http-requests/auth/auth-register.http)
+  const normalizeOptional = (v: any) => (typeof v === 'string' && v.trim() === '' ? null : v);
+
+  const {
+    has_minor_children,
+    minor_children_count,
+    patronymic,
+    emergency_contact_name,
+    emergency_contact_phone,
+    terms, // not required by backend
+    ...restFields
+  } = rest;
+
+  const have_minor_children = Boolean(has_minor_children);
+  const minor_children_number = have_minor_children ? Number(minor_children_count || 0) : 0;
+
+  const dataPart = {
+    ...restFields,
+    patronymic: normalizeOptional(patronymic),
+    emergency_contact_name: normalizeOptional(emergency_contact_name),
+    emergency_contact_phone: normalizeOptional(emergency_contact_phone),
+    have_minor_children,
+    minor_children_number,
+    documents_metadata
+  };
+
+  // Append JSON payload as a plain string field so backend reads it as form-data field, not a file
+  formData.append('data', JSON.stringify(dataPart));
+
+  // Ensure multipart header overrides the JSON default on the axios instance
+  const response: AxiosResponse<LoginResponse> = await apiClient.post(
+    FUNCTIONS_V1_AUTH_REGISTRATION,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  );
+
+  return response.data;
+}
+
+/**
  * Logout current user
  */
 export async function logoutUser(): Promise<void> {

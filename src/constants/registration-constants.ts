@@ -52,10 +52,13 @@ export const REGISTRATION_STEPS = [
 ] as const;
 
 export const USER_CATEGORIES = [
-  { value: UserCategory.COMBAT_PARTICIPANT, label: T_KEYS.USER_CATEGORIES_COMBAT_PARTICIPANT },
-  { value: UserCategory.FAMILY_OF_DECEASED, label: T_KEYS.USER_CATEGORIES_FAMILY_OF_DECEASED },
-  { value: UserCategory.FAMILY_OF_MISSING, label: T_KEYS.USER_CATEGORIES_FAMILY_OF_MISSING },
-  { value: UserCategory.PERSON_WITH_DISABILITY, label: T_KEYS.USER_CATEGORIES_PERSON_WITH_DISABILITY }
+  { value: UserCategory.FAMILY_WITHOUT_FATHER, label: T_KEYS.USER_CATEGORIES_FAMILY_WITHOUT_FATHER },
+  { value: UserCategory.VOLUNTEER, label: T_KEYS.USER_CATEGORIES_VOLUNTEER },
+  { value: UserCategory.ACTIVE_MILITARY, label: T_KEYS.USER_CATEGORIES_ACTIVE_MILITARY },
+  { value: UserCategory.ACTIVE_VETERAN, label: T_KEYS.USER_CATEGORIES_ACTIVE_VETERAN },
+  { value: UserCategory.RETIRED_VETERAN, label: T_KEYS.USER_CATEGORIES_RETIRED_VETERAN },
+  { value: UserCategory.COMBAT_DISABLED, label: T_KEYS.USER_CATEGORIES_COMBAT_DISABLED },
+  { value: UserCategory.HOMELESS_FAMILY, label: T_KEYS.USER_CATEGORIES_HOMELESS_FAMILY }
 ] as const;
 
 export const MARITAL_CATEGORIES = [
@@ -69,6 +72,20 @@ export const ACTIVITY_TYPES = [
   { value: ActivityType.SOCIAL, label: T_KEYS.ACTIVITY_TYPE_SOCIAL },
   { value: ActivityType.ECONOMIC, label: T_KEYS.ACTIVITY_TYPE_ECONOMIC },
   { value: ActivityType.VOLUNTEER, label: T_KEYS.ACTIVITY_TYPE_VOLUNTEER }
+] as const;
+
+// Document types for registration document uploads
+export const DOCUMENT_TYPES = [
+  { value: 'volunteer_certificate', label: T_KEYS.DOCUMENTS.TYPES.VOLUNTEER_CERTIFICATE },
+  { value: 'military_id', label: T_KEYS.DOCUMENTS.TYPES.MILITARY_ID },
+  { value: 'veteran_certificate', label: T_KEYS.DOCUMENTS.TYPES.VETERAN_CERTIFICATE },
+  { value: 'disability_certificate', label: T_KEYS.DOCUMENTS.TYPES.DISABILITY_CERTIFICATE },
+  { value: 'death_certificate', label: T_KEYS.DOCUMENTS.TYPES.DEATH_CERTIFICATE },
+  { value: 'marriage_certificate', label: T_KEYS.DOCUMENTS.TYPES.MARRIAGE_CERTIFICATE },
+  { value: 'birth_certificate', label: T_KEYS.DOCUMENTS.TYPES.BIRTH_CERTIFICATE },
+  { value: 'displacement_certificate', label: T_KEYS.DOCUMENTS.TYPES.DISPLACEMENT_CERTIFICATE },
+  { value: 'passport', label: T_KEYS.DOCUMENTS.TYPES.PASSPORT },
+  { value: 'other', label: T_KEYS.DOCUMENTS.TYPES.OTHER }
 ] as const;
 
 // Use dynamic functions from geographic constants for comprehensive Ukrainian data

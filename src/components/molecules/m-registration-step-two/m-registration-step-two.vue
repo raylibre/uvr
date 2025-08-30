@@ -42,15 +42,24 @@
         />
       </div>
 
+      <ARadioGroup
+        :name="'register-gender'"
+        v-model="gender.value.value as string"
+        :label="t(T_KEYS.FORM.LABELS.GENDER)"
+        :options="genderOptions"
+        :required="true"
+        :error="gender.errorMessage.value ? translateValidationError(gender.errorMessage.value) : ''"
+      />
+
       <AFormSelect
         :id="'marital-category'"
-        v-model="marital.value.value as string"
+        v-model="maritalStatus.value.value as string"
         :label="t(T_KEYS.AUTH.REGISTER.LABELS.MARITAL_STATUS)"
         :options="userMaritalList"
         :required="true"
         icon="fas fa-users"
-        :error="marital.errorMessage.value ? translateValidationError(marital.errorMessage.value) : ''"
-        @blur="marital.validate"
+        :error="maritalStatus.errorMessage.value ? translateValidationError(maritalStatus.errorMessage.value) : ''"
+        @blur="maritalStatus.validate"
       />
 
       <div class="minor-children-section">
@@ -102,21 +111,79 @@
         @blur="activityType.validate"
       />
 
-      <AFormTextarea
-        :id="'register-bio'"
-        v-model="bio.value.value as string"
-        :label="t(T_KEYS.AUTH.REGISTER.LABELS.BIO_OPTIONAL)"
-        :placeholder="t(T_KEYS.AUTH.REGISTER.PLACEHOLDERS.BIO_MOTIVATION)"
-        :rows="4"
-        :error="bio.errorMessage.value ? translateValidationError(bio.errorMessage.value) : ''"
-        @blur="bio.validate"
-      />
+      <!-- Documents Uploader (replacing Bio) -->
+      <div class="documents-uploader">
+        <label class="documents-label">{{ t(T_KEYS.DOCUMENTS.TITLE) }}</label>
+
+        <div class="documents-list space-y-4">
+          <div
+            v-for="(doc, idx) in documents.value.value as any[]"
+            :key="`doc-${doc.type}`"
+            class="document-item grid grid-cols-1 sm:grid-cols-3 gap-3"
+          >
+            <div class="doc-header flex items-center justify-between sm:justify-start gap-2">
+              <span class="doc-type inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-sm text-gray-800">
+                {{ getDocTypeLabel(doc.type) }}
+              </span>
+              <button
+                type="button"
+                class="doc-remove text-gray-400 hover:text-red-600"
+                aria-label="Remove document type"
+                title="Remove"
+                @click="removeDocType(idx)"
+              >
+                <i class="fas fa-trash"/>
+              </button>
+            </div>
+
+            <div class="doc-uploader sm:col-span-2 compact-uploader">
+              <AFileUpload
+                :id="`register-doc-${doc.type}`"
+                :name="`register-doc-${doc.type}`"
+                :label="''"
+                accept="image/*,application/pdf"
+                :multiple="true"
+                :model-value="doc.files"
+                :max-size="10 * 1024 * 1024"
+                @update:modelValue="(files: File[]) => handleFilesChange(idx, files)"
+                @error="onUploadError"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="add-document mt-4">
+          <button
+            v-if="!isAddingDocType && availableDocTypes.length"
+            type="button"
+            class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            @click="isAddingDocType = true"
+          >
+            <i class="fas fa-plus" />
+            {{ t(T_KEYS.DOCUMENTS.ADD) }}
+          </button>
+
+          <div v-else-if="isAddingDocType" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-2">
+            <AFormSelect
+              :id="'register-document-type'"
+              v-model="pendingDocType"
+              :label="t(T_KEYS.DOCUMENTS.SELECT_TYPE)"
+              :options="availableDocTypes"
+              :placeholder="t(T_KEYS.DOCUMENTS.SELECT_TYPE)"
+              @update:modelValue="onSelectDocType"
+            />
+            <AButton class="sm:ml-2" variant="outline" @click="cancelAddDoc">{{ t(T_KEYS.COMMON.BUTTONS.CANCEL) }}</AButton>
+          </div>
+        </div>
+
+        <p v-if="documentsError" class="text-sm text-red-600 mt-2">{{ documentsError }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from 'vue';
+import { defineComponent, computed, watch, ref } from 'vue';
 import { useField } from 'vee-validate';
 import {
   REGIONS,
@@ -125,6 +192,7 @@ import {
   ACTIVITY_TYPES,
   getCitiesForRegion
 } from '~/constants/registration-constants';
+import ARadioGroup from '~/components/atoms/a-radio-group';
 import AFormSelect from '~/components/atoms/a-form-select';
 import AFormTextarea from '~/components/atoms/a-form-textarea';
 import AFormDatepicker from '~/components/atoms/a-form-datepicker';
@@ -133,6 +201,9 @@ import ACheckbox from '~/components/atoms/a-checkbox';
 import { useRegistrationValidation } from '~/composables/use-registration-validation';
 import { useTranslation } from '~/composables/use-translation.ts';
 import { T_KEYS } from '~/constants/translation-keys';
+import AFileUpload from '~/components/atoms/a-file-upload/a-file-upload.vue';
+import AButton from '~/components/atoms/a-button';
+import { DOCUMENT_TYPES } from '~/constants/registration-constants';
 
 export default defineComponent({
   name: 'MRegistrationStepTwo',
@@ -142,7 +213,10 @@ export default defineComponent({
     AFormTextarea,
     AFormDatepicker,
     AFormInput,
-    ACheckbox
+    ACheckbox,
+    ARadioGroup,
+    AFileUpload,
+    AButton
   },
 
   setup() {
@@ -169,13 +243,19 @@ export default defineComponent({
       validateOnMount: false
     });
 
+    const gender = useField('gender', undefined, {
+      form: stepForm as any,
+      validateOnValueUpdate: false,
+      validateOnMount: false
+    });
+
     const category = useField('category', undefined, {
       form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
 
-    const marital = useField('marital', undefined, {
+    const maritalStatus = useField('marital_status', undefined, {
       form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
@@ -187,11 +267,16 @@ export default defineComponent({
       validateOnMount: false
     });
 
-    const bio = useField('bio', undefined, {
+    const documents = useField('documents', undefined, {
       form: stepForm as any,
       validateOnValueUpdate: false,
       validateOnMount: false
     });
+
+    // Local state for adding document types
+    const isAddingDocType = ref(false);
+    const pendingDocType = ref<string>('');
+    const documentsError = ref<string>('');
 
     const hasMinorChildren = useField('has_minor_children', undefined, {
       form: stepForm as any,
@@ -234,6 +319,14 @@ export default defineComponent({
       });
     });
 
+    const genderOptions = computed(() => {
+      // Defined in constants as label keys; translate here
+      return [
+        { value: 'male', label: t('registration.gender.male') },
+        { value: 'female', label: t('registration.gender.female') }
+      ];
+    });
+
     const userActivityTypesList = computed(() => {
       return ACTIVITY_TYPES.map(item => {
         return {
@@ -242,6 +335,60 @@ export default defineComponent({
         }
       });
     });
+
+    const availableDocTypes = computed(() => {
+      const selected = new Set((documents.value.value as any[] || []).map((d: any) => d.type));
+      return DOCUMENT_TYPES
+        .filter(item => !selected.has(item.value))
+        .map(item => ({ value: item.value, label: t(item.label) }));
+    });
+
+    const getDocTypeLabel = (type: string) => {
+      const entry = DOCUMENT_TYPES.find(d => d.value === type);
+      return entry ? t(entry.label) : type;
+    };
+
+    const onSelectDocType = () => {
+      if (!pendingDocType.value) return;
+      const current = (documents.value.value as any[]) || [];
+      const list = [...current];
+      list.push({ type: pendingDocType.value, files: [] });
+      documents.value.value = list as any;
+      pendingDocType.value = '';
+      isAddingDocType.value = false;
+    };
+
+    // Fallback: automatically add when v-model changes
+    watch(pendingDocType, (val) => {
+      if (val) onSelectDocType();
+    });
+
+    const cancelAddDoc = () => {
+      pendingDocType.value = '';
+      isAddingDocType.value = false;
+    };
+
+    const onUploadError = (err: string) => {
+      documentsError.value = err;
+      setTimeout(() => { documentsError.value = ''; }, 3000);
+    };
+
+    const handleFilesChange = (idx: number, files: File[]) => {
+      const list = [...(((documents.value.value as any[]) || []))];
+      const limited = files.slice(0, 3);
+      if (files.length > 3) {
+        documentsError.value = t(T_KEYS.UPLOAD.ERRORS.MAX_FILES, { max: 3 });
+        setTimeout(() => { documentsError.value = ''; }, 3000);
+      }
+      list[idx] = { ...list[idx], files: limited };
+      documents.value.value = list as any;
+    };
+
+    const removeDocType = (idx: number) => {
+      const list = [...(((documents.value.value as any[]) || []))];
+      list.splice(idx, 1);
+      documents.value.value = list as any;
+    };
 
     const handleRegionChange = () => {
       // Clear and reset city when region changes
@@ -257,10 +404,10 @@ export default defineComponent({
         dateOfBirth.validate(),
         region.validate(),
         city.validate(),
+        gender.validate(),
         category.validate(),
-        marital.validate(),
+        maritalStatus.validate(),
         activityType.validate(),
-        bio.validate(),
         hasMinorChildren.validate(),
         // Only validate minor_children_count if has_minor_children is checked
         ...(hasMinorChildren.value.value ? [minorChildrenCount.validate()] : [])
@@ -272,18 +419,31 @@ export default defineComponent({
       dateOfBirth,
       region,
       city,
+      gender,
       category,
-      bio,
-      marital,
+      documents,
+      maritalStatus,
       activityType,
       hasMinorChildren,
       minorChildrenCount,
       userMaritalList,
+      genderOptions,
       userCategoriesList,
       userActivityTypesList,
       REGIONS,
       availableCities,
       handleRegionChange,
+      // documents
+      isAddingDocType,
+      pendingDocType,
+      availableDocTypes,
+      getDocTypeLabel,
+      onSelectDocType,
+      cancelAddDoc,
+      onUploadError,
+      handleFilesChange,
+      removeDocType,
+      documentsError,
       validateAll,
       t,
       T_KEYS,
@@ -324,6 +484,44 @@ export default defineComponent({
 
   .children-count-container {
     @apply mt-4 max-w-xs;
+  }
+
+  .documents-uploader {
+    @apply mt-4 sm:mt-6;
+
+    .documents-label {
+      @apply block text-sm font-medium text-gray-700 mb-2;
+    }
+
+    .document-item {
+      @apply bg-white border border-gray-200 rounded-md p-3;
+
+      .doc-header {
+        @apply col-span-1;
+      }
+    }
+
+    .add-document {
+      @apply pt-2;
+    }
+  }
+  // Compact tweaks for small screens
+  @media (max-width: 640px) {
+    .compact-uploader :deep(.upload-area) {
+      @apply p-3;
+    }
+    .compact-uploader :deep(.upload-icon) {
+      @apply text-2xl mb-2;
+    }
+    .compact-uploader :deep(.upload-text__or) {
+      display: none;
+    }
+    .compact-uploader :deep(.upload-help) {
+      display: none;
+    }
+    .compact-uploader :deep(.upload-button) {
+      @apply text-sm;
+    }
   }
 }
 </style>

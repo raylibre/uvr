@@ -1,8 +1,11 @@
 export const T_KEYS = {
-  USER_CATEGORIES_COMBAT_PARTICIPANT: 'user.categories.combatParticipant',
-  USER_CATEGORIES_FAMILY_OF_DECEASED: 'user.categories.familyOfDeceased',
-  USER_CATEGORIES_FAMILY_OF_MISSING: 'user.categories.familyOfMissing',
-  USER_CATEGORIES_PERSON_WITH_DISABILITY: 'user.categories.personWithDisability',
+  USER_CATEGORIES_FAMILY_WITHOUT_FATHER: 'user.categories.familyWithoutFather',
+  USER_CATEGORIES_VOLUNTEER: 'user.categories.volunteer',
+  USER_CATEGORIES_ACTIVE_MILITARY: 'user.categories.activeMilitary',
+  USER_CATEGORIES_ACTIVE_VETERAN: 'user.categories.activeVeteran',
+  USER_CATEGORIES_RETIRED_VETERAN: 'user.categories.retiredVeteran',
+  USER_CATEGORIES_COMBAT_DISABLED: 'user.categories.combatDisabled',
+  USER_CATEGORIES_HOMELESS_FAMILY: 'user.categories.homelessFamily',
   MARITAL_STATUS_MARRIED: 'user.maritalStatus.married',
   MARITAL_STATUS_SINGLE: 'user.maritalStatus.single',
   MARITAL_STATUS_DIVORCED: 'user.maritalStatus.divorced',
@@ -10,6 +13,30 @@ export const T_KEYS = {
   ACTIVITY_TYPE_SOCIAL: 'user.activityTypes.social',
   ACTIVITY_TYPE_ECONOMIC: 'user.activityTypes.economic',
   ACTIVITY_TYPE_VOLUNTEER: 'user.activityTypes.volunteer',
+  DOCUMENTS: {
+    TITLE: 'auth.register.documents.title',
+    ADD: 'auth.register.documents.add',
+    SELECT_TYPE: 'auth.register.documents.selectType',
+    TYPES: {
+      VOLUNTEER_CERTIFICATE: 'auth.register.documents.types.volunteerCertificate',
+      MILITARY_ID: 'auth.register.documents.types.militaryId',
+      VETERAN_CERTIFICATE: 'auth.register.documents.types.veteranCertificate',
+      DISABILITY_CERTIFICATE: 'auth.register.documents.types.disabilityCertificate',
+      DEATH_CERTIFICATE: 'auth.register.documents.types.deathCertificate',
+      MARRIAGE_CERTIFICATE: 'auth.register.documents.types.marriageCertificate',
+      BIRTH_CERTIFICATE: 'auth.register.documents.types.birthCertificate',
+      DISPLACEMENT_CERTIFICATE: 'auth.register.documents.types.displacementCertificate',
+      PASSPORT: 'auth.register.documents.types.passport',
+      OTHER: 'auth.register.documents.types.other'
+    }
+  },
+  UPLOAD: {
+    ERRORS: {
+      MAX_SIZE: 'upload.errors.maxSize',
+      FILE_TYPE: 'upload.errors.fileType',
+      MAX_FILES: 'upload.errors.maxFiles'
+    }
+  },
   COMMON: {
     BUTTONS: {
       SEND: 'common.buttons.send',
@@ -84,6 +111,7 @@ export const T_KEYS = {
       DATE_OF_BIRTH: 'form.labels.dateOfBirth',
       REGION: 'form.labels.region',
       CITY: 'form.labels.city',
+      GENDER: 'form.labels.gender',
       CATEGORY: 'form.labels.category',
       FULL_ADDRESS: 'form.labels.fullAddress',
       EMERGENCY_CONTACT_NAME: 'form.labels.emergencyContactName',

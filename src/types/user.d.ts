@@ -1,21 +1,24 @@
 export enum UserCategory {
-  COMBAT_PARTICIPANT = 'COMBAT_PARTICIPANT',
-  FAMILY_OF_DECEASED = 'FAMILY_OF_DECEASED',
-  FAMILY_OF_MISSING = 'FAMILY_OF_MISSING',
-  PERSON_WITH_DISABILITY = 'PERSON_WITH_DISABILITY'
+  FAMILY_WITHOUT_FATHER = 'family_without_father',
+  VOLUNTEER = 'volunteer',
+  ACTIVE_MILITARY = 'active_military',
+  ACTIVE_VETERAN = 'active_veteran',
+  RETIRED_VETERAN = 'retired_veteran',
+  COMBAT_DISABLED = 'combat_disabled',
+  HOMELESS_FAMILY = 'homeless_family'
 }
 
 export enum MaritalCategory {
-  MARRIED = 'MARRIED',
-  SINGLE = 'SINGLE',
-  DIVORCED = 'DIVORCED',
-  DIVORCED_PAYING_ALIMONY = 'DIVORCED_PAYING_ALIMONY'
+  MARRIED = 'married',
+  SINGLE = 'single',
+  DIVORCED = 'divorced',
+  DIVORCED_PAYING_ALIMONY = 'divorced_alimony'
 }
 
 export enum ActivityType {
-  SOCIAL = 'SOCIAL',
-  ECONOMIC = 'ECONOMIC',
-  VOLUNTEER = 'VOLUNTEER'
+  SOCIAL = 'social',
+  ECONOMIC = 'economic',
+  VOLUNTEER = 'volunteer'
 }
 
 export interface UserProfile {
@@ -32,8 +35,10 @@ export interface UserProfile {
   date_of_birth: string;
   region: string;
   city: string;
+  gender: 'male' | 'female';
   category: UserCategory;
   activity_type: ActivityType;
+  marital_status: MaritalCategory;
   bio?: string;
 
   // Step 3 - Emergency Info
