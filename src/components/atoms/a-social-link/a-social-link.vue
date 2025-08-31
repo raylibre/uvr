@@ -5,20 +5,15 @@
     target="_blank"
     rel="noopener noreferrer"
   >
-    <AIcon :name="icon" size="lg" />
+    <i :class="icon" />
   </a>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AIcon from '~/components/atoms/a-icon';
 
 export default defineComponent({
   name: 'ASocialLink',
-
-  components: {
-    AIcon
-  },
 
   props: {
     href: {
@@ -35,6 +30,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .a-social-link {
-  @apply text-2xl hover:text-primary transition-colors;
+  @apply text-2xl hover:text-primary transition-colors duration-200;
+  
+  i {
+    @apply text-lg;
+  }
+  
+  &:hover {
+    @apply transform scale-110;
+  }
 }
 </style> 

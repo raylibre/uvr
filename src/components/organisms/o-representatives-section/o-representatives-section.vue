@@ -1,6 +1,6 @@
 <template>
   <section class="o-representatives-section">
-    <h2>Наші представники</h2>
+    <h2>Центральне керівництво</h2>
     <p class="section-description">Познайомтеся з нашою командою, яка працює на підтримку ветеранів</p>
     <div class="representatives-grid">
       <div
