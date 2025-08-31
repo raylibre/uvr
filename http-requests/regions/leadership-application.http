@@ -1,0 +1,170 @@
+### УВР v2 Regions System - HTTP Tests for leadership-application endpoint
+### Test environment variables (adjust as needed)
+@baseUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@prodUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@authToken = Bearer admin-jwt-token-here
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+
+### Submit leadership application for head position
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "head",
+  "experience": "Маю 5 років досвіду управління регіональними проектами в сфері ветеранської допомоги. Працював координатором програм в громадській організації.",
+  "motivation_letter": "Хочу очолити Київську область, щоб впровадити інноваційні підходи до роботи з ветеранами та їх сім'ями. Маю конкретний план дій на перші 100 днів роботи, включаючи створення мобільних пунктів надання послуг та цифровізацію процесів подачі заявок."
+}
+
+###
+
+### Submit leadership application for deputy position
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kharkiv_region",
+  "desired_role": "deputy",
+  "experience": "Працюю заступником директора з соціальних питань 3 роки. Маю досвід координації між різними відомствами.",
+  "motivation_letter": "Хочу стати заступником в Харківській області, щоб допомогти у координації всіх програм підтримки ветеранів. Особливо важливо забезпечити швидке реагування на потреби військових, що повертаються з фронту."
+}
+
+###
+
+### Submit leadership application for coordinator position
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "lviv_region",
+  "desired_role": "coordinator",
+  "experience": "10 років роботи в соціальній сфері, координую волонтерські програми по всій Західній Україні.",
+  "motivation_letter": "Хочу стати координатором у Львівській області, щоб об'єднати зусилля всіх організацій, що працюють з ветеранами. Маю план створення єдиної мережі підтримки на рівні громад."
+}
+
+###
+
+### Test missing authorization header
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "head",
+  "experience": "Test experience",
+  "motivation_letter": "Test motivation letter that is long enough to pass validation"
+}
+
+###
+
+### Test missing region_id
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "desired_role": "head",
+  "experience": "Test experience",
+  "motivation_letter": "Test motivation letter that is long enough to pass validation"
+}
+
+###
+
+### Test invalid desired_role
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "invalid_role",
+  "experience": "Test experience",
+  "motivation_letter": "Test motivation letter that is long enough to pass validation"
+}
+
+###
+
+### Test too short experience
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "head",
+  "experience": "Short",
+  "motivation_letter": "Test motivation letter that is long enough to pass validation"
+}
+
+###
+
+### Test too short motivation letter
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "head",
+  "experience": "Test experience that is long enough",
+  "motivation_letter": "Short"
+}
+
+###
+
+### Test invalid region_id
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "invalid_region",
+  "desired_role": "head",
+  "experience": "Test experience that is long enough",
+  "motivation_letter": "Test motivation letter that is long enough to pass validation"
+}
+
+###
+
+### Test invalid JSON
+POST {{baseUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "kyiv_region",
+  "desired_role": "head",
+  "experience": "Test experience",
+  invalid_json
+
+###
+
+### Test CORS preflight
+OPTIONS {{baseUrl}}/leadership-application
+Origin: http://localhost:3000
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type,authorization
+
+###
+
+### Test invalid method
+GET {{baseUrl}}/leadership-application
+Authorization: {{authToken}}
+
+###
+
+### Production test - submit application
+POST {{prodUrl}}/leadership-application
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "region_id": "test_region",
+  "desired_role": "coordinator",
+  "experience": "Test production experience for coordinator position",
+  "motivation_letter": "Production test motivation letter for coordinator position in test region"
+}

@@ -1,0 +1,210 @@
+### УВР v2 Regions System - HTTP Tests for admin-leadership-applications endpoint
+### Test environment variables (adjust as needed)
+@baseUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@prodUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@adminToken = Bearer admin-jwt-token-here
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+### Get all leadership applications (admin access)
+GET {{baseUrl}}/admin-leadership-applications
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Get leadership applications with status filter
+GET {{baseUrl}}/admin-leadership-applications?status=submitted
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Get leadership applications with pagination
+GET {{baseUrl}}/admin-leadership-applications?limit=10&offset=0
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Get under review applications
+GET {{baseUrl}}/admin-leadership-applications?status=under_review&limit=20
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Get approved applications
+GET {{baseUrl}}/admin-leadership-applications?status=approved
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Get rejected applications
+GET {{baseUrl}}/admin-leadership-applications?status=rejected
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Update application status to under_review
+PUT {{baseUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "under_review",
+  "admin_comment": "Заявка взята на розгляд. Будемо перевіряти досвід та мотивацію кандидата."
+}
+
+###
+
+### Approve leadership application
+PUT {{baseUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "approved",
+  "admin_comment": "Кандидат має відповідний досвід та виразив чітку мотивацію. Призначаємо на посаду."
+}
+
+###
+
+### Reject leadership application
+PUT {{baseUrl}}/admin-leadership-applications/2
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "rejected",
+  "admin_comment": "Недостатньо досвіду для керівної посади. Рекомендуємо спочатку попрацювати координатором."
+}
+
+###
+
+### Test non-admin access (should fail)
+GET {{baseUrl}}/admin-leadership-applications
+Content-Type: application/json
+Authorization: {{userToken}}
+
+###
+
+### Test missing authorization
+GET {{baseUrl}}/admin-leadership-applications
+Content-Type: application/json
+
+###
+
+### Test invalid application ID in PUT
+PUT {{baseUrl}}/admin-leadership-applications/invalid
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "approved"
+}
+
+###
+
+### Test non-existent application ID
+PUT {{baseUrl}}/admin-leadership-applications/99999
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "approved"
+}
+
+###
+
+### Test invalid status
+PUT {{baseUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "invalid_status"
+}
+
+###
+
+### Test missing status field
+PUT {{baseUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "admin_comment": "Test comment without status"
+}
+
+###
+
+### Test invalid JSON
+PUT {{baseUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "approved",
+  invalid_json
+
+###
+
+### Test invalid limit parameter
+GET {{baseUrl}}/admin-leadership-applications?limit=150
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Test invalid offset parameter
+GET {{baseUrl}}/admin-leadership-applications?offset=-5
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Test CORS preflight for GET
+OPTIONS {{baseUrl}}/admin-leadership-applications
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: authorization
+
+###
+
+### Test CORS preflight for PUT
+OPTIONS {{baseUrl}}/admin-leadership-applications/1
+Origin: http://localhost:3000
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: content-type,authorization
+
+###
+
+### Test invalid method
+POST {{baseUrl}}/admin-leadership-applications
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "test": "invalid method"
+}
+
+###
+
+### Production test - get applications
+GET {{prodUrl}}/admin-leadership-applications?limit=5
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+###
+
+### Production test - update application
+PUT {{prodUrl}}/admin-leadership-applications/1
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "status": "under_review",
+  "admin_comment": "Production test - taking application under review"
+}

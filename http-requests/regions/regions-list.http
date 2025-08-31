@@ -1,0 +1,65 @@
+### УВР v2 Regions System - HTTP Tests for regions-list endpoint
+### Test environment variables (adjust as needed)
+@baseUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@prodUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@adminToken = Bearer admin-jwt-token-here
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+
+### Basic regions list
+GET {{baseUrl}}/regions-list
+Content-Type: application/json
+
+###
+
+### Regions list with contacts
+GET {{baseUrl}}/regions-list?include_contacts=true
+Content-Type: application/json
+
+###
+
+### Regions list with leadership
+GET {{baseUrl}}/regions-list?include_leadership=true
+Content-Type: application/json
+
+###
+
+### Regions list with statistics
+GET {{baseUrl}}/regions-list?include_stats=true
+Content-Type: application/json
+
+###
+
+### Full regions list with all data
+GET {{baseUrl}}/regions-list?include_contacts=true&include_leadership=true&include_stats=true
+Content-Type: application/json
+
+###
+
+### Test CORS preflight
+OPTIONS {{baseUrl}}/regions-list
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: content-type
+
+###
+
+### Test invalid method
+POST {{baseUrl}}/regions-list
+Content-Type: application/json
+
+{
+  "test": "invalid method"
+}
+
+###
+
+### Production test - basic regions list
+GET {{prodUrl}}/regions-list
+Content-Type: application/json
+
+###
+
+### Production test - full data
+GET {{prodUrl}}/regions-list?include_contacts=true&include_leadership=true&include_stats=true
+Content-Type: application/json

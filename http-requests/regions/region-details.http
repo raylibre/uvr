@@ -1,0 +1,81 @@
+### УВР v2 Regions System - HTTP Tests for region-details endpoint
+### Test environment variables (adjust as needed)
+@baseUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@prodUrl = https://btbmqvawpokfwptcrmem.supabase.co/functions/v1
+@adminToken = Bearer admin-jwt-token-here
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0Ym1xdmF3cG9rZndwdGNybWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzUwODksImV4cCI6MjA2NDQ1MTA4OX0.8izmlGlzinrsCUHMyH_WpFEfeTCp3t1yfHYDcnmhDws
+
+
+### Get Kyiv region details
+GET {{baseUrl}}/region-details?region_id=kyiv_region
+Content-Type: application/json
+
+###
+
+### Get Kharkiv region details
+GET {{baseUrl}}/region-details?region_id=kharkiv_region
+Content-Type: application/json
+
+###
+
+### Get Lviv region details
+GET {{baseUrl}}/region-details?region_id=lviv_region
+Content-Type: application/json
+
+###
+
+### Test missing region_id parameter
+GET {{baseUrl}}/region-details
+Content-Type: application/json
+
+###
+
+### Test invalid region_id
+GET {{baseUrl}}/region-details?region_id=invalid_region
+Content-Type: application/json
+
+###
+
+### Test CORS preflight
+OPTIONS {{baseUrl}}/region-details
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: content-type
+
+###
+
+### Test invalid method
+POST {{baseUrl}}/region-details?region_id=kyiv_region
+Content-Type: application/json
+
+{
+  "test": "invalid method"
+}
+
+###
+
+### Production test - Kyiv region
+GET {{prodUrl}}/region-details?region_id=kyiv_region
+Content-Type: application/json
+
+###
+
+### Production test - check multiple regions
+GET {{prodUrl}}/region-details?region_id=kharkiv_region
+Content-Type: application/json
+
+###
+
+### Test various regions for completeness
+GET {{baseUrl}}/region-details?region_id=dnipropetrovsk_region
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/region-details?region_id=odesa_region
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/region-details?region_id=zakarpattia_region
+Content-Type: application/json
