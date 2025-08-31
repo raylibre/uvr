@@ -26,7 +26,8 @@ const { BUS } = useEventBus();
 export function openConfirmationModal(confirmationOptions: ConfirmationModalOptions): Promise<boolean> {
   // Only one confirmation modal can be open at a time
   if (isVisible.value) {
-    return Promise.reject(false);
+    // If a confirmation is already open, resolve to false instead of throwing
+    return Promise.resolve(false);
   }
 
   return new Promise((resolve) => {
@@ -42,8 +43,8 @@ export function openConfirmationModal(confirmationOptions: ConfirmationModalOpti
         resolve(true);
       } finally {
         loading.value = false;
+        // Close the modal but keep options until the transition completes
         isVisible.value = false;
-        options.value = null;
       }
     };
 
@@ -54,10 +55,9 @@ export function openConfirmationModal(confirmationOptions: ConfirmationModalOpti
         }
         resolve(false);
       } finally {
-        console.log('here');
         loading.value = false;
+        // Close the modal but keep options until the transition completes
         isVisible.value = false;
-        options.value = null;
       }
     };
 
@@ -68,9 +68,15 @@ export function openConfirmationModal(confirmationOptions: ConfirmationModalOpti
 
     // Clean up event listeners when modal is closed
     const cleanup = () => {
+      // Give the leave transition time to finish before clearing content
+      setTimeout(() => {
+        options.value = null;
+      }, 220);
       unsubscribeConfirm();
       unsubscribeReject();
       unsubscribeClose();
+      // Unsubscribe this cleanup listener itself
+      BUS.off(EVENTS.MODAL_CLOSED, cleanup as any);
     };
     BUS.on(EVENTS.MODAL_CONFIRM, handleConfirm);
     BUS.on(EVENTS.MODAL_REJECT, handleReject);

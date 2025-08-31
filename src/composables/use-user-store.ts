@@ -17,6 +17,8 @@ import type {
 import { useEventBus } from './use-event-bus';
 import { EVENTS } from '~/constants/event-bus-constants';
 import { handleApiError, notifySuccess } from '~/services/notification-service';
+import { i18n } from '~/i18n';
+import { T_KEYS } from '~/constants/translation-keys';
 
 // Global state - shared across all instances of the composable
 const user = ref<User | null>(null);
@@ -34,8 +36,15 @@ export function useUserStore() {
 
   // Create AsyncSource instances for auth operations
   const loginSource = reactive(new AsyncSource(loginUser, handleApiError));
-  const registerSource = reactive(new AsyncSource(registerUser, handleApiError));
-  const registerFullSource = reactive(new AsyncSource(registerUserMultipart, handleApiError));
+
+  // Emit FAILED_REGISTER on server errors in addition to notifications
+  function handleRegisterError(error: any) {
+    handleApiError(error);
+    BUS.emit(EVENTS.FAILED_REGISTER as any, { error: error?.message || 'Registration failed' });
+  }
+
+  const registerSource = reactive(new AsyncSource(registerUser, handleRegisterError));
+  const registerFullSource = reactive(new AsyncSource(registerUserMultipart, handleRegisterError));
   const logoutSource = reactive(new AsyncSource(logoutUser, handleApiError));
   const currentUserSource = reactive(new AsyncSource(getCurrentUser, handleAuthMeError));
 
@@ -43,13 +52,15 @@ export function useUserStore() {
   const userFullName = computed(() => {
     if (!user.value) return '';
     const { first_name, last_name, patronymic } = user.value;
-    return [first_name, last_name, patronymic].filter(Boolean).join(' ');
+    // UA order: Last First Patronymic
+    return [last_name, first_name, patronymic].filter(Boolean).join(' ');
   });
 
   const userDisplayName = computed(() => {
     if (!user.value) return '';
-    const { first_name, last_name } = user.value;
-    return `${first_name} ${last_name}`.trim();
+    const { first_name, last_name, patronymic } = user.value;
+    // Prefer the same UA order even for compact display
+    return [last_name, first_name, patronymic].filter(Boolean).join(' ');
   });
 
   const userInitials = computed(() => {
@@ -92,16 +103,35 @@ export function useUserStore() {
   };
 
   const register = (payload: any) => {
+    // Define a unified post-success handler that triggers login + auth-me
+    const afterRegister = (response: any) => {
+      // Emit registration success for UI feedback, but do NOT set token yet
+      handleRegisterSuccess(response);
+
+      // Attempt automatic login using freshly registered credentials
+      try {
+        const identifier = payload?.email || payload?.phone;
+        const password = payload?.password;
+        if (identifier && password) {
+          login({ identifier, password });
+        } else {
+          console.warn('Cannot auto-login after register: missing identifier or password');
+        }
+      } catch (e) {
+        console.warn('Auto-login after register failed to start:', e);
+      }
+    };
+
     // If minimal payload (email/phone/password only), use simple register
     if (
       payload &&
       typeof payload === 'object' &&
       Object.keys(payload).every((k) => ['email', 'phone', 'password'].includes(k))
     ) {
-      registerSource.push(handleRegisterSuccess, payload);
+      return registerSource.push(afterRegister, payload);
     } else {
       // Full registration with documents (multipart)
-      registerFullSource.push(handleRegisterSuccess, payload);
+      return registerFullSource.push(afterRegister, payload);
     }
   };
 
@@ -132,25 +162,17 @@ export function useUserStore() {
     localStorage.setItem('user', JSON.stringify(response.user));
     
     BUS.emit(EVENTS.SUCCESS_LOGIN, { user: response.user });
-    notifySuccess('Successfully logged in!');
+    notifySuccess(i18n.global.t(T_KEYS.AUTH.LOGIN.SUCCESS_TOAST) as string);
 
     // Get fresh user data after login
     currentUserSource.push(handleCurrentUserSuccess);
   }
 
   function handleRegisterSuccess(response: any) {
-    user.value = response.user;
-    isAuthenticated.value = true;
-    
-    // Store token and user data
-    localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    
-    BUS.emit(EVENTS.SUCCESS_REGISTER, { user: response.user });
-    notifySuccess('Registration successful!');
-
-    // Get fresh user data after registration
-    currentUserSource.push(handleCurrentUserSuccess);
+    // Do not set token here; registration response may not include it.
+    // Emit success for UI and let auto-login handle auth + auth-me.
+    BUS.emit(EVENTS.SUCCESS_REGISTER, { user: response?.user });
+    notifySuccess(i18n.global.t(T_KEYS.AUTH.REGISTER.SUCCESS_TOAST) as string);
   }
 
   function handleLogoutSuccess() {
@@ -165,7 +187,7 @@ export function useUserStore() {
     localStorage.removeItem('user');
     
     BUS.emit(EVENTS.LOGOUT as any);
-    notifySuccess('Successfully logged out!');
+    notifySuccess(i18n.global.t(T_KEYS.AUTH.LOGIN.LOGOUT_SUCCESS_TOAST) as string);
   }
 
   function handleCurrentUserSuccess(response: AuthMeResponse) {

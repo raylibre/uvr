@@ -176,7 +176,9 @@
           </div>
         </div>
 
-        <p v-if="documentsError" class="text-sm text-red-600 mt-2">{{ documentsError }}</p>
+        <p v-if="documents.errorMessage.value || documentsError" class="text-sm text-red-600 mt-2">
+          {{ documents.errorMessage.value ? translateValidationError(documents.errorMessage.value) : documentsError }}
+        </p>
       </div>
     </div>
   </div>
@@ -382,12 +384,19 @@ export default defineComponent({
       }
       list[idx] = { ...list[idx], files: limited };
       documents.value.value = list as any;
+      // Re-validate documents when files change
+      if (typeof (documents as any).validate === 'function') {
+        (documents as any).validate();
+      }
     };
 
     const removeDocType = (idx: number) => {
       const list = [...(((documents.value.value as any[]) || []))];
       list.splice(idx, 1);
       documents.value.value = list as any;
+      if (typeof (documents as any).validate === 'function') {
+        (documents as any).validate();
+      }
     };
 
     const handleRegionChange = () => {

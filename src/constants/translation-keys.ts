@@ -13,10 +13,17 @@ export const T_KEYS = {
   ACTIVITY_TYPE_SOCIAL: 'user.activityTypes.social',
   ACTIVITY_TYPE_ECONOMIC: 'user.activityTypes.economic',
   ACTIVITY_TYPE_VOLUNTEER: 'user.activityTypes.volunteer',
+  USER: {
+    STATUS: {
+      VERIFIED: 'user.status.verified',
+      PENDING_VERIFICATION: 'user.status.pendingVerification'
+    }
+  },
   DOCUMENTS: {
     TITLE: 'auth.register.documents.title',
     ADD: 'auth.register.documents.add',
     SELECT_TYPE: 'auth.register.documents.selectType',
+    REQUIRED: 'auth.register.documents.required',
     TYPES: {
       VOLUNTEER_CERTIFICATE: 'auth.register.documents.types.volunteerCertificate',
       MILITARY_ID: 'auth.register.documents.types.militaryId',
@@ -354,6 +361,9 @@ export const T_KEYS = {
         CONTACT_PHONE: 'auth.register.review.contactPhone',
         ADDRESS: 'auth.register.review.address'
       },
+      SUCCESS_TITLE: 'auth.register.successTitle',
+      SUCCESS_SUBTITLE: 'auth.register.successSubtitle',
+      SUCCESS_TOAST: 'auth.register.successToast',
       ERRORS: {
         EMAIL_REQUIRED: 'auth.register.errors.emailRequired',
         EMAIL_INVALID: 'auth.register.errors.emailInvalid',
@@ -367,6 +377,17 @@ export const T_KEYS = {
         PASSWORDS_DO_NOT_MATCH: 'auth.register.errors.passwordsDoNotMatch',
         GENERAL: 'auth.register.errors.general'
       }
+    }
+    ,
+    LOGIN: {
+      TITLE: 'auth.login.title',
+      IDENTIFIER_LABEL: 'auth.login.identifierLabel',
+      PASSWORD_LABEL: 'auth.login.passwordLabel',
+      IDENTIFIER_REQUIRED: 'auth.login.identifierRequired',
+      PASSWORD_MIN_LENGTH: 'auth.login.passwordMinLength',
+      INVALID_CREDENTIALS: 'auth.login.invalidCredentials',
+      SUCCESS_TOAST: 'auth.login.successToast',
+      LOGOUT_SUCCESS_TOAST: 'auth.login.logoutSuccessToast'
     }
   },
   DEBUG: {
@@ -410,4 +431,4 @@ export const T_KEYS = {
       MESSAGE: 'programDetail.authCard.message'
     }
   }
-} as const; 
+} as const;

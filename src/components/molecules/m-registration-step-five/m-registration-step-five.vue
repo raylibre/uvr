@@ -173,7 +173,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { t, T_KEYS } = useTranslation();
+    const { t, T_KEYS, lang } = useTranslation();
     const { getStepForm, translateValidationError } = useRegistrationValidation();
     const { formData } = useRegistrationData();
     const stepForm = getStepForm(5);
@@ -187,11 +187,21 @@ export default defineComponent({
 
     const formatDate = (date: string) => {
       if (!date) return '';
-      return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
+      const locale = (lang?.value || 'en').toString();
+      const resolved = locale === 'uk' ? 'uk-UA' : locale;
+      try {
+        return new Date(date).toLocaleDateString(resolved, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch {
+        return new Date(date).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
     };
 
     const getCategoryLabel = (category: string) => {

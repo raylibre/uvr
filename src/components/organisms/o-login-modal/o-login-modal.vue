@@ -1,10 +1,10 @@
 <template>
-  <OModal v-model="isOpen" title="Login">
+  <OModal v-model="isOpen" :title="t(T_KEYS.AUTH.LOGIN.TITLE)">
     <form class="login-form" @submit.prevent="handleSubmit">
       <AFormInput
         :id="'login-identifier'"
         v-model="form.identifier"
-        :label="'Email or Phone Number'"
+        :label="t(T_KEYS.AUTH.LOGIN.IDENTIFIER_LABEL)"
         :type="'text'"
         :required="true"
         :error="errors.identifier"
@@ -14,7 +14,7 @@
       <AFormInput
         :id="'login-password'"
         v-model="form.password"
-        :label="'Password'"
+        :label="t(T_KEYS.AUTH.LOGIN.PASSWORD_LABEL)"
         :type="'password'"
         :required="true"
         :error="errors.password"
@@ -28,14 +28,14 @@
           variant="outline"
           @click="handleClose"
         >
-          Cancel
+          {{ t(T_KEYS.COMMON.BUTTONS.CANCEL) }}
         </AButton>
         <AButton
           variant="primary"
           :loading="isLoading"
           @click="handleSubmit"
         >
-          Login
+          {{ t(T_KEYS.COMMON.BUTTONS.LOGIN) }}
         </AButton>
       </div>
     </template>
@@ -50,6 +50,7 @@ import { EVENTS } from '~/constants/event-bus-constants';
 import OModal from '~/components/organisms/o-modal';
 import AFormInput from '~/components/atoms/a-form-input';
 import AButton from '~/components/atoms/a-button';
+import { useTranslation } from '~/composables/use-translation';
 
 interface LoginForm {
   identifier: string;
@@ -71,6 +72,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, T_KEYS } = useTranslation();
     const { login } = useUserStore();
     const { setBusListener, BUS } = useEventBus();
     const isLoading = ref(false);
@@ -87,15 +89,15 @@ export default defineComponent({
       let isValid = true;
 
       if (!form.identifier) {
-        errors.identifier = 'Email or phone number is required';
+        errors.identifier = t(T_KEYS.AUTH.LOGIN.IDENTIFIER_REQUIRED);
         isValid = false;
       }
 
       if (!form.password) {
-        errors.password = 'Password is required';
+        errors.password = t(T_KEYS.FORM.VALIDATION.PASSWORD_REQUIRED);
         isValid = false;
       } else if (form.password.length < 6) {
-        errors.password = 'Password must be at least 6 characters';
+        errors.password = t(T_KEYS.AUTH.LOGIN.PASSWORD_MIN_LENGTH);
         isValid = false;
       }
 
@@ -119,9 +121,9 @@ export default defineComponent({
         if (error instanceof Error) {
           // Handle specific error cases
           if (error.message.includes('credentials')) {
-            errors.identifier = 'Invalid credentials';
+            errors.identifier = t(T_KEYS.AUTH.LOGIN.INVALID_CREDENTIALS);
           } else {
-            errors.identifier = 'An error occurred. Please try again.';
+            errors.identifier = t(T_KEYS.COMMON.ERRORS.GENERAL_ERROR);
           }
           BUS.emit(EVENTS.FAILED_LOGIN as any, { error: error.message });
         }
@@ -140,6 +142,8 @@ export default defineComponent({
     });
 
     return {
+      t,
+      T_KEYS,
       form,
       errors,
       isLoading,

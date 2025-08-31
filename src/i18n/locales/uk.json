@@ -19,6 +19,10 @@
       "social": "Соціальна",
       "economic": "Економічна",
       "volunteer": "Волонтер"
+    },
+    "status": {
+      "verified": "Підтверджено",
+      "pendingVerification": "Очікує підтвердження"
     }
   },
   "common": {
@@ -259,6 +263,7 @@
         "title": "Документи",
         "add": "Додати документ",
         "selectType": "Оберіть тип документу",
+        "required": "Завантажте щонайменше один документ",
         "types": {
           "volunteerCertificate": "Посвідчення волонтера",
           "militaryId": "Військовий квиток",
@@ -298,7 +303,20 @@
         "contactName": "Ім'я контакту",
         "contactPhone": "Телефон контакту",
         "address": "Адреса"
-      }
+      },
+      "successTitle": "Реєстрація успішна",
+      "successSubtitle": "Виконуємо вхід до облікового запису…",
+      "successToast": "Реєстрація пройшла успішно!"
+    },
+    "login": {
+      "title": "Вхід",
+      "identifierLabel": "Електронна пошта або номер телефону",
+      "passwordLabel": "Пароль",
+      "identifierRequired": "Потрібно вказати email або номер телефону",
+      "passwordMinLength": "Пароль має містити щонайменше 6 символів",
+      "invalidCredentials": "Невірні облікові дані",
+      "successToast": "Вхід виконано успішно!",
+      "logoutSuccessToast": "Вихід виконано успішно!"
     }
   },
   "registration": {

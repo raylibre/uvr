@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { useEventBus } from '~/composables/use-event-bus';
 import { useConfirmationModal } from '~/composables/use-confirmation-modal.ts';
 import OModal from '~/components/organisms/o-modal';
@@ -64,6 +64,17 @@ export default defineComponent({
       BUS.emit(EVENTS.MODAL_CLOSE as any);
       BUS.emit(EVENTS.MODAL_CLOSED as any);
     };
+
+    // Ensure cleanup also runs when modal is closed via buttons
+    // Watch visibility and emit MODAL_CLOSED after leave transition
+    // Transition leave duration is 200ms in OModal
+    watch(isVisible, (visible, wasVisible) => {
+      if (!visible && wasVisible) {
+        setTimeout(() => {
+          BUS.emit(EVENTS.MODAL_CLOSED as any);
+        }, 220);
+      }
+    });
 
     return {
       isVisible,

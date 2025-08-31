@@ -5,7 +5,7 @@
     :prevent-close="true"
     class="o-register-modal"
     content-class="register-modal"
-    @close="handleClose"
+    @close="handleClose()"
   >
     <div class="layout">
       <!-- Left sidebar with steps - Hidden on mobile/tablet, visible on desktop -->
@@ -67,6 +67,36 @@
           <p class="progress-text">
             {{ t(T_KEYS.AUTH.REGISTER.STEP_PROGRESS, { current: currentStep, total: totalSteps }) }}: {{ t(steps[currentStep - 1]?.title) }}
           </p>
+        </div>
+
+        <!-- Error banner -->
+        <div v-if="registerError" class="mx-4 mt-4 lg:mx-8">
+          <div class="rounded-md bg-red-50 p-4 border border-red-200">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-red-400" />
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">{{ t(T_KEYS.COMMON.ERRORS.FORM_SUBMIT_ERROR) }}</h3>
+                <div class="mt-2 text-sm text-red-700">{{ registerError }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success banner -->
+        <div v-if="registerSuccess" class="mx-4 mt-4 lg:mx-8">
+          <div class="rounded-md bg-green-50 p-4 border border-green-200">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-green-500" />
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-green-800">{{ successTitle }}</h3>
+                <div class="mt-2 text-sm text-green-700">{{ successSubtitle }}</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="form">
@@ -141,7 +171,7 @@ export default defineComponent({
 
   setup() {
     const { t, T_KEYS } = useTranslation();
-    const { setBusListener } = useEventBus();
+    const { setBusListener, EVENTS } = useEventBus();
     const {
       formData,
       currentStep,
@@ -158,6 +188,11 @@ export default defineComponent({
     } = useRegistrationForm();
 
     const isOpen = ref(false);
+    const registerError = ref('');
+    const registerSuccess = ref(false);
+    const successTitle = computed(() => t(T_KEYS.AUTH.REGISTER.SUCCESS_TITLE));
+    const successSubtitle = computed(() => t(T_KEYS.AUTH.REGISTER.SUCCESS_SUBTITLE));
+    let registerErrorTimer: number | undefined;
     const currentStepRef = ref<InstanceType<typeof MRegistrationStepOne | typeof MRegistrationStepTwo | typeof MRegistrationStepThree | typeof MRegistrationStepFour | typeof MRegistrationStepFive> | null>(null);
 
     const currentStepComponent = computed(() => {
@@ -194,9 +229,9 @@ export default defineComponent({
       });
     };
 
-    const handleClose = async () => {
+    const handleClose = async (skipConfirm = false) => {
       // If there are unsaved changes, show confirmation modal
-      if (hasUnsavedChanges()) {
+      if (!skipConfirm && hasUnsavedChanges()) {
         const confirmed = await openConfirmationModal({
           title: t(T_KEYS.AUTH.REGISTER.UNSAVED_CHANGES),
           text: t(T_KEYS.AUTH.REGISTER.UNSAVED_CHANGES_TEXT),
@@ -212,6 +247,12 @@ export default defineComponent({
       isOpen.value = false;
       resetForm();
       document.body.style.overflow = '';
+      // Clear any visible error when closing
+      registerError.value = '';
+      if (registerErrorTimer) {
+        clearTimeout(registerErrorTimer);
+        registerErrorTimer = undefined;
+      }
     };
 
     const handleCancelButtonClick = () => {
@@ -231,7 +272,33 @@ export default defineComponent({
       isOpen.value = true;
     });
 
-    setBusListener(EVENTS.HIDE_REGISTER_MODAL, handleClose);
+    setBusListener(EVENTS.HIDE_REGISTER_MODAL, () => handleClose());
+
+    // Close the modal after successful registration (user is logged in by store)
+    setBusListener(EVENTS.SUCCESS_REGISTER, () => {
+      registerSuccess.value = true;
+    });
+
+    // Close the modal after successful login. If we just showed
+    // register success, delay close slightly so the user can see it.
+    setBusListener(EVENTS.SUCCESS_LOGIN, () => {
+      if (registerSuccess.value) {
+        setTimeout(() => handleClose(true), 1000);
+      } else {
+        handleClose(true);
+      }
+    });
+
+    // Show error for 5 seconds on failed registration
+    setBusListener(EVENTS.FAILED_REGISTER, (payload?: any) => {
+      const message = payload?.error || 'Registration failed. Please try again.';
+      registerError.value = message;
+      if (registerErrorTimer) clearTimeout(registerErrorTimer);
+      registerErrorTimer = window.setTimeout(() => {
+        registerError.value = '';
+        registerErrorTimer = undefined;
+      }, 5000);
+    });
 
     // Add watch effect for body overflow
     watch(isOpen, (value) => {
@@ -253,6 +320,10 @@ export default defineComponent({
       currentStepComponent,
       submitButtonText,
       isLoading,
+      registerSuccess,
+      successTitle,
+      successSubtitle,
+      registerError,
       totalSteps,
       handleClose,
       handleSubmitButtonClick,

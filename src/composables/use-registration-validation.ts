@@ -72,7 +72,14 @@ const stepTwoSchema = yup.object({
   category: yup.string().required('Category is required'),
   marital_status: yup.string().required('Marital status is required'),
   activity_type: yup.string().required('Activity type is required'),
-  documents: yup.array().optional(),
+  // Require at least one uploaded file across any document category
+  documents: yup
+    .array()
+    .test('at-least-one-document', 'At least one document is required', (value) => {
+      if (!value || !Array.isArray(value)) return false;
+      // Check if any document has at least one file
+      return value.some((d: any) => Array.isArray(d?.files) && d.files.length > 0);
+    }),
   has_minor_children: yup.boolean().default(false),
   minor_children_count: yup.mixed().test('conditional-required', 'Number of minor children is required', function(value) {
     // If has_minor_children is true, require a value
@@ -285,7 +292,8 @@ export const useRegistrationValidation = () => {
       'Кількість неповнолітніх дітей є обов\'язковою': t(T_KEYS.FORM.VALIDATION.REQUIRED),
       'Please provide a complete address': t(T_KEYS.FORM.VALIDATION.REQUIRED),
       'Будь ласка, вкажіть повну адресу': t(T_KEYS.FORM.VALIDATION.REQUIRED),
-      'You must accept the terms and conditions': t(T_KEYS.FORM.VALIDATION.REQUIRED)
+      'You must accept the terms and conditions': t(T_KEYS.FORM.VALIDATION.REQUIRED),
+      'At least one document is required': t(T_KEYS.DOCUMENTS.REQUIRED)
       // You can expand this list with more localized strings if needed
     };
     return errorMap[errorMessage] || errorMessage;

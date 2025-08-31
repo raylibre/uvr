@@ -68,10 +68,8 @@ export const useRegistrationForm = () => {
 
       // Get the final form data
       const registrationData = formData.value as Required<UserProfile>;
-      await register(registrationData);
-
-      BUS.emit(EVENTS.SUCCESS_REGISTER, {});
-      resetForm();
+      // Trigger register; success/failed events are emitted by user store
+      await register(registrationData as any);
       return true;
     } catch (error) {
       if (error instanceof Error) {

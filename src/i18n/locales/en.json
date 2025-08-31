@@ -19,6 +19,10 @@
       "social": "Social",
       "economic": "Economic",
       "volunteer": "Volunteer"
+    },
+    "status": {
+      "verified": "Verified",
+      "pendingVerification": "Pending verification"
     }
   },
   "common": {
@@ -263,6 +267,7 @@
         "title": "Documents",
         "add": "Add document",
         "selectType": "Select document type",
+        "required": "Please upload at least one document",
         "types": {
           "volunteerCertificate": "Volunteer Certificate",
           "militaryId": "Military ID",
@@ -302,7 +307,20 @@
         "contactName": "Contact Name",
         "contactPhone": "Contact Phone",
         "address": "Address"
-      }
+      },
+      "successTitle": "Registration successful",
+      "successSubtitle": "Signing you in…",
+      "successToast": "Registration successful!"
+    },
+    "login": {
+      "title": "Login",
+      "identifierLabel": "Email or Phone Number",
+      "passwordLabel": "Password",
+      "identifierRequired": "Email or phone number is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "invalidCredentials": "Invalid credentials",
+      "successToast": "Successfully logged in!",
+    "logoutSuccessToast": "Successfully logged out!"
     }
   },
   "registration": {

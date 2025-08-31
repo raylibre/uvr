@@ -78,7 +78,7 @@
           @click="handleProfile"
         >
           <i class="fas fa-user item-icon" />
-          <span>Profile</span>
+          <span>{{ t(T_KEYS.COMMON.BUTTONS.PROFILE) }}</span>
         </button>
 
         <button
@@ -88,7 +88,7 @@
           @click="handleSettings"
         >
           <i class="fas fa-cog item-icon" />
-          <span>Settings</span>
+          <span>{{ t(T_KEYS.COMMON.BUTTONS.SETTINGS) }}</span>
         </button>
       </div>
 
@@ -102,7 +102,7 @@
           @click="handleLogout"
         >
           <i class="fas fa-sign-out-alt item-icon" />
-          <span>Logout</span>
+          <span>{{ t(T_KEYS.COMMON.BUTTONS.LOGOUT) }}</span>
         </button>
       </div>
     </div>
@@ -113,6 +113,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useUserStore } from '~/composables/use-user-store';
 import clickOutside from '~/directives/click-outside';
+import { useTranslation } from '~/composables/use-translation';
 
 export default defineComponent({
   name: 'MUserDropdown',
@@ -122,6 +123,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, T_KEYS } = useTranslation();
     const { user, userDisplayName, userFullName, userInitials, logout, isVerified } = useUserStore();
     const isOpen = ref(false);
 
@@ -133,7 +135,8 @@ export default defineComponent({
 
     const userStatusText = computed(() => {
       if (!user.value) return '';
-      return isVerified.value ? 'Verified' : 'Pending verification';
+      // Use direct keys to avoid any stale T_KEYS mismatch
+      return isVerified.value ? t('user.status.verified') : t('user.status.pendingVerification');
     });
 
     // Methods
@@ -163,6 +166,8 @@ export default defineComponent({
     };
 
     return {
+      t,
+      T_KEYS,
       user,
       isOpen,
       userDisplayName,
