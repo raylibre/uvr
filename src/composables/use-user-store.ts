@@ -17,7 +17,6 @@ import type {
 import { useEventBus } from './use-event-bus';
 import { EVENTS } from '~/constants/event-bus-constants';
 import { handleApiError, notifySuccess } from '~/services/notification-service';
-import { i18n } from '~/i18n';
 import { T_KEYS } from '~/constants/translation-keys';
 
 // Global state - shared across all instances of the composable
@@ -162,7 +161,7 @@ export function useUserStore() {
     localStorage.setItem('user', JSON.stringify(response.user));
     
     BUS.emit(EVENTS.SUCCESS_LOGIN, { user: response.user });
-    notifySuccess(i18n.global.t(T_KEYS.AUTH.LOGIN.SUCCESS_TOAST) as string);
+    notifySuccess(T_KEYS.AUTH.LOGIN.SUCCESS_TOAST);
 
     // Get fresh user data after login
     currentUserSource.push(handleCurrentUserSuccess);
@@ -172,7 +171,7 @@ export function useUserStore() {
     // Do not set token here; registration response may not include it.
     // Emit success for UI and let auto-login handle auth + auth-me.
     BUS.emit(EVENTS.SUCCESS_REGISTER, { user: response?.user });
-    notifySuccess(i18n.global.t(T_KEYS.AUTH.REGISTER.SUCCESS_TOAST) as string);
+    notifySuccess(T_KEYS.AUTH.REGISTER.SUCCESS_TOAST);
   }
 
   function handleLogoutSuccess() {
@@ -187,7 +186,7 @@ export function useUserStore() {
     localStorage.removeItem('user');
     
     BUS.emit(EVENTS.LOGOUT as any);
-    notifySuccess(i18n.global.t(T_KEYS.AUTH.LOGIN.LOGOUT_SUCCESS_TOAST) as string);
+    notifySuccess(T_KEYS.AUTH.LOGIN.LOGOUT_SUCCESS_TOAST);
   }
 
   function handleCurrentUserSuccess(response: AuthMeResponse) {

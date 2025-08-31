@@ -13,6 +13,31 @@ export interface NotificationOptions {
 // Simple notification storage (can be enhanced with more sophisticated UI library)
 const notifications = new Map<string, NotificationOptions>();
 
+// Optional i18n bridge. We avoid importing useI18n in non-setup code.
+// Prefer a provided global translator if available; otherwise fallback to i18n.global if present.
+let translateFn: ((key: string, params?: Record<string, any>) => string) | null = null;
+
+export function setTranslator(fn: (key: string, params?: Record<string, any>) => string) {
+  translateFn = fn;
+}
+
+function translate(keyOrMessage: string, params?: Record<string, any>): string {
+  // If key looks like a dotted path, try translator, else return as-is
+  const looksLikeKey = keyOrMessage.includes('.') && !keyOrMessage.includes(' ');
+  try {
+    const anyGlobal = globalThis as any;
+    const t = translateFn || anyGlobal.__I18N_T__ || anyGlobal?.i18n?.global?.t;
+    if (looksLikeKey && typeof t === 'function') {
+      const res = t(keyOrMessage, params);
+      // Some i18n versions return objects; ensure string
+      return typeof res === 'string' ? res : String(res);
+    }
+  } catch (_) {
+    // ignore and fallback
+  }
+  return keyOrMessage;
+}
+
 /**
  * Display an error notification to the user
  * @param message - Error message to display
@@ -45,6 +70,20 @@ export function notifySuccess(message: string, options?: Partial<NotificationOpt
   };
 
   showNotification(notification);
+}
+
+// Key-based helpers (preferred in non-setup files)
+export function notifySuccessKey(key: string, params?: Record<string, any>, options?: Partial<NotificationOptions>): void {
+  notifySuccess(translate(key, params), options);
+}
+export function notifyErrorKey(key: string, params?: Record<string, any>, options?: Partial<NotificationOptions>): void {
+  notifyError(translate(key, params), options);
+}
+export function notifyWarningKey(key: string, params?: Record<string, any>, options?: Partial<NotificationOptions>): void {
+  notifyWarning(translate(key, params), options);
+}
+export function notifyInfoKey(key: string, params?: Record<string, any>, options?: Partial<NotificationOptions>): void {
+  notifyInfo(translate(key, params), options);
 }
 
 /**
