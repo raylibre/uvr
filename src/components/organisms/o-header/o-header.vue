@@ -56,10 +56,17 @@ fill="currentColor">
           </template>
         </div>
 
-        <!-- Action Buttons with Language Switcher -->
+        <!-- Action Buttons with Social Links -->
         <div class="actions">
-          <!-- Desktop Language Switcher -->
-          <OLangChangeBlock class="language-switcher" />
+          <!-- Desktop Social Links -->
+          <div class="social-links">
+            <ASocialLink
+              v-for="social in socialLinks"
+              :key="social.id"
+              :href="social.url"
+              :icon="social.icon"
+            />
+          </div>
 
           <!-- Loading state during initialization -->
           <div v-if="!isInitialized" class="initialization-loading">
@@ -91,9 +98,6 @@ fill="currentColor">
 
           <!-- Compact Mobile Authentication Section -->
           <div class="mobile-compact-actions">
-            <!-- Mobile Language Switcher -->
-            <OLangChangeBlock class="mobile-language-switcher" />
-
             <!-- Mobile Loading State -->
             <div v-if="!isInitialized" class="mobile-loading">
               <div class="loading-spinner-sm"/>
@@ -206,9 +210,16 @@ fill="currentColor">
           />
         </template>
         <div class="mobile-menu__actions">
-          <!-- Mobile Language Switcher -->
-          <div class="mobile-menu__language">
-            <OLangChangeBlock />
+          <!-- Mobile Social Links Section -->
+          <div class="mobile-menu__social">
+            <div class="social-links">
+              <ASocialLink
+                v-for="social in socialLinks"
+                :key="social.id"
+                :href="social.url"
+                :icon="social.icon"
+              />
+            </div>
           </div>
           <!-- Mobile Authentication Section -->
           <div v-if="isAuthenticated" class="mobile-menu__user">
@@ -227,8 +238,9 @@ fill="currentColor">
 import { defineComponent, ref, onMounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import AButton from '~/components/atoms/a-button/a-button.vue';
-import OLangChangeBlock from '~/components/organisms/o-lang-change-block';
+import ASocialLink from '~/components/atoms/a-social-link';
 import { MENU_ITEMS, type MenuItem } from '~/constants/navigation-constants';
+import { SOCIAL_LINKS } from '~/constants/social-links';
 import { useTranslation } from '~/composables/use-translation';
 import { useLanguage } from '~/composables/use-language';
 import { useEventBus } from '~/composables/use-event-bus';
@@ -246,7 +258,7 @@ export default defineComponent({
     AButton,
     RouterLink,
     MHeaderNavButton,
-    OLangChangeBlock,
+    ASocialLink,
     MUserDropdown
   },
   directives: {
@@ -264,6 +276,9 @@ export default defineComponent({
     const closeDropdown = (name: string) => { if (dropdownOpen.value === name) dropdownOpen.value = null; };
     const toggleDropdown = (name: string) => { dropdownOpen.value = dropdownOpen.value === name ? null : name; };
     const isDropdownOpen = (name: string) => dropdownOpen.value === name;
+
+    // Social links configuration (imported from constants)
+    const socialLinks = SOCIAL_LINKS;
 
     const getNavigationRoute = (item: MenuItem) => {
       // If the item has a custom path, use it directly
@@ -303,6 +318,7 @@ export default defineComponent({
       menuItems: MENU_ITEMS,
       isMobileMenuOpen,
       isAuthenticated,
+      socialLinks,
       getNavigationRoute,
       toggleMobileMenu,
       closeMobileMenu,
@@ -386,12 +402,16 @@ export default defineComponent({
     }
   }
 
-  // Action Buttons with Language Switcher
+  // Action Buttons with Social Links
   .actions {
-    @apply flex items-center space-x-2;
+    @apply flex items-center space-x-3;
 
-    .language-switcher {
-      @apply hidden md:block;
+    .social-links {
+      @apply hidden md:flex md:space-x-3;
+      
+      .a-social-link {
+        @apply text-gray-600 hover:text-primary;
+      }
     }
 
     .initialization-loading {
@@ -414,9 +434,7 @@ export default defineComponent({
     .mobile-compact-actions {
       @apply flex md:hidden items-center space-x-2;
 
-      .mobile-language-switcher {
-        @apply block;
-      }
+
 
       .mobile-loading {
         @apply flex items-center;
@@ -474,8 +492,16 @@ export default defineComponent({
       @apply pt-4 pb-3 border-t border-gray-200;
     }
 
-    &__language {
-      @apply px-2;
+    &__social {
+      @apply px-2 mb-4;
+      
+      .social-links {
+        @apply flex justify-center space-x-6;
+        
+        .a-social-link {
+          @apply text-gray-600 hover:text-primary text-xl;
+        }
+      }
     }
 
     &__user {
