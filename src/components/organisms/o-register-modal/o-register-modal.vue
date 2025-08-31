@@ -147,7 +147,6 @@ import { useEventBus } from '~/composables/use-event-bus';
 import { useRegistrationForm } from '~/composables/use-registration-form';
 import { openConfirmationModal } from '~/composables/use-confirmation-modal';
 import { useTranslation } from '~/composables/use-translation';
-import { EVENTS } from '~/constants/event-bus-constants';
 import OModal from '~/components/organisms/o-modal';
 import AButton from '~/components/atoms/a-button';
 import MRegistrationStepOne from '~/components/molecules/m-registration-step-one';
