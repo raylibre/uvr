@@ -45,16 +45,16 @@ const tooltipClasses = computed(() => ({
 // Methods
 const adjustTooltipPosition = async () => {
   if (!props.visible || !tooltipEl.value) return
-  
+
   await nextTick()
-  
+
   const rect = tooltipEl.value.getBoundingClientRect()
   const windowWidth = window.innerWidth
-  const windowHeight = window.innerHeight
-  
+  // const windowHeight = window.innerHeight
+
   let newX = props.x
   let newY = props.y
-  
+
   // Adjust horizontal position
   if (props.x + rect.width / 2 > windowWidth - 10) {
     // Too far right, move left
@@ -67,7 +67,7 @@ const adjustTooltipPosition = async () => {
   } else {
     flipHorizontal.value = false
   }
-  
+
   // Adjust vertical position
   if (props.y < rect.height + 10) {
     // Too close to top, show below cursor
@@ -76,7 +76,7 @@ const adjustTooltipPosition = async () => {
   } else {
     flipVertical.value = false
   }
-  
+
   adjustedPosition.value = { x: newX, y: newY }
 }
 
