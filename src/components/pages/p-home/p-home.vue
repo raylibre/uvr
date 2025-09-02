@@ -2,6 +2,11 @@
   <div class="p-home">
     <OHeroSection />
     
+    <OOrganizationStructureSection
+      @region-click="handleRegionClick"
+      @region-hover="handleRegionHover"
+    />
+    
     <OPublicProgramsSection
       :limit="4"
       :show-featured-only="false"
@@ -31,6 +36,7 @@ import { useRouter } from 'vue-router';
 import { useHomeStore } from '~/composables/use-home-store';
 import { ROUTE_NAMES } from '~/constants/router-constants';
 import OHeroSection from '~/components/organisms/o-hero-section';
+import OOrganizationStructureSection from '~/components/organisms/o-organization-structure-section';
 import OPublicProgramsSection from '~/components/organisms/o-public-programs-section';
 import ORepresentativesSection from '~/components/organisms/o-representatives-section';
 import ONewsSection from '~/components/organisms/o-news-section';
@@ -41,6 +47,7 @@ export default defineComponent({
 
   components: {
     OHeroSection,
+    OOrganizationStructureSection,
     OPublicProgramsSection,
     ORepresentativesSection,
     ONewsSection,
@@ -76,6 +83,17 @@ export default defineComponent({
       router.push({ name: ROUTE_NAMES.NEWS });
     };
 
+    const handleRegionClick = (regionId: string, regionName: string) => {
+      // Navigate to programs page when region is clicked
+      router.push({ name: ROUTE_NAMES.PROGRAMS });
+      console.log(`Region clicked: ${regionName} (${regionId})`);
+    };
+
+    const handleRegionHover = (regionId: string, regionName: string) => {
+      // Optional: Add analytics or other functionality on hover
+      console.log(`Region hovered: ${regionName} (${regionId})`);
+    };
+
     return {
       representatives,
       newsItems,
@@ -84,7 +102,9 @@ export default defineComponent({
       handleViewAllPrograms,
       handleRepresentativeClick,
       handleNewsClick,
-      handleViewAllNews
+      handleViewAllNews,
+      handleRegionClick,
+      handleRegionHover
     };
   }
 });
