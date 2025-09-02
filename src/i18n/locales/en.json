@@ -1,385 +1,412 @@
-{
-  "user": {
-    "categories": {
-      "familyWithoutFather": "Family Without Father",
-      "volunteer": "Volunteer",
-      "activeMilitary": "Active Military",
-      "activeVeteran": "Active Veteran",
-      "retiredVeteran": "Retired Veteran",
-      "combatDisabled": "Combat-Disabled Veteran",
-      "homelessFamily": "Homeless Family"
-    },
-    "maritalStatus": {
-      "married": "Married",
-      "single": "Single",
-      "divorced": "Divorced",
-      "divorcedPayingAlimony": "Divorced Paying Alimony"
-    },
-    "activityTypes": {
-      "social": "Social",
-      "economic": "Economic",
-      "volunteer": "Volunteer"
-    },
-    "status": {
-      "verified": "Verified",
-      "pendingVerification": "Pending verification"
-    }
-  },
-  "common": {
-    "buttons": {
-      "submit": "Submit",
-      "send": "Send Message",
-      "sending": "Sending...",
-      "viewDetails": "View Details",
-      "backToHome": "Back to Home",
-      "getInTouch": "Get in Touch",
-      "ourServices": "Our Services",
-      "join": "Join Us",
-      "login": "Login",
-      "cancel": "Cancel",
-      "continue": "Continue",
-      "back": "Back",
-      "finish": "Finish",
-      "next": "Next",
-      "previous": "Previous",
-      "retry": "Retry",
-      "today": "Today",
+﻿{
+    "user":  {
+                 "categories":  {
+                                    "familyWithoutFather":  "Family Without Father",
+                                    "volunteer":  "Volunteer",
+                                    "activeMilitary":  "Active Military",
+                                    "activeVeteran":  "Active Veteran",
+                                    "retiredVeteran":  "Retired Veteran",
+                                    "combatDisabled":  "Combat-Disabled Veteran",
+                                    "homelessFamily":  "Homeless Family"
+                                },
+                 "maritalStatus":  {
+                                       "married":  "Married",
+                                       "single":  "Single",
+                                       "divorced":  "Divorced",
+                                       "divorcedPayingAlimony":  "Divorced Paying Alimony"
+                                   },
+                 "activityTypes":  {
+                                       "social":  "Social",
+                                       "economic":  "Economic",
+                                       "volunteer":  "Volunteer"
+                                   },
+                 "status":  {
+                                "verified":  "Verified",
+                                "pendingVerification":  "Pending verification"
+                            }
+             },
+    "common":  {
+                   "buttons":  {
+                                   "submit":  "Submit",
+                                   "send":  "Send Message",
+                                   "sending":  "Sending...",
+                                   "viewDetails":  "View Details",
+                                   "backToHome":  "Back to Home",
+                                   "getInTouch":  "Get in Touch",
+                                   "ourServices":  "Our Services",
+                                   "join":  "Join Us",
+                                   "login":  "Login",
+                                   "cancel":  "Cancel",
+                                   "continue":  "Continue",
+                                   "back":  "Back",
+                                   "finish":  "Finish",
+                                   "next":  "Next",
+                                   "previous":  "Previous",
+                                   "retry":  "Retry",
+                                   "today":  "Today",
+                                   "profile":  "Profile",
+                                   "settings":  "Settings",
+                                   "logout":  "Logout",
+                                   "uploadFiles":  "Upload Files",
+                                   "viewAll":  "View All",
+                                   "viewAllPrograms":  "View All Programs",
+                                   "edit":  "Edit"
+                               },
+                   "navigation":  {
+                                      "home":  "Home",
+                                      "structure":  "Our Structure",
+                                      "programs":  "Our Programs",
+                                      "leadership":  "Leadership",
+                                      "legalHelp":  "Legal Help",
+                                      "prosthetics":  "Prosthetics",
+                                      "familyToFamily":  "Family to Family",
+                                      "ourActivities":  "Our Activities",
+                                      "aboutUs":  "About Us",
+                                      "familySupportProgram":  "Family Support Program",
+                                      "legalAidVeterans":  "Legal Aid for Veterans",
+                                      "prostheticsForHeroes":  "Prosthetics for Heroes",
+                                      "news":  "News"
+                                  },
+                   "labels":  {
+                                  "or":  "or",
+                                  "close":  "Close",
+                                  "client":  "Client",
+                                  "duration":  "Duration",
+                                  "yes":  "Yes",
+                                  "no":  "No",
+                                  "enabled":  "Enabled",
+                                  "disabled":  "Disabled",
+                                  "dragAndDrop":  "Drag and drop files here"
+                              },
+                   "errors":  {
+                                  "pageNotFound":  "Page not found",
+                                  "generalError":  "An error occurred",
+                                  "formSubmitError":  "Error submitting form"
+                              },
+                   "datepicker":  {
+                                      "today":  "Today",
+                                      "cancel":  "Cancel",
+                                      "selectDate":  "Select date",
+                                      "clearDate":  "Clear date"
+                                  }
+               },
+    "home":  {
+                 "hero":  {
+                              "title":  "Our Work.",
+                              "titleHighlight":  "Your Vision Realized.",
+                              "description":  "At Mason, every project tells a story - a story of trust, innovation, and excellence. Through our commercial construction and infrastructure services, our portfolio reflects our commitment to quality."
+                          },
+                 "projects":  {
+                                  "title":  "Discover Our Completed Projects",
+                                  "description":  "Every project we complete is a reflection of our commitment to quality, precision, and client satisfaction. Here are some of our recent successes."
+                              },
+                 "contact":  {
+                                 "title":  "Start Your Project With Us",
+                                 "description":  "Let\u0027s bring your vision to life. Whether it\u0027s a new commercial building, bridge expansion project, or infrastructure development, we\u0027re here to help."
+                             }
+             },
+    "about":  {
+                  "hero":  {
+                               "title":  "About Us",
+                               "subtitle":  "Supporting Veterans and Their Families"
+                           },
+                  "mission":  {
+                                  "title":  "Our Mission",
+                                  "description":  "We are dedicated to providing comprehensive support and resources to veterans and their families, helping them transition to civilian life and thrive in their communities."
+                              },
+                  "vision":  {
+                                 "title":  "Our Vision",
+                                 "description":  "A world where every veteran and their family receives the support they deserve, enabling them to lead fulfilling and successful lives after their service to our country."
+                             },
+                  "values":  {
+                                 "title":  "Our Values",
+                                 "items":  {
+                                               "integrity":  {
+                                                                 "title":  "Integrity",
+                                                                 "description":  "We operate with honesty, transparency, and ethical standards in all our interactions."
+                                                             },
+                                               "compassion":  {
+                                                                  "title":  "Compassion",
+                                                                  "description":  "We approach every individual with empathy, understanding, and genuine care for their well-being."
+                                                              },
+                                               "excellence":  {
+                                                                  "title":  "Excellence",
+                                                                  "description":  "We strive to deliver the highest quality services and support to those we serve."
+                                                              },
+                                               "community":  {
+                                                                 "title":  "Community",
+                                                                 "description":  "We believe in the power of connection and building strong, supportive networks."
+                                                             }
+                                           }
+                             },
+                  "services":  {
+                                   "title":  "What We Do",
+                                   "description":  "We provide a wide range of services to support veterans and their families in their journey:",
+                                   "items":  {
+                                                 "legal":  "Legal assistance and advocacy",
+                                                 "prosthetics":  "Prosthetic support and rehabilitation services",
+                                                 "family":  "Family-to-family support programs",
+                                                 "activities":  "Community activities and engagement programs",
+                                                 "leadership":  "Leadership development and mentorship"
+                                             }
+                               },
+                  "stats":  {
+                                "title":  "Our Impact",
+                                "veterans":  "Veterans Served",
+                                "families":  "Families Supported",
+                                "programs":  "Active Programs",
+                                "years":  "Years of Service"
+                            },
+                  "contact":  {
+                                  "title":  "Get Involved",
+                                  "description":  "Whether you\u0027re a veteran seeking support or someone who wants to help, we\u0027d love to hear from you.",
+                                  "joinButton":  "Join Our Community",
+                                  "contactButton":  "Contact Us"
+                              }
+              },
+    "form":  {
+                 "labels":  {
+                                "name":  "Name",
+                                "email":  "Email",
+                                "subject":  "Subject",
+                                "message":  "Message",
+                                "subscribe":  "Subscribe to our newsletter",
+                                "firstName":  "First Name",
+                                "lastName":  "Last Name",
+                                "patronymic":  "Patronymic",
+                                "emailAddress":  "Email Address",
+                                "phoneNumber":  "Phone Number",
+                                "password":  "Password",
+                                "confirmPassword":  "Confirm Password",
+                                "dateOfBirth":  "Date of Birth",
+                                "region":  "Region",
+                                "city":  "City",
+                                "gender":  "Gender",
+                                "category":  "Category",
+                                "fullAddress":  "Full Address",
+                                "emergencyContactName":  "Emergency Contact Name",
+                                "emergencyContactPhone":  "Emergency Contact Phone",
+                                "hasMinorChildren":  "Do you have minor children?",
+                                "minorChildrenCount":  "Number of minor children",
+                                "bio":  "Bio"
+                            },
+                 "placeholders":  {
+                                      "name":  "Enter your name",
+                                      "email":  "Enter your email",
+                                      "subject":  "Enter message subject",
+                                      "message":  "Enter your message",
+                                      "enterYourName":  "Enter your name",
+                                      "enterYourEmail":  "Enter your email"
+                                  },
+                 "validation":  {
+                                    "required":  "{field} is required",
+                                    "email":  "Please enter a valid email",
+                                    "minLength":  "{field} must be at least {min} characters",
+                                    "firstNameRequired":  "First name is required",
+                                    "lastNameRequired":  "Last name is required",
+                                    "patronymicRequired":  "Patronymic is required",
+                                    "emailRequired":  "Email is required",
+                                    "phoneRequired":  "Phone number is required",
+                                    "passwordRequired":  "Password is required",
+                                    "passwordConfirmationRequired":  "Password confirmation is required",
+                                    "dateOfBirthRequired":  "Date of birth is required",
+                                    "regionRequired":  "Region is required",
+                                    "cityRequired":  "City is required",
+                                    "categoryRequired":  "Category is required",
+                                    "addressRequired":  "Address is required",
+                                    "firstNameMinLength":  "First name must be at least 2 characters",
+                                    "lastNameMinLength":  "Last name must be at least 2 characters",
+                                    "patronymicMinLength":  "Patronymic must be at least 2 characters",
+                                    "emailInvalid":  "Please enter a valid email address",
+                                    "phoneInvalid":  "Please enter a valid phone number",
+                                    "passwordMinLength":  "Password must be at least 8 characters",
+                                    "passwordsDoNotMatch":  "Passwords do not match"
+                                }
+             },
+    "auth":  {
+                 "register":  {
+                                  "title":  "New Account",
+                                  "newAccount":  "New Account",
+                                  "completeRegistration":  "Complete Registration",
+                                  "unsavedChanges":  "Unsaved Changes",
+                                  "unsavedChangesText":  "You have unsaved changes. Are you sure you want to close this form?",
+                                  "yesClose":  "Yes, Close",
+                                  "stepProgress":  "Step {current} of {total}",
+                                  "steps":  {
+                                                "step1":  {
+                                                              "title":  "Account Details",
+                                                              "description":  "Please provide account information to create your account."
+                                                          },
+                                                "step2":  {
+                                                              "title":  "Personal Details",
+                                                              "description":  "Please provide your personal information."
+                                                          },
+                                                "step3":  {
+                                                              "title":  "Emergency Contact Information",
+                                                              "description":  "Please provide your address and emergency contact details."
+                                                          },
+                                                "step4":  {
+                                                              "title":  "Notifications",
+                                                              "description":  "Set your notification preferences"
+                                                          },
+                                                "step5":  {
+                                                              "title":  "Confirmation",
+                                                              "description":  "Review and confirm your details"
+                                                          }
+                                            },
+                                  "labels":  {
+                                                 "maritalStatus":  "Marital Status",
+                                                 "activityType":  "Activity Type",
+                                                 "bioOptional":  "Bio (Optional)",
+                                                 "documents":  "Documents"
+                                             },
+                                  "placeholders":  {
+                                                       "enterAddress":  "Enter your complete address...",
+                                                       "bioMotivation":  "Tell us about yourself and your motivation..."
+                                                   },
+                                  "documents":  {
+                                                    "title":  "Documents",
+                                                    "add":  "Add document",
+                                                    "selectType":  "Select document type",
+                                                    "required":  "Please upload at least one document",
+                                                    "types":  {
+                                                                  "volunteerCertificate":  "Volunteer Certificate",
+                                                                  "militaryId":  "Military ID",
+                                                                  "veteranCertificate":  "Veteran Certificate",
+                                                                  "disabilityCertificate":  "Disability Certificate",
+                                                                  "deathCertificate":  "Death Certificate",
+                                                                  "marriageCertificate":  "Marriage Certificate",
+                                                                  "birthCertificate":  "Birth Certificate",
+                                                                  "displacementCertificate":  "Displacement Certificate",
+                                                                  "passport":  "Passport",
+                                                                  "other":  "Other"
+                                                              }
+                                                },
+                                  "notifications":  {
+                                                        "enableNotifications":  "Enable Notifications",
+                                                        "enableDescription":  "Receive important updates about your account and our services",
+                                                        "emailNotifications":  "Email Notifications",
+                                                        "emailDescription":  "Receive updates via email",
+                                                        "smsNotifications":  "SMS Notifications",
+                                                        "smsDescription":  "Receive updates via SMS",
+                                                        "notificationsEnabled":  "Notifications Enabled",
+                                                        "changeSettings":  "You can change these preferences at any time in your account settings."
+                                                    },
+                                  "terms":  {
+                                                "agreeTo":  "I confirm that all the information provided is accurate and I agree to the",
+                                                "termsOfService":  "Terms of Service",
+                                                "and":  "and",
+                                                "privacyPolicy":  "Privacy Policy"
+                                            },
+                                  "review":  {
+                                                 "title":  "Review Your Information",
+                                                 "description":  "Please review your registration details before submitting.",
+                                                 "personalInfo":  "Personal Information",
+                                                 "demographics":  "Demographics",
+                                                 "emergencyContact":  "Emergency Contact",
+                                                 "notificationPreferences":  "Notification Preferences",
+                                                 "contactName":  "Contact Name",
+                                                 "contactPhone":  "Contact Phone",
+                                                 "address":  "Address"
+                                             },
+                                  "successTitle":  "Registration successful",
+                                  "successSubtitle":  "Signing you inвЂ¦",
+                                  "successToast":  "Registration successful!"
+                              },
+                 "login":  {
+                               "title":  "Login",
+                               "identifierLabel":  "Email or Phone Number",
+                               "passwordLabel":  "Password",
+                               "identifierRequired":  "Email or phone number is required",
+                               "passwordMinLength":  "Password must be at least 6 characters",
+                               "invalidCredentials":  "Invalid credentials",
+                               "successToast":  "Successfully logged in!",
+                               "logoutSuccessToast":  "Successfully logged out!"
+                           }
+             },
+    "registration":  {
+                         "gender":  {
+                                        "male":  "Male",
+                                        "female":  "Female"
+                                    }
+                     },
+    "errors":  {
+                   "404":  {
+                               "title":  "404",
+                               "message":  "Oops! The page you\u0027re looking for doesn\u0027t exist."
+                           },
+                   "form":  {
+                                "submit":  "An error occurred while submitting the form"
+                            }
+               },
+    "upload":  {
+                   "errors":  {
+                                  "maxSize":  "File size exceeds {size}",
+                                  "fileType":  "File type not accepted",
+                                  "maxFiles":  "You can upload up to {max} files"
+                              }
+               },
+    "programDetail":  {
+                          "notFoundTitle":  "Program not found",
+                          "notFoundDescription":  "Unfortunately, the program with the address {slug} does not exist or has been deleted.",
+                          "technicalDetails":  "Technical details",
+                          "stats":  {
+                                        "helped":  "Helped",
+                                        "currentParticipants":  "Current participants",
+                                        "successStories":  "Success stories",
+                                        "budget":  "Program budget"
+                                    },
+                          "aboutSection":  "About the program",
+                          "requirementsSection":  "Participation requirements",
+                          "benefitsSection":  "What you will get",
+                          "gallerySection":  "Gallery",
+                          "infoCard":  {
+                                           "title":  "Program information",
+                                           "duration":  "Duration: {months} months",
+                                           "location":  "Location: {location}",
+                                           "maxParticipants":  "Max participants: {max}",
+                                           "deadline":  "Deadline: {date}"
+                                       },
+                          "applicationForm":  {
+                                                  "title":  "Apply",
+                                                  "messageLabel":  "Message for organizers",
+                                                  "messagePlaceholder":  "Tell us why you want to participate in this program..."
+                                              },
+                          "statusCard":  {
+                                             "title":  "Application status"
+                                         },
+                          "contactCard":  {
+                                              "title":  "Contacts"
+                                          },
+                          "authCard":  {
+                                           "title":  "Authorization required",
+                                           "message":  "You need to be logged in to apply for the program."
+                                        }
+                        },
+  "profile": {
+    "sections": {
       "profile": "Profile",
-      "settings": "Settings",
-      "logout": "Logout",
-      "uploadFiles": "Upload Files",
-      "viewAll": "View All",
-      "viewAllPrograms": "View All Programs"
+      "programs": "Programs",
+      "documents": "Documents",
+      "notifications": "Notifications"
     },
-    "navigation": {
-      "home": "Home",
-      "structure": "Our Structure",
-      "programs": "Our Programs",
-      "leadership": "Leadership",
-      "legalHelp": "Legal Help",
-      "prosthetics": "Prosthetics",
-      "familyToFamily": "Family to Family",
-      "ourActivities": "Our Activities",
-      "aboutUs": "About Us",
-      "familySupportProgram": "Family Support Program",
-      "legalAidVeterans": "Legal Aid for Veterans",
-      "prostheticsForHeroes": "Prosthetics for Heroes",
-      "news": "News"
-    },
-    "labels": {
-      "or": "or",
-      "close": "Close",
-      "client": "Client",
-      "duration": "Duration",
-      "yes": "Yes",
-      "no": "No",
-      "enabled": "Enabled",
-      "disabled": "Disabled",
-      "dragAndDrop": "Drag and drop files here"
-    },
-    "errors": {
-      "pageNotFound": "Page not found",
-      "generalError": "An error occurred",
-      "formSubmitError": "Error submitting form"
-    },
-    "datepicker": {
-      "today": "Today",
-      "cancel": "Cancel",
-      "selectDate": "Select date",
-      "clearDate": "Clear date"
-    }
-  },
-  "home": {
-    "hero": {
-      "title": "Our Work.",
-      "titleHighlight": "Your Vision Realized.",
-      "description": "At Mason, every project tells a story - a story of trust, innovation, and excellence. Through our commercial construction and infrastructure services, our portfolio reflects our commitment to quality."
-    },
-    "projects": {
-      "title": "Discover Our Completed Projects",
-      "description": "Every project we complete is a reflection of our commitment to quality, precision, and client satisfaction. Here are some of our recent successes."
-    },
-    "contact": {
-      "title": "Start Your Project With Us",
-      "description": "Let's bring your vision to life. Whether it's a new commercial building, bridge expansion project, or infrastructure development, we're here to help."
-    }
-  },
-  "about": {
-    "hero": {
-      "title": "About Us",
-      "subtitle": "Supporting Veterans and Their Families"
-    },
-    "mission": {
-      "title": "Our Mission",
-      "description": "We are dedicated to providing comprehensive support and resources to veterans and their families, helping them transition to civilian life and thrive in their communities."
-    },
-    "vision": {
-      "title": "Our Vision",
-      "description": "A world where every veteran and their family receives the support they deserve, enabling them to lead fulfilling and successful lives after their service to our country."
-    },
-    "values": {
-      "title": "Our Values",
-      "items": {
-        "integrity": {
-          "title": "Integrity",
-          "description": "We operate with honesty, transparency, and ethical standards in all our interactions."
-        },
-        "compassion": {
-          "title": "Compassion",
-          "description": "We approach every individual with empathy, understanding, and genuine care for their well-being."
-        },
-        "excellence": {
-          "title": "Excellence",
-          "description": "We strive to deliver the highest quality services and support to those we serve."
-        },
-        "community": {
-          "title": "Community",
-          "description": "We believe in the power of connection and building strong, supportive networks."
-        }
-      }
-    },
-    "services": {
-      "title": "What We Do",
-      "description": "We provide a wide range of services to support veterans and their families in their journey:",
-      "items": {
-        "legal": "Legal assistance and advocacy",
-        "prosthetics": "Prosthetic support and rehabilitation services",
-        "family": "Family-to-family support programs",
-        "activities": "Community activities and engagement programs",
-        "leadership": "Leadership development and mentorship"
-      }
-    },
-    "stats": {
-      "title": "Our Impact",
-      "veterans": "Veterans Served",
-      "families": "Families Supported",
-      "programs": "Active Programs",
-      "years": "Years of Service"
-    },
-    "contact": {
-      "title": "Get Involved",
-      "description": "Whether you're a veteran seeking support or someone who wants to help, we'd love to hear from you.",
-      "joinButton": "Join Our Community",
-      "contactButton": "Contact Us"
-    }
-  },
-  "form": {
-    "labels": {
-      "name": "Name",
-      "email": "Email",
-      "subject": "Subject",
-      "message": "Message",
-      "subscribe": "Subscribe to our newsletter",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+    "fields": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
       "patronymic": "Patronymic",
-      "emailAddress": "Email Address",
-      "phoneNumber": "Phone Number",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "dateOfBirth": "Date of Birth",
-      "region": "Region",
-      "city": "City",
-      "gender": "Gender",
-      "category": "Category",
-      "fullAddress": "Full Address",
-      "emergencyContactName": "Emergency Contact Name",
-      "emergencyContactPhone": "Emergency Contact Phone",
-      "hasMinorChildren": "Do you have minor children?",
-      "minorChildrenCount": "Number of minor children",
+      "email": "Email",
+      "phone": "Phone",
+      "date_of_birth": "Date of Birth",
+      "address": "Address",
       "bio": "Bio"
     },
-    "placeholders": {
-      "name": "Enter your name",
-      "email": "Enter your email",
-      "subject": "Enter message subject",
-      "message": "Enter your message",
-      "enterYourName": "Enter your name",
-      "enterYourEmail": "Enter your email"
+    "messages": {
+      "loading": "Loading...",
+      "no_programs": "No programs available",
+      "no_documents": "No documents uploaded"
     },
-    "validation": {
-      "required": "{field} is required",
-      "email": "Please enter a valid email",
-      "minLength": "{field} must be at least {min} characters",
-      "firstNameRequired": "First name is required",
-      "lastNameRequired": "Last name is required",
-      "patronymicRequired": "Patronymic is required",
-      "emailRequired": "Email is required",
-      "phoneRequired": "Phone number is required",
-      "passwordRequired": "Password is required",
-      "passwordConfirmationRequired": "Password confirmation is required",
-      "dateOfBirthRequired": "Date of birth is required",
-      "regionRequired": "Region is required",
-      "cityRequired": "City is required",
-      "categoryRequired": "Category is required",
-      "addressRequired": "Address is required",
-      "firstNameMinLength": "First name must be at least 2 characters",
-      "lastNameMinLength": "Last name must be at least 2 characters",
-      "patronymicMinLength": "Patronymic must be at least 2 characters",
-      "emailInvalid": "Please enter a valid email address",
-      "phoneInvalid": "Please enter a valid phone number",
-      "passwordMinLength": "Password must be at least 8 characters",
-      "passwordsDoNotMatch": "Passwords do not match"
-    }
-  },
-  "auth": {
-    "register": {
-      "title": "New Account",
-      "newAccount": "New Account",
-      "completeRegistration": "Complete Registration",
-      "unsavedChanges": "Unsaved Changes",
-      "unsavedChangesText": "You have unsaved changes. Are you sure you want to close this form?",
-      "yesClose": "Yes, Close",
-      "stepProgress": "Step {current} of {total}",
-      "steps": {
-        "step1": {
-          "title": "Account Details",
-          "description": "Please provide account information to create your account."
-        },
-        "step2": {
-          "title": "Personal Details",
-          "description": "Please provide your personal information."
-        },
-        "step3": {
-          "title": "Emergency Contact Information",
-          "description": "Please provide your address and emergency contact details."
-        },
-        "step4": {
-          "title": "Notifications",
-          "description": "Set your notification preferences"
-        },
-        "step5": {
-          "title": "Confirmation",
-          "description": "Review and confirm your details"
-        }
-      },
-      "labels": {
-        "maritalStatus": "Marital Status",
-        "activityType": "Activity Type",
-        "bioOptional": "Bio (Optional)",
-        "documents": "Documents"
-      },
-      "placeholders": {
-        "enterAddress": "Enter your complete address...",
-        "bioMotivation": "Tell us about yourself and your motivation..."
-      },
-      "documents": {
-        "title": "Documents",
-        "add": "Add document",
-        "selectType": "Select document type",
-        "required": "Please upload at least one document",
-        "types": {
-          "volunteerCertificate": "Volunteer Certificate",
-          "militaryId": "Military ID",
-          "veteranCertificate": "Veteran Certificate",
-          "disabilityCertificate": "Disability Certificate",
-          "deathCertificate": "Death Certificate",
-          "marriageCertificate": "Marriage Certificate",
-          "birthCertificate": "Birth Certificate",
-          "displacementCertificate": "Displacement Certificate",
-          "passport": "Passport",
-          "other": "Other"
-        }
-      },
-      "notifications": {
-        "enableNotifications": "Enable Notifications",
-        "enableDescription": "Receive important updates about your account and our services",
-        "emailNotifications": "Email Notifications",
-        "emailDescription": "Receive updates via email",
-        "smsNotifications": "SMS Notifications",
-        "smsDescription": "Receive updates via SMS",
-        "notificationsEnabled": "Notifications Enabled",
-        "changeSettings": "You can change these preferences at any time in your account settings."
-      },
-      "terms": {
-        "agreeTo": "I confirm that all the information provided is accurate and I agree to the",
-        "termsOfService": "Terms of Service",
-        "and": "and",
-        "privacyPolicy": "Privacy Policy"
-      },
-      "review": {
-        "title": "Review Your Information",
-        "description": "Please review your registration details before submitting.",
-        "personalInfo": "Personal Information",
-        "demographics": "Demographics",
-        "emergencyContact": "Emergency Contact",
-        "notificationPreferences": "Notification Preferences",
-        "contactName": "Contact Name",
-        "contactPhone": "Contact Phone",
-        "address": "Address"
-      },
-      "successTitle": "Registration successful",
-      "successSubtitle": "Signing you in…",
-      "successToast": "Registration successful!"
-    },
-    "login": {
-      "title": "Login",
-      "identifierLabel": "Email or Phone Number",
-      "passwordLabel": "Password",
-      "identifierRequired": "Email or phone number is required",
-      "passwordMinLength": "Password must be at least 6 characters",
-      "invalidCredentials": "Invalid credentials",
-      "successToast": "Successfully logged in!",
-    "logoutSuccessToast": "Successfully logged out!"
-    }
-  },
-  "registration": {
-    "gender": {
-      "male": "Male",
-      "female": "Female"
-    }
-  },
-  "errors": {
-    "404": {
-      "title": "404",
-      "message": "Oops! The page you're looking for doesn't exist."
-    },
-    "form": {
-      "submit": "An error occurred while submitting the form"
-    }
-  },
-  "upload": {
-    "errors": {
-      "maxSize": "File size exceeds {size}",
-      "fileType": "File type not accepted",
-      "maxFiles": "You can upload up to {max} files"
-    }
-  },
-  "programDetail": {
-    "notFoundTitle": "Program not found",
-    "notFoundDescription": "Unfortunately, the program with the address {slug} does not exist or has been deleted.",
-    "technicalDetails": "Technical details",
-    "stats": {
-      "helped": "Helped",
-      "currentParticipants": "Current participants",
-      "successStories": "Success stories",
-      "budget": "Program budget"
-    },
-    "aboutSection": "About the program",
-    "requirementsSection": "Participation requirements",
-    "benefitsSection": "What you will get",
-    "gallerySection": "Gallery",
-    "infoCard": {
-      "title": "Program information",
-      "duration": "Duration: {months} months",
-      "location": "Location: {location}",
-      "maxParticipants": "Max participants: {max}",
-      "deadline": "Deadline: {date}"
-    },
-    "applicationForm": {
-      "title": "Apply",
-      "messageLabel": "Message for organizers",
-      "messagePlaceholder": "Tell us why you want to participate in this program..."
-    },
-    "statusCard": {
-      "title": "Application status"
-    },
-    "contactCard": {
-      "title": "Contacts"
-    },
-    "authCard": {
-      "title": "Authorization required",
-      "message": "You need to be logged in to apply for the program."
+    "notifications": {
+      "manage_in_settings": "Manage notification preferences in Settings"
     }
   }
-} 
+}

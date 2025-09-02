@@ -111,6 +111,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { ROUTE_NAMES } from '~/constants/router-constants';
 import { useUserStore } from '~/composables/use-user-store';
 import clickOutside from '~/directives/click-outside';
 import { useTranslation } from '~/composables/use-translation';
@@ -125,6 +127,7 @@ export default defineComponent({
   setup() {
     const { t, T_KEYS } = useTranslation();
     const { user, userDisplayName, userFullName, userInitials, logout, isVerified } = useUserStore();
+    const router = useRouter();
     const isOpen = ref(false);
 
     // Computed properties
@@ -149,15 +152,13 @@ export default defineComponent({
     };
 
     const handleProfile = () => {
-      console.log('Navigate to profile');
       closeDropdown();
-      // TODO: Navigate to profile page
+      router.push({ name: ROUTE_NAMES.ACCOUNT_PROFILE });
     };
 
     const handleSettings = () => {
-      console.log('Navigate to settings');
       closeDropdown();
-      // TODO: Navigate to settings page
+      router.push({ name: ROUTE_NAMES.ACCOUNT_PROFILE_EDIT });
     };
 
     const handleLogout = () => {

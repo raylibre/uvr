@@ -3,6 +3,8 @@ import { Permission } from '~/constants/permission-constants';
 
 export const ROUTE_NAMES = {
   HOME: 'HOME',
+  ACCOUNT_PROFILE: 'ACCOUNT_PROFILE',
+  ACCOUNT_PROFILE_EDIT: 'ACCOUNT_PROFILE_EDIT',
   LEADERSHIP: 'LEADERSHIP',
   LEGAL_HELP: 'LEGAL_HELP',
   PROSTHETICS: 'PROSTHETICS',
@@ -27,6 +29,24 @@ export const ROUTES: RouteRecordRaw[] = [
     path: '/',
     name: ROUTE_NAMES.HOME,
     component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/account/profile',
+    name: ROUTE_NAMES.ACCOUNT_PROFILE,
+    component: () => import('~/components/pages/p-account-profile'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.VIEW_OWN_PROFILE]
+    }
+  },
+  {
+    path: '/account/profile/edit',
+    name: ROUTE_NAMES.ACCOUNT_PROFILE_EDIT,
+    component: () => import('~/components/pages/p-account-profile-edit'),
+    meta: {
+      requiresAuth: true,
+      permissions: [Permission.UPDATE_OWN_PROFILE]
+    }
   },
   {
     path: '/programs',

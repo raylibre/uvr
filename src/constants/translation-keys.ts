@@ -62,6 +62,7 @@ export const T_KEYS = {
       VIEW_ALL: 'common.buttons.viewAll',
       RETRY: 'common.buttons.retry',
       VIEW_ALL_PROGRAMS: 'common.buttons.viewAllPrograms',
+      EDIT: 'common.buttons.edit',
       SUBMIT: 'common.buttons.submit',
       UPLOAD_FILES: 'common.buttons.uploadFiles',
       TODAY: 'common.buttons.today',

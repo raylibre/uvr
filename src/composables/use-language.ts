@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue';
+﻿import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export interface LanguageOption {
@@ -13,7 +13,7 @@ const SUPPORTED_LANGUAGES: LanguageOption[] = [
 ];
 
 // Store current language state outside the composable
-const currentLanguageCode = ref<string>('en');
+const currentLanguageCode = ref<string>('uk');
 
 export function useLanguage() {
   const { locale } = useI18n();
@@ -41,7 +41,7 @@ export function useLanguage() {
       currentLanguageCode.value = savedLanguage;
       locale.value = savedLanguage;
     } else {
-      // Default to Ukrainian if no preference is saved
+      // Default to Українська if no preference is saved
       currentLanguageCode.value = 'uk';
       locale.value = 'uk';
     }
@@ -54,3 +54,7 @@ export function useLanguage() {
     initializeLanguage
   };
 } 
+
+
+
+
