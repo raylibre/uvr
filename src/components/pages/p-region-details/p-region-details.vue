@@ -59,8 +59,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+<script lang="ts">
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ORegionLeadershipSection from '~/components/organisms/o-region-leadership-section/o-region-leadership-section.vue';
 import ORegionNewsSection from '~/components/organisms/o-region-news-section/o-region-news-section.vue';
@@ -71,33 +71,54 @@ interface RouteParams {
   region_id?: string;
 }
 
-const route = useRoute();
-const params = route.params as RouteParams;
-const regionId = computed(() => (params.region_id || '').toString());
+export default defineComponent({
+  name: 'PRegionDetails',
+  
+  components: {
+    ORegionLeadershipSection,
+    ORegionNewsSection,
+    ORegionContactsSection
+  },
+  
+  setup() {
+    const route = useRoute();
+    const params = route.params as RouteParams;
+    const regionId = computed(() => (params.region_id || '').toString());
 
-const regionNameUa = ref<string>('');
-const regionContacts = ref<any | null>(null);
-const activeTab = ref<'leadership' | 'news' | 'contacts'>('leadership');
+    const regionNameUa = ref<string>('');
+    const regionContacts = ref<any | null>(null);
+    const activeTab = ref<'leadership' | 'news' | 'contacts'>('leadership');
 
-onMounted(async () => {
-  if (!regionId.value) return;
-  try {
-    const data = await getRegionDetails(regionId.value);
-    regionNameUa.value = data?.data?.region?.name_ua ?? '';
-    regionContacts.value = data?.data?.region?.contacts ?? null;
-  } catch {}
+    onMounted(async () => {
+      if (!regionId.value) return;
+      try {
+        const data = await getRegionDetails(regionId.value);
+        regionNameUa.value = data?.data?.region?.name_ua ?? '';
+        regionContacts.value = data?.data?.region?.contacts ?? null;
+      } catch {}
+    });
+
+    const mapSrc = computed(() => {
+      const addr = regionContacts.value?.address;
+      if (!addr) return '';
+      const q = encodeURIComponent(addr);
+      return `https://www.google.com/maps?q=${q}&output=embed`;
+    });
+
+    function setActiveTab(tab: 'leadership' | 'news' | 'contacts') {
+      activeTab.value = tab;
+    }
+    
+    return {
+      regionId,
+      regionNameUa,
+      regionContacts,
+      activeTab,
+      mapSrc,
+      setActiveTab
+    };
+  }
 });
-
-const mapSrc = computed(() => {
-  const addr = regionContacts.value?.address;
-  if (!addr) return '';
-  const q = encodeURIComponent(addr);
-  return `https://www.google.com/maps?q=${q}&output=embed`;
-});
-
-function setActiveTab(tab: 'leadership' | 'news' | 'contacts') {
-  activeTab.value = tab;
-}
 </script>
 
 <style lang="scss" src="./p-region-details.scss" />

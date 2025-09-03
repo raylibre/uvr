@@ -14,9 +14,9 @@
       <form @submit.prevent="submitApplication" class="application-form">
         <div class="form-group">
           <label for="desired_role" class="form-label">Бажана посада *</label>
-          <select 
-            id="desired_role" 
-            v-model="formData.desired_role" 
+          <select
+            id="desired_role"
+            v-model="formData.desired_role"
             class="form-select"
             required
           >
@@ -29,7 +29,7 @@
 
         <div class="form-group">
           <label for="experience" class="form-label">Досвід роботи *</label>
-          <textarea 
+          <textarea
             id="experience"
             v-model="formData.experience"
             class="form-textarea"
@@ -41,7 +41,7 @@
 
         <div class="form-group">
           <label for="motivation_letter" class="form-label">Мотиваційний лист *</label>
-          <textarea 
+          <textarea
             id="motivation_letter"
             v-model="formData.motivation_letter"
             class="form-textarea"
@@ -102,7 +102,7 @@ const submitApplication = async () => {
   }
 
   isSubmitting.value = true;
-  
+
   try {
     const payload = {
       region_id: props.regionId,
@@ -113,14 +113,14 @@ const submitApplication = async () => {
     };
 
     await submitLeadershipApplication(payload);
-    
+
     notifySuccess('Заявку успішно надіслано! Наша команда розгляне її найближчим часом.');
-    
+
     // Reset form
     formData.desired_role = '';
     formData.experience = '';
     formData.motivation_letter = '';
-    
+
     emit('close');
   } catch (error: any) {
     handleApiError(error);
@@ -168,7 +168,7 @@ const submitApplication = async () => {
 }
 
 .application-form .form-textarea {
-  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical;
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
 }
 
 .application-form .form-actions {

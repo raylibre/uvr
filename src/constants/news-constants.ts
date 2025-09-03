@@ -24,6 +24,6 @@ export const NEWS_CATEGORY_CLASSES = {
 // News pagination settings
 export const NEWS_PAGINATION = {
   DEFAULT_LIMIT: 10,
-  HOME_PAGE_LIMIT: 4,
+  HOME_PAGE_LIMIT: 6,
   LOAD_MORE_INCREMENT: 10
-} as const; 
+} as const;

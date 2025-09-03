@@ -32,7 +32,7 @@ export const ROUTES: RouteRecordRaw[] = [
   {
     path: '/regions/:region_id',
     name: ROUTE_NAMES.REGION_DETAILS,
-    component: () => import('~/components/pages/p-region-details/p-region-details.vue'),
+    component: () => import('~/components/pages/p-region-details'),
     props: true
   },
   {

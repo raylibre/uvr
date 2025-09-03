@@ -103,10 +103,10 @@ const isOpen = (idx: number) => openIndex.value === idx;
 const openApplicationModal = () => {
   if (!isAuthenticated.value) {
     // Notify user to sign up first
-    BUS.emit(EVENTS.SHOW_LOGIN_MODAL);
+    BUS.emit(EVENTS.SHOW_LOGIN_MODAL as any);
     return;
   }
-  
+
   showApplicationModal.value = true;
 };
 
@@ -169,45 +169,45 @@ onMounted(async () => {
       @apply flex items-center gap-6;
     }
 
-    .avatar { 
-      @apply w-24 h-24 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0; 
+    .avatar {
+      @apply w-24 h-24 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0;
     }
-    
-    .avatar img { 
-      @apply w-full h-full object-cover; 
+
+    .avatar img {
+      @apply w-full h-full object-cover;
     }
 
     .info {
       @apply flex-1;
-      
+
       .main-info {
-        .name { 
-          @apply text-2xl font-semibold text-primary; 
+        .name {
+          @apply text-2xl font-semibold text-primary;
         }
-        .position { 
-          @apply text-gray-600; 
+        .position {
+          @apply text-gray-600;
         }
       }
     }
 
-    .toggle { 
+    .toggle {
       @apply text-primary hover:text-primary-light text-lg flex-shrink-0 transition-colors duration-200;
       @apply flex items-center justify-center w-8 h-8;
     }
 
-    .details { 
+    .details {
       @apply mt-4 pt-4 border-t border-gray-100 space-y-2;
-      
-      .bio { 
-        @apply text-gray-600 leading-relaxed; 
+
+      .bio {
+        @apply text-gray-600 leading-relaxed;
       }
-      
+
       .contacts {
         @apply space-y-1;
-        
+
         div {
           @apply text-sm text-gray-600;
-          
+
           strong {
             @apply text-gray-800;
           }

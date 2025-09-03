@@ -1,12 +1,12 @@
 <template>
   <div class="p-home">
     <OHeroSection />
-    
+
     <OOrganizationStructureSection
       @region-click="handleRegionClick"
       @region-hover="handleRegionHover"
     />
-    
+
     <OPublicProgramsSection
       :limit="6"
       :show-featured-only="false"
@@ -62,9 +62,9 @@ export default defineComponent({
     onMounted(fetchData);
 
     const handleProgramClick = (slug: string) => {
-      router.push({ 
-        name: ROUTE_NAMES.PROGRAM_DETAIL, 
-        params: { slug } 
+      router.push({
+        name: ROUTE_NAMES.PROGRAM_DETAIL,
+        params: { slug }
       });
     };
 
@@ -84,13 +84,12 @@ export default defineComponent({
       router.push({ name: ROUTE_NAMES.NEWS });
     };
 
-    const handleRegionClick = (regionId: string, regionName: string) => {
-      // Перетворюємо SVG ID у backend region_id (якщо можливо)
+    const handleRegionClick = (regionId: string) => {
       const backendId = mapSvgRegionToBackend(regionId) || regionId;
       router.push({ name: ROUTE_NAMES.REGION_DETAILS, params: { region_id: backendId } });
     };
 
-    const handleRegionHover = (regionId: string, regionName: string) => {
+    const handleRegionHover = () => {
     };
 
     return {
@@ -113,4 +112,4 @@ export default defineComponent({
 .p-home {
   @apply min-h-screen;
 }
-</style> 
+</style>

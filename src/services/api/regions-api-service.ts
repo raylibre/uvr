@@ -56,7 +56,7 @@ export async function getRegionOtg(regionId: string): Promise<any> {
 export interface LeadershipApplicationPayload {
   region_id: string;
   user_id: string;
-  desired_role: 'head' | 'deputy' | 'coordinator';
+  desired_role: string;
   experience: string;
   motivation_letter: string;
 }
