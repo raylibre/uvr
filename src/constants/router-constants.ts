@@ -3,6 +3,7 @@ import { Permission } from '~/constants/permission-constants';
 
 export const ROUTE_NAMES = {
   HOME: 'HOME',
+  REGION_DETAILS: 'REGION_DETAILS',
   LEADERSHIP: 'LEADERSHIP',
   LEGAL_HELP: 'LEGAL_HELP',
   PROSTHETICS: 'PROSTHETICS',
@@ -27,6 +28,12 @@ export const ROUTES: RouteRecordRaw[] = [
     path: '/',
     name: ROUTE_NAMES.HOME,
     component: () => import('~/components/pages/p-home')
+  },
+  {
+    path: '/regions/:region_id',
+    name: ROUTE_NAMES.REGION_DETAILS,
+    component: () => import('~/components/pages/p-region-details/p-region-details.vue'),
+    props: true
   },
   {
     path: '/programs',

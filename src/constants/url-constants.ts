@@ -22,6 +22,11 @@ export const UPLOADS = '/uploads';
 // News endpoints
 export const NEWS_LIST = '/news-list';
 export const NEWS_ARTICLE = '/news-article';
+// Regions endpoints (Functions v1)
+export const REGION_DETAILS = '/region-details';
+export const REGION_CONTACTS = '/region-contacts';
+export const REGION_NEWS = '/region-news';
+export const REGION_OTG = '/region-otg';
 
 // User and profile endpoints
 export const USERS = '/users';
@@ -50,6 +55,12 @@ export const FUNCTIONS_V1_PUBLIC_PROJECTS = FUNCTIONS + V1 + PUBLIC_PROJECTS;
 // News endpoints
 export const FUNCTIONS_V1_NEWS_LIST = FUNCTIONS + V1 + NEWS_LIST;
 export const FUNCTIONS_V1_NEWS_ARTICLE = FUNCTIONS + V1 + NEWS_ARTICLE;
+// Regions endpoints
+export const FUNCTIONS_V1_REGION_DETAILS = FUNCTIONS + V1 + REGION_DETAILS;
+export const FUNCTIONS_V1_REGION_CONTACTS = FUNCTIONS + V1 + REGION_CONTACTS;
+export const FUNCTIONS_V1_REGION_NEWS = FUNCTIONS + V1 + REGION_NEWS;
+export const FUNCTIONS_V1_REGION_OTG = FUNCTIONS + V1 + REGION_OTG;
+export const FUNCTIONS_V1_LEADERSHIP_APPLICATION = FUNCTIONS + V1 + '/leadership-application';
 
 // New project endpoints
 export const FUNCTIONS_V1_PROJECT_BY_SLUG = FUNCTIONS + V1 + '/project-by-slug';

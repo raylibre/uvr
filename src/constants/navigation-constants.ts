@@ -3,7 +3,7 @@ import { ROUTE_NAMES } from './router-constants';
 export interface MenuItem {
   name: keyof typeof ROUTE_NAMES;
   title: string;
-  path?: string; // For program-specific paths
+  path?: string | { name: string; hash?: string }; // For program-specific paths and hash routing
   exact?: boolean;
   children?: MenuItem[]; // Add children for dropdowns
 }
@@ -17,7 +17,7 @@ export const MENU_ITEMS: MenuItem[] = [
     name: ROUTE_NAMES.HOME,
     title: 'common.navigation.structure',
     exact: true,
-    path: '/#structure'
+    path: { name: ROUTE_NAMES.HOME, hash: '#structure' }
   },
   {
     name: 'NEWS',

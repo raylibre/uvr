@@ -8,7 +8,7 @@
     />
     
     <OPublicProgramsSection
-      :limit="4"
+      :limit="6"
       :show-featured-only="false"
       :show-view-all="true"
       @project-click="handleProgramClick"
@@ -34,6 +34,7 @@
 import { defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useHomeStore } from '~/composables/use-home-store';
+import { mapSvgRegionToBackend } from '~/utils/region-mapping';
 import { ROUTE_NAMES } from '~/constants/router-constants';
 import OHeroSection from '~/components/organisms/o-hero-section';
 import OOrganizationStructureSection from '~/components/organisms/o-organization-structure-section';
@@ -84,14 +85,12 @@ export default defineComponent({
     };
 
     const handleRegionClick = (regionId: string, regionName: string) => {
-      // Navigate to programs page when region is clicked
-      router.push({ name: ROUTE_NAMES.PROGRAMS });
-      console.log(`Region clicked: ${regionName} (${regionId})`);
+      // Перетворюємо SVG ID у backend region_id (якщо можливо)
+      const backendId = mapSvgRegionToBackend(regionId) || regionId;
+      router.push({ name: ROUTE_NAMES.REGION_DETAILS, params: { region_id: backendId } });
     };
 
     const handleRegionHover = (regionId: string, regionName: string) => {
-      // Optional: Add analytics or other functionality on hover
-      console.log(`Region hovered: ${regionName} (${regionId})`);
     };
 
     return {

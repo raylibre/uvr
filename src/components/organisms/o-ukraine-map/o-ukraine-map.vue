@@ -3,7 +3,7 @@
     <div class="map-container" @mouseleave="handleMapMouseLeave">
       <svg-map
         :map="ukraineMapData"
-        @click="onRegionClick"
+        @select="onRegionSelect"
         :locationClass="getRegionClass"
         class="ukraine-svg-map"
       />
@@ -21,10 +21,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { SvgMap } from 'vue3-svg-map'
 import Ukraine from '@svg-maps/ukraine'
-import { ROUTE_NAMES } from '~/constants/router-constants'
 import MMapTooltip from '~/components/molecules/m-map-tooltip'
 import 'vue3-svg-map/style.css'
 
@@ -51,8 +49,6 @@ const emit = defineEmits<{
   regionHover: [regionId: string, regionName: string]
 }>()
 
-// Router
-const router = useRouter()
 
 // Refs
 const tooltip = ref({
@@ -130,21 +126,19 @@ const getRegionClass = (location: { id: string; [key: string]: any }, _index: nu
   return [baseClass, ...modifiers].join(' ')
 }
 
-const onRegionClick = (event: MouseEvent) => {
+const onRegionSelect = (targetEl: EventTarget | null) => {
   if (!props.clickable) return
-  
-  const target = event.target as SVGElement
-  const regionId = target.getAttribute('data-region')
-  const regionName = target.getAttribute('data-name')
-  
+
+  const target = targetEl as SVGElement | null
+  const regionId = target?.getAttribute('data-region')
+  const regionName = target?.getAttribute('data-name')
+
   if (regionId && regionName) {
     const ukrainianName = regionNameMapping[regionId] || regionName
-    
+
     emit('regionClick', regionId, ukrainianName)
-    
-    // For now, navigate to programs page - region pages can be implemented later
-    router.push({ name: ROUTE_NAMES.PROGRAMS })
-    
+    // Навігацію делегуємо батьківському компоненту
+
     console.log(`Region clicked: ${ukrainianName} (${regionId})`)
   }
 }

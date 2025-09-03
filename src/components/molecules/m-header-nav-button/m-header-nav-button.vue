@@ -54,7 +54,21 @@ export default defineComponent({
           ? route.fullPath === props.to
           : route.path.startsWith(props.to);
       }
-      return props.to.name === route.name;
+      
+      // For route objects, check both name and hash
+      if (props.to && typeof props.to === 'object') {
+        const nameMatches = props.to.name === route.name;
+        
+        // If the route object has a hash, we need both name and hash to match
+        if (props.to.hash) {
+          return nameMatches && route.hash === props.to.hash;
+        }
+        
+        // If no hash in route object, just check name
+        return nameMatches;
+      }
+      
+      return false;
     });
 
     const displayLabel = computed(() => {

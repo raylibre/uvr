@@ -1,0 +1,67 @@
+.p-region-details {
+  @apply container mx-auto px-4 py-8;
+
+  .breadcrumbs {
+    @apply text-sm text-gray-600 mb-6 flex items-center gap-2;
+    .org { @apply font-medium uppercase tracking-wide; }
+    .sep { @apply text-gray-400; }
+    .region { @apply text-gray-900 font-semibold uppercase; }
+  }
+
+  .layout { @apply grid grid-cols-12 gap-8; }
+
+  .sidebar {
+    @apply col-span-12 md:col-span-3 mt-6 md:mt-10;
+
+    .nav-link {
+      /* Брендові (primary) кольори і акцентна підкреслена лінія */
+      @apply block py-2 text-primary hover:text-primary-light transition relative bg-transparent border-none cursor-pointer w-full text-left;
+      
+      &::after {
+        content: '';
+        @apply block w-full h-0.5 bg-primary opacity-0 transition-opacity;
+      }
+      
+      &:hover::after { 
+        @apply opacity-70; 
+      }
+      
+      &.active { 
+        @apply text-primary font-semibold; 
+      }
+      
+      &.active::after { 
+        @apply opacity-100; 
+      }
+    }
+  }
+
+  .content { @apply col-span-12 md:col-span-9; }
+
+  .contacts-tab {
+    .contacts-layout {
+      @apply flex flex-col gap-6;
+    }
+
+    .contacts-info {
+      @apply w-full;
+    }
+
+    .contacts-map {
+      @apply w-full;
+      
+      iframe {
+        @apply rounded-lg border border-gray-200 bg-white w-full;
+        height: 300px;
+        
+        @media (min-width: 640px) {
+          height: 400px;
+        }
+        
+        @media (min-width: 1024px) {
+          height: 450px;
+        }
+      }
+    }
+  }
+}

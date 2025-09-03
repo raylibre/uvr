@@ -1,5 +1,5 @@
 <template>
-  <section class="o-organization-structure-section">
+  <section id="structure" class="o-organization-structure-section">
     <div class="container mx-auto px-4 py-16">
       <!-- Section Header -->
       <div class="section-header text-center mb-12">
