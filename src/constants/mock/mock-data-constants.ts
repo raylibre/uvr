@@ -12,7 +12,7 @@ export const MOCK_PROGRAMS: Record<string, ProgramDetail> = {
     id: 4,
     title: 'ШІ-психолог для ветеранів',
     slug: 'ai-psychology-support',
-    short_description: 'Психологічна підтримка за допомогою ШІ',
+    short_description: 'Психологічна підтримка',
     description: 'Програма надає комплексну психологічну підтримку ветеранам за допомогою передових технологій штучного інтелекту. Наша система забезпечує індивідуальний підхід до кожного учасника, аналізуючи їхні потреби та пропонуючи найбільш ефективні методи терапії.\n\nПрограма розроблена провідними психологами та фахівцями з ШІ для забезпечення найвищої якості допомоги нашим героям.',
     project_type: ProjectType.AI_PSYCHOLOGY,
     featured_image_url: '/images/projects/ai-psychology-hero.jpg',
@@ -151,18 +151,18 @@ export const MOCK_CURRENT_USER = {
 // Helper functions for mock data generation
 export function generateMockParticipation(programId: number, status?: ParticipationStatus): UserParticipation {
   const randomStatus = status || MOCK_PARTICIPATION_STATUSES[Math.floor(Math.random() * MOCK_PARTICIPATION_STATUSES.length)];
-  
+
   return {
     id: Math.floor(Math.random() * 100) + 1,
     user_id: MOCK_CURRENT_USER.id,
     project_id: programId,
     status: randomStatus,
     applied_at: '2025-06-01T10:00:00.000Z',
-    approved_at: randomStatus === ParticipationStatus.APPROVED || randomStatus === ParticipationStatus.COMPLETED 
-      ? '2025-06-02T14:30:00.000Z' 
+    approved_at: randomStatus === ParticipationStatus.APPROVED || randomStatus === ParticipationStatus.COMPLETED
+      ? '2025-06-02T14:30:00.000Z'
       : null,
-    completed_at: randomStatus === ParticipationStatus.COMPLETED 
-      ? '2025-06-15T16:45:00.000Z' 
+    completed_at: randomStatus === ParticipationStatus.COMPLETED
+      ? '2025-06-15T16:45:00.000Z'
       : null,
     notes: 'Тестова участь у програмі'
   };
@@ -170,4 +170,4 @@ export function generateMockParticipation(programId: number, status?: Participat
 
 export function shouldHaveParticipation(): boolean {
   return Math.random() > 0.6;
-} 
+}

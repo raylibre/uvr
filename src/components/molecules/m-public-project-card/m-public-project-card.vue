@@ -1,9 +1,9 @@
 <template>
   <div class="m-public-project-card" @click="$emit('click', project.slug)">
     <div class="project-image-container">
-      <img 
-        v-if="project.featured_image_url" 
-        :src="project.featured_image_url" 
+      <img
+        v-if="project.featured_image_url"
+        :src="project.featured_image_url"
         :alt="project.title"
         class="project-image"
       />
@@ -17,11 +17,11 @@
         Рекомендований
       </div>
     </div>
-    
+
     <div class="project-content">
       <h3 class="project-title">{{ project.title }}</h3>
       <p class="project-description">{{ project.short_description }}</p>
-      
+
       <div class="project-stats">
         <div class="stat-item">
           <i class="fas fa-users"/>
@@ -36,12 +36,12 @@
           <span>{{ project.success_stories_count }} успішних історій</span>
         </div>
       </div>
-      
+
       <div v-if="project.total_budget" class="project-budget">
         <i class="fas fa-coins"/>
         <span>Бюджет: {{ formatBudget(project.total_budget) }} грн</span>
       </div>
-      
+
       <div class="project-type">
         <span class="type-badge" :class="`type-${project.project_type}`">
           {{ formatProjectType(project.project_type) }}
@@ -74,7 +74,7 @@ export default defineComponent({
 
     function formatProjectType(type: string): string {
       const typeMap: Record<string, string> = {
-        ai_psychology: 'ШІ-психологія',
+        ai_psychology: 'Психологія',
         family_support: 'Підтримка сімей',
         prosthetics: 'Протезування',
         civilian_retraining: 'Перекваліфікація',
@@ -156,7 +156,7 @@ export default defineComponent({
 
     .project-type {
       @apply mt-auto;
-      
+
       .type-badge {
         @apply inline-block px-3 py-1 rounded-full text-xs font-medium;
         @apply bg-primary-light/20 text-primary-dark;
@@ -171,4 +171,4 @@ export default defineComponent({
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-</style> 
+</style>
