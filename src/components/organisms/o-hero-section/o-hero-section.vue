@@ -1,5 +1,5 @@
 <template>
-  <section class="o-hero-section">
+  <section class="o-hero-section" ref="heroRef" :style="heroBgStyle">
     <div class="hero-content">
       <div class="hero-logo">
         <img
@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
+import { useCamoBackground } from '~/composables/use-camo-background';
 
 export default defineComponent({
   name: 'OHeroSection',
@@ -42,6 +43,16 @@ export default defineComponent({
         description: 'Допомога ветеранам у побудові успішної цивільної карʼєри'
       }
     ];
+
+    const heroRef = ref<HTMLElement | null>(null);
+    const { camoDataUrl, init, destroy } = useCamoBackground(4271);
+
+    const heroBgStyle = computed(() =>
+      camoDataUrl.value ? { backgroundImage: `url(${camoDataUrl.value})` } : {},
+    );
+
+    onMounted(() => { if (heroRef.value) init(heroRef.value); });
+    onUnmounted(() => destroy());
 
     const logoTransformStyle = ref('');
 
@@ -67,10 +78,12 @@ export default defineComponent({
     };
 
     return {
+      heroRef,
+      heroBgStyle,
       keyPoints,
       logoTransformStyle,
       onLogoMouseMove,
-      onLogoMouseLeave
+      onLogoMouseLeave,
     };
   }
 });
@@ -78,12 +91,22 @@ export default defineComponent({
 
 <style scoped>
 .o-hero-section {
-  @apply relative flex items-center py-6; /* Add vertical padding for mobile */
+  @apply relative flex items-center py-6;
   min-height: 100vh;
-  background: linear-gradient(to right, var(--color-yellow-light) 0%, var(--color-primary-dark) 75%);
+  background-color: #323820;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 16, 6, 0.46);
+    backdrop-filter: blur(2px);
+    z-index: 0;
+    pointer-events: none;
+  }
 }
 
 @screen md {
@@ -94,6 +117,8 @@ export default defineComponent({
 
 .hero-content {
   @apply container mx-auto flex flex-col md:flex-row items-center justify-between;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-logo {
