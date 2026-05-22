@@ -45,7 +45,7 @@ export default defineComponent({
     ];
 
     const heroRef = ref<HTMLElement | null>(null);
-    const { camoDataUrl, init, destroy } = useCamoBackground(4271);
+    const { init, destroy } = useCamoBackground(4271);
 
     const heroBgStyle = computed(() => ({}));
 
