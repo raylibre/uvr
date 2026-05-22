@@ -47,9 +47,7 @@ export default defineComponent({
     const heroRef = ref<HTMLElement | null>(null);
     const { camoDataUrl, init, destroy } = useCamoBackground(4271);
 
-    const heroBgStyle = computed(() =>
-      camoDataUrl.value ? { backgroundImage: `url(${camoDataUrl.value})` } : {},
-    );
+    const heroBgStyle = computed(() => ({}));
 
     onMounted(() => { if (heroRef.value) init(heroRef.value); });
     onUnmounted(() => destroy());
@@ -93,10 +91,11 @@ export default defineComponent({
 .o-hero-section {
   @apply relative flex items-center py-6;
   min-height: 100vh;
-  background-color: #323820;
-  background-size: cover;
-  background-position: center;
+  background-image: url('/images/pixel_zsu_tile.jpg');
+  background-repeat: repeat;
+  background-size: 420px 420px;
   background-attachment: fixed;
+  background-position: center;
 
   &::before {
     content: '';
@@ -107,6 +106,7 @@ export default defineComponent({
     z-index: 0;
     pointer-events: none;
   }
+
 }
 
 @screen md {
@@ -119,6 +119,11 @@ export default defineComponent({
   @apply container mx-auto flex flex-col md:flex-row items-center justify-between;
   position: relative;
   z-index: 1;
+  color: white;
+
+  h3, p {
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  }
 }
 
 .hero-logo {
@@ -145,7 +150,11 @@ export default defineComponent({
 }
 
 .key-point {
-  @apply bg-white/90 p-6 rounded-lg;
+  @apply p-6 rounded-lg;
+  background: rgba(255,255,255,0.10);
+  border: 0.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+  color: white;
   transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s cubic-bezier(0.4,0,0.2,1);
   margin-bottom: 1rem;
 }
