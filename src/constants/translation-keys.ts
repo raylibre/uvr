@@ -418,6 +418,13 @@ export const T_KEYS = {
     NOTIFICATIONS: {
       SAVE: 'profile.notifications.save',
       SAVED: 'profile.notifications.saved'
+    },
+    MEMBER_CODE: {
+      TITLE: 'profile.memberCode.title',
+      COPY: 'profile.memberCode.copy',
+      COPIED: 'profile.memberCode.copied',
+      HINT: 'profile.memberCode.hint',
+      LOADING: 'profile.memberCode.loading'
     }
   },
   PROGRAM_DETAIL: {

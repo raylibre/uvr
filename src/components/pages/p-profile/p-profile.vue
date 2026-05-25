@@ -108,6 +108,32 @@
 
         <div class="profile-card profile-card--full">
           <h2 class="card-title">
+            <i class="fas fa-key card-icon" />
+            {{ t(T_KEYS.PROFILE.MEMBER_CODE.TITLE) }}
+          </h2>
+          <div class="member-code-body">
+            <div v-if="isMemberCodeLoading" class="member-code-loading">
+              {{ t(T_KEYS.PROFILE.MEMBER_CODE.LOADING) }}
+            </div>
+            <template v-else-if="memberCode">
+              <div class="member-code-display">
+                <span class="member-code-value">{{ memberCode }}</span>
+                <button
+                  class="copy-btn"
+                  :class="{ 'copy-btn--done': isCopied }"
+                  @click="copyMemberCode"
+                >
+                  <i class="fas" :class="isCopied ? 'fa-check' : 'fa-copy'" />
+                  {{ isCopied ? t(T_KEYS.PROFILE.MEMBER_CODE.COPIED) : t(T_KEYS.PROFILE.MEMBER_CODE.COPY) }}
+                </button>
+              </div>
+              <p class="member-code-hint">{{ t(T_KEYS.PROFILE.MEMBER_CODE.HINT) }}</p>
+            </template>
+          </div>
+        </div>
+
+        <div class="profile-card profile-card--full">
+          <h2 class="card-title">
             <i class="fas fa-file-alt card-icon" />
             {{ t(T_KEYS.PROFILE.CARDS.APPLICATIONS) }}
           </h2>
@@ -203,7 +229,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from 'vue';
+import { defineComponent, reactive, ref, watch, onMounted } from 'vue';
 import { useUserStore } from '~/composables/use-user-store';
 import { useTranslation } from '~/composables/use-translation';
 import { USER_CATEGORY_LABELS, VERIFICATION_STATUS_LABELS } from '~/constants/status-constants';
@@ -248,6 +274,7 @@ export default defineComponent({
     const { t, T_KEYS } = useTranslation();
     const {
       user,
+      memberCode,
       userFullName,
       userInitials,
       isVerified,
@@ -255,8 +282,37 @@ export default defineComponent({
       verificationStatuses,
       pendingApplications,
       isNotificationLoading,
-      updateNotificationSettings
+      isMemberCodeLoading,
+      updateNotificationSettings,
+      loadMemberCode
     } = useUserStore();
+
+    const isCopied = ref(false);
+
+    onMounted(() => {
+      if (!memberCode.value) {
+        loadMemberCode();
+      }
+    });
+
+    const copyMemberCode = async () => {
+      if (!memberCode.value || isCopied.value) return;
+      try {
+        await navigator.clipboard.writeText(memberCode.value);
+        isCopied.value = true;
+        setTimeout(() => { isCopied.value = false; }, 2000);
+      } catch {
+        // fallback for browsers without clipboard API
+        const el = document.createElement('textarea');
+        el.value = memberCode.value;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        isCopied.value = true;
+        setTimeout(() => { isCopied.value = false; }, 2000);
+      }
+    };
 
     const notificationSettings = reactive({
       notifications_enabled: user.value?.notifications_enabled ?? true,
@@ -310,6 +366,7 @@ export default defineComponent({
       t,
       T_KEYS,
       user,
+      memberCode,
       userFullName,
       userInitials,
       isVerified,
@@ -317,6 +374,8 @@ export default defineComponent({
       verificationStatuses,
       pendingApplications,
       isNotificationLoading,
+      isMemberCodeLoading,
+      isCopied,
       notificationSettings,
       formatDate,
       getCategoryLabel,
@@ -324,7 +383,8 @@ export default defineComponent({
       getVerificationStatusClass,
       getApplicationStatusLabel,
       getApplicationStatusClass,
-      saveNotifications
+      saveNotifications,
+      copyMemberCode
     };
   }
 });
@@ -523,5 +583,36 @@ export default defineComponent({
 
 .notifications-footer {
   @apply mt-5 flex justify-end;
+}
+
+.member-code-body {
+  @apply flex flex-col gap-3;
+}
+
+.member-code-loading {
+  @apply text-sm text-gray-400;
+}
+
+.member-code-display {
+  @apply flex items-center gap-4 flex-wrap;
+
+  .member-code-value {
+    @apply font-mono text-2xl font-bold text-gray-900 tracking-widest
+           bg-gray-50 border border-gray-200 rounded-lg px-5 py-3;
+  }
+}
+
+.copy-btn {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium
+         transition-all duration-200 cursor-pointer;
+  @apply border-gray-300 bg-white text-gray-700 hover:bg-gray-50;
+
+  &--done {
+    @apply border-green-400 bg-green-50 text-green-700;
+  }
+}
+
+.member-code-hint {
+  @apply text-sm text-gray-500 leading-relaxed;
 }
 </style>

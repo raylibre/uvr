@@ -369,6 +369,13 @@
     "notifications": {
       "save": "Save",
       "saved": "Notification settings saved"
+    },
+    "memberCode": {
+      "title": "My member code",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "hint": "Use this code together with your email to log in to the Sim'ya - Sim'yi platform.",
+      "loading": "Loading..."
     }
   },
   "programDetail": {

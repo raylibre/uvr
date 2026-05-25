@@ -23,6 +23,7 @@ export interface User {
   is_active: boolean;
   available_projects_count: number;
   unread_notifications_count: number;
+  member_code?: string;
 }
 
 export interface UserVerificationStatus {

@@ -14,7 +14,8 @@ import {
   FUNCTIONS_V1_AUTH_ME,
   FUNCTIONS_V1_AUTH_LOGOUT,
   FUNCTIONS_V1_AUTH_REFRESH,
-  FUNCTIONS_V1_AUTH_PROFILE
+  FUNCTIONS_V1_AUTH_PROFILE,
+  FUNCTIONS_V1_MEMBER_CODE
 } from '~/constants/url-constants';
 
 /**
@@ -169,6 +170,14 @@ export async function updateUserNotificationSettings(settings: {
   sms_notifications?: boolean;
 }): Promise<void> {
   await apiClient.patch(FUNCTIONS_V1_AUTH_PROFILE, { notification_settings: settings });
+}
+
+/**
+ * Fetch current user's member code
+ */
+export async function fetchMemberCode(): Promise<string> {
+  const response = await apiClient.get(FUNCTIONS_V1_MEMBER_CODE);
+  return response.data.member_code as string;
 }
 
 /**
