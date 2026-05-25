@@ -1,5 +1,5 @@
 <template>
-  <section class="o-hero-section" ref="heroRef" :style="heroBgStyle">
+  <section ref="heroRef" class="o-hero-section" :style="heroBgStyle">
     <div class="hero-content">
       <div class="hero-logo">
         <img

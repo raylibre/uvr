@@ -54,9 +54,9 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   const { hasAnyPermission } = usePermissions();
-  const currentUser = localStorage.getItem('currentUser');
+  const token = localStorage.getItem('token');
 
-  if (to.meta.requiresAuth && !currentUser) {
+  if (to.meta.requiresAuth && !token) {
     next({ name: ROUTE_NAMES.HOME });
     return;
   }

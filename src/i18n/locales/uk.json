@@ -325,6 +325,32 @@
       "female": "Жіноча"
     }
   },
+  "profile": {
+    "title": "Мій профіль",
+    "cards": {
+      "personalInfo": "Особиста інформація",
+      "verification": "Верифікація",
+      "applications": "Мої заявки",
+      "notifications": "Сповіщення"
+    },
+    "labels": {
+      "memberSince": "Учасник з",
+      "category": "Категорія",
+      "verificationStatus": "Статус верифікації",
+      "verifiedAt": "Підтверджено",
+      "additionalCategories": "Додаткові категорії",
+      "submittedAt": "Подано",
+      "noApplications": "Заявок поки немає"
+    },
+    "stats": {
+      "availableProjects": "Доступних програм",
+      "pendingApplications": "Заявок на розгляді"
+    },
+    "notifications": {
+      "save": "Зберегти",
+      "saved": "Налаштування сповіщень збережено"
+    }
+  },
   "programDetail": {
     "notFoundTitle": "Програму не знайдено",
     "notFoundDescription": "На жаль, програма з адресою {slug} не існує або була видалена.",

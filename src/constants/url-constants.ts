@@ -61,6 +61,7 @@ export const FUNCTIONS_V1_REGION_CONTACTS = FUNCTIONS + V1 + REGION_CONTACTS;
 export const FUNCTIONS_V1_REGION_NEWS = FUNCTIONS + V1 + REGION_NEWS;
 export const FUNCTIONS_V1_REGION_OTG = FUNCTIONS + V1 + REGION_OTG;
 export const FUNCTIONS_V1_LEADERSHIP_APPLICATION = FUNCTIONS + V1 + '/leadership-application';
+export const FUNCTIONS_V1_AUTH_PROFILE = FUNCTIONS + V1 + '/auth-profile';
 
 // New project endpoints
 export const FUNCTIONS_V1_PROJECT_BY_SLUG = FUNCTIONS + V1 + '/project-by-slug';

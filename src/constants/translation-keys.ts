@@ -394,6 +394,32 @@ export const T_KEYS = {
     VALIDATION_DEBUG: 'debug.validationDebug',
     VALIDATE_ALL_FIELDS: 'debug.validateAllFields'
   },
+  PROFILE: {
+    TITLE: 'profile.title',
+    CARDS: {
+      PERSONAL_INFO: 'profile.cards.personalInfo',
+      VERIFICATION: 'profile.cards.verification',
+      APPLICATIONS: 'profile.cards.applications',
+      NOTIFICATIONS: 'profile.cards.notifications'
+    },
+    LABELS: {
+      MEMBER_SINCE: 'profile.labels.memberSince',
+      CATEGORY: 'profile.labels.category',
+      VERIFICATION_STATUS: 'profile.labels.verificationStatus',
+      VERIFIED_AT: 'profile.labels.verifiedAt',
+      ADDITIONAL_CATEGORIES: 'profile.labels.additionalCategories',
+      SUBMITTED_AT: 'profile.labels.submittedAt',
+      NO_APPLICATIONS: 'profile.labels.noApplications'
+    },
+    STATS: {
+      AVAILABLE_PROJECTS: 'profile.stats.availableProjects',
+      PENDING_APPLICATIONS: 'profile.stats.pendingApplications'
+    },
+    NOTIFICATIONS: {
+      SAVE: 'profile.notifications.save',
+      SAVED: 'profile.notifications.saved'
+    }
+  },
   PROGRAM_DETAIL: {
     NOT_FOUND_TITLE: 'programDetail.notFoundTitle',
     NOT_FOUND_DESCRIPTION: 'programDetail.notFoundDescription',

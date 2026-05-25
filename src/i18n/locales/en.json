@@ -345,6 +345,32 @@
       "maxFiles": "You can upload up to {max} files"
     }
   },
+  "profile": {
+    "title": "My Profile",
+    "cards": {
+      "personalInfo": "Personal Information",
+      "verification": "Verification",
+      "applications": "My Applications",
+      "notifications": "Notifications"
+    },
+    "labels": {
+      "memberSince": "Member since",
+      "category": "Category",
+      "verificationStatus": "Verification status",
+      "verifiedAt": "Verified at",
+      "additionalCategories": "Additional categories",
+      "submittedAt": "Submitted",
+      "noApplications": "No applications yet"
+    },
+    "stats": {
+      "availableProjects": "Available programs",
+      "pendingApplications": "Pending applications"
+    },
+    "notifications": {
+      "save": "Save",
+      "saved": "Notification settings saved"
+    }
+  },
   "programDetail": {
     "notFoundTitle": "Program not found",
     "notFoundDescription": "Unfortunately, the program with the address {slug} does not exist or has been deleted.",

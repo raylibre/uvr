@@ -43,8 +43,8 @@
       </div>
 
       <ARadioGroup
-        :name="'register-gender'"
         v-model="gender.value.value as string"
+        :name="'register-gender'"
         :label="t(T_KEYS.FORM.LABELS.GENDER)"
         :options="genderOptions"
         :required="true"
@@ -145,7 +145,7 @@
                 :multiple="true"
                 :model-value="doc.files"
                 :max-size="10 * 1024 * 1024"
-                @update:modelValue="(files: File[]) => handleFilesChange(idx, files)"
+                @update:model-value="(files: File[]) => handleFilesChange(idx, files)"
                 @error="onUploadError"
               />
             </div>
@@ -170,7 +170,7 @@
               :label="t(T_KEYS.DOCUMENTS.SELECT_TYPE)"
               :options="availableDocTypes"
               :placeholder="t(T_KEYS.DOCUMENTS.SELECT_TYPE)"
-              @update:modelValue="onSelectDocType"
+              @update:model-value="onSelectDocType"
             />
             <AButton class="sm:ml-2" variant="outline" @click="cancelAddDoc">{{ t(T_KEYS.COMMON.BUTTONS.CANCEL) }}</AButton>
           </div>
