@@ -6,7 +6,8 @@ import {
   logoutUser,
   getCurrentUser,
   registerUserMultipart,
-  updateUserNotificationSettings
+  updateUserNotificationSettings,
+  fetchMemberCode
 } from '~/services/api/auth-api-service';
 import type { 
   User, 
@@ -22,6 +23,7 @@ import { T_KEYS } from '~/constants/translation-keys';
 
 // Global state - shared across all instances of the composable
 const user = ref<User | null>(null);
+const memberCode = ref<string | null>(null);
 const userStatistics = ref<UserStatistics | null>(null);
 const verificationStatuses = ref<{
   primaryCategory: UserVerificationStatus;
@@ -48,6 +50,7 @@ export function useUserStore() {
   const logoutSource = reactive(new AsyncSource(logoutUser, handleApiError));
   const currentUserSource = reactive(new AsyncSource(getCurrentUser, handleAuthMeError));
   const notificationSettingsSource = reactive(new AsyncSource(updateUserNotificationSettings, handleApiError));
+  const memberCodeSource = reactive(new AsyncSource(fetchMemberCode, handleApiError));
 
   // Computed properties
   const userFullName = computed(() => {
@@ -92,6 +95,7 @@ export function useUserStore() {
   const isLogoutLoading = computed(() => logoutSource.isLoading);
   const isCurrentUserLoading = computed(() => currentUserSource.isLoading);
   const isNotificationLoading = computed(() => notificationSettingsSource.isLoading);
+  const isMemberCodeLoading = computed(() => memberCodeSource.isLoading);
   const isLoading = computed(() => 
     isLoginLoading.value || 
     isRegisterLoading.value || 
@@ -179,6 +183,7 @@ export function useUserStore() {
 
   function handleLogoutSuccess() {
     user.value = null;
+    memberCode.value = null;
     userStatistics.value = null;
     verificationStatuses.value = null;
     pendingApplications.value = [];
@@ -246,6 +251,12 @@ export function useUserStore() {
     console.log('Password update not implemented yet');
   };
 
+  const loadMemberCode = () => {
+    memberCodeSource.push((code: string) => {
+      memberCode.value = code;
+    });
+  };
+
   const updateNotificationSettings = (settings: {
     notifications_enabled?: boolean;
     email_notifications?: boolean;
@@ -291,12 +302,13 @@ export function useUserStore() {
   return {
     // State
     user: readonly(user),
+    memberCode: readonly(memberCode),
     userStatistics: readonly(userStatistics),
     verificationStatuses: readonly(verificationStatuses),
     pendingApplications: readonly(pendingApplications),
     isAuthenticated: readonly(isAuthenticated),
     isInitialized: readonly(isInitialized),
-    
+
     // Computed properties
     userFullName,
     userDisplayName,
@@ -305,7 +317,7 @@ export function useUserStore() {
     availableProjectsCount,
     unreadNotificationsCount,
     pendingApplicationsCount,
-    
+
     // Loading states
     isLoading,
     isLoginLoading,
@@ -313,21 +325,23 @@ export function useUserStore() {
     isLogoutLoading,
     isCurrentUserLoading,
     isNotificationLoading,
-    
+    isMemberCodeLoading,
+
     // Methods
     login,
     register,
     logout,
     initialize,
     refreshUserData,
-    
+    loadMemberCode,
+
     // Future methods
     updateProfile,
     updatePassword,
     updateNotificationSettings,
     getUserProjects,
     getUserNotifications,
-    
+
     // Getters (for backward compatibility)
     getUser: () => user.value,
     getIsAuthenticated: () => isAuthenticated.value
