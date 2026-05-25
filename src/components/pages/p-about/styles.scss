@@ -3,10 +3,22 @@
 
   // Hero Section
   .hero-section {
-    @apply py-20 bg-gradient-to-br from-primary-light to-primary-dark text-white;
+    @apply relative py-20 text-white;
+    background-image: url('/images/pixel_zsu_tile.jpg');
+    background-repeat: repeat;
+    background-size: 420px 420px;
+    background-attachment: fixed;
+    background-position: center;
+
+    &::before {
+      content: '';
+      @apply absolute inset-0;
+      background: rgba(12, 16, 6, 0.46);
+      backdrop-filter: blur(2px);
+    }
 
     .container {
-      @apply max-w-6xl mx-auto px-4 text-center;
+      @apply relative z-10 max-w-6xl mx-auto px-4 text-center;
     }
 
     .hero-title {

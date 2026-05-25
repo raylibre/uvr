@@ -336,10 +336,22 @@ export default defineComponent({
 }
 
 .profile-hero {
-  @apply bg-secondary text-white py-10 px-4;
+  @apply relative text-white py-10 px-4;
+  background-image: url('/images/pixel_zsu_tile.jpg');
+  background-repeat: repeat;
+  background-size: 420px 420px;
+  background-attachment: fixed;
+  background-position: center;
+
+  &::before {
+    content: '';
+    @apply absolute inset-0;
+    background: rgba(12, 16, 6, 0.46);
+    backdrop-filter: blur(2px);
+  }
 
   .hero-inner {
-    @apply max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6;
+    @apply relative z-10 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6;
   }
 
   .hero-avatar {
