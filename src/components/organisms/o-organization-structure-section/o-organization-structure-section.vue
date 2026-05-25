@@ -22,17 +22,25 @@
             <!-- Selected Region Info -->
             <div v-if="selectedRegion" class="selected-region-info mt-6 p-4 bg-blue-50 rounded-lg">
               <div class="flex items-center justify-center gap-3">
-                <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"/>
                 <p class="text-blue-800 font-medium">
                   Обрана область: <span class="font-bold">{{ selectedRegion }}</span>
                 </p>
                 <button 
-                  @click="clearSelection"
                   class="ml-2 text-blue-600 hover:text-blue-800 transition-colors"
                   title="Очистити вибір"
+                  @click="clearSelection"
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  <svg
+class="w-4 h-4"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                    <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M6 18L18 6M6 6l12 12"/>
                   </svg>
                 </button>
               </div>
@@ -52,14 +60,30 @@
           <div class="interaction-hints mt-8 text-center">
             <div class="flex flex-wrap justify-center gap-8 text-sm">
               <div class="hint-item flex items-center gap-2">
-                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.122 2.122"/>
+                <svg
+class="w-4 h-4 text-blue-500"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                  <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.122 2.122"/>
                 </svg>
                 <span class="text-gray-600">Наведіть курсор для деталей</span>
               </div>
               <div class="hint-item flex items-center gap-2">
-                <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                <svg
+class="w-4 h-4 text-yellow-500"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                  <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
                 <span class="text-yellow-600 font-medium">Клікніть для вибору</span>
               </div>
@@ -77,9 +101,21 @@
             color-scheme="blue"
           >
             <template #icon>
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <svg
+class="w-6 h-6 text-white"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
             </template>
           </AInfoCard>
@@ -90,8 +126,16 @@
             color-scheme="yellow"
           >
             <template #icon>
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+              <svg
+class="w-6 h-6 text-white"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
               </svg>
             </template>
           </AInfoCard>
@@ -102,8 +146,16 @@
             color-scheme="blue"
           >
             <template #icon>
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              <svg
+class="w-6 h-6 text-white"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24">
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </template>
           </AInfoCard>

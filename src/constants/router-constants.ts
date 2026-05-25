@@ -17,6 +17,7 @@ export const ROUTE_NAMES = {
   PROGRAM_PROSTHETICS_FOR_HEROES: 'PROGRAM_PROSTHETICS_FOR_HEROES',
   NEWS: 'NEWS',
   NEWS_ARTICLE: 'NEWS_ARTICLE',
+  PROFILE: 'PROFILE',
   NOT_FOUND: 'NOT_FOUND'
 } as const;
 
@@ -124,5 +125,11 @@ export const ROUTES: RouteRecordRaw[] = [
     path: '/about',
     name: ROUTE_NAMES.ABOUT,
     component: () => import('~/components/pages/p-about')
+  },
+  {
+    path: '/profile',
+    name: ROUTE_NAMES.PROFILE,
+    component: () => import('~/components/pages/p-profile'),
+    meta: { requiresAuth: true }
   }
 ]; 

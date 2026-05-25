@@ -1,11 +1,11 @@
 <template>
     <div class="o-ukraine-map">
     <div class="map-container" @mouseleave="handleMapMouseLeave">
-      <svg-map
+      <SvgMap
         :map="ukraineMapData"
-        @select="onRegionSelect"
-        :locationClass="getRegionClass"
+        :location-class="getRegionClass"
         class="ukraine-svg-map"
+        @select="onRegionSelect"
       />
       
       <!-- Tooltip -->

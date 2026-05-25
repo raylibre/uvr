@@ -42,7 +42,7 @@
             <div class="contacts-info">
               <ORegionContactsSection :contacts="regionContacts" />
             </div>
-            <div class="contacts-map" v-if="mapSrc">
+            <div v-if="mapSrc" class="contacts-map">
               <iframe 
                 :src="mapSrc" 
                 width="100%" 
@@ -50,7 +50,7 @@
                 style="border:0;" 
                 allowfullscreen
                 loading="lazy"
-              ></iframe>
+              />
             </div>
           </div>
         </div>

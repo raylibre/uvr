@@ -1,11 +1,12 @@
 import { ref, computed, reactive, readonly } from 'vue';
 import AsyncSource from 'async-source';
-import { 
-  loginUser, 
-  registerUser, 
-  logoutUser, 
-  getCurrentUser, 
-  registerUserMultipart
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  getCurrentUser,
+  registerUserMultipart,
+  updateUserNotificationSettings
 } from '~/services/api/auth-api-service';
 import type { 
   User, 
@@ -46,6 +47,7 @@ export function useUserStore() {
   const registerFullSource = reactive(new AsyncSource(registerUserMultipart, handleRegisterError));
   const logoutSource = reactive(new AsyncSource(logoutUser, handleApiError));
   const currentUserSource = reactive(new AsyncSource(getCurrentUser, handleAuthMeError));
+  const notificationSettingsSource = reactive(new AsyncSource(updateUserNotificationSettings, handleApiError));
 
   // Computed properties
   const userFullName = computed(() => {
@@ -89,6 +91,7 @@ export function useUserStore() {
   const isRegisterLoading = computed(() => registerSource.isLoading || registerFullSource.isLoading);
   const isLogoutLoading = computed(() => logoutSource.isLoading);
   const isCurrentUserLoading = computed(() => currentUserSource.isLoading);
+  const isNotificationLoading = computed(() => notificationSettingsSource.isLoading);
   const isLoading = computed(() => 
     isLoginLoading.value || 
     isRegisterLoading.value || 
@@ -243,13 +246,18 @@ export function useUserStore() {
     console.log('Password update not implemented yet');
   };
 
-  const updateNotificationSettings = async (settings: {
+  const updateNotificationSettings = (settings: {
     notifications_enabled?: boolean;
     email_notifications?: boolean;
     sms_notifications?: boolean;
   }) => {
-    // TODO: Implement notification settings update API call with AsyncSource
-    console.log('Notification settings update not implemented yet:', settings);
+    notificationSettingsSource.push(() => {
+      if (user.value) {
+        user.value = { ...user.value, ...settings };
+        localStorage.setItem('user', JSON.stringify(user.value));
+      }
+      notifySuccess(T_KEYS.PROFILE.NOTIFICATIONS.SAVED);
+    }, settings);
   };
 
   const getUserProjects = async () => {
@@ -304,6 +312,7 @@ export function useUserStore() {
     isRegisterLoading,
     isLogoutLoading,
     isCurrentUserLoading,
+    isNotificationLoading,
     
     // Methods
     login,

@@ -111,9 +111,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '~/composables/use-user-store';
 import clickOutside from '~/directives/click-outside';
 import { useTranslation } from '~/composables/use-translation';
+import { ROUTE_NAMES } from '~/constants/router-constants';
 
 export default defineComponent({
   name: 'MUserDropdown',
@@ -124,6 +126,7 @@ export default defineComponent({
 
   setup() {
     const { t, T_KEYS } = useTranslation();
+    const router = useRouter();
     const { user, userDisplayName, userFullName, userInitials, logout, isVerified } = useUserStore();
     const isOpen = ref(false);
 
@@ -149,9 +152,8 @@ export default defineComponent({
     };
 
     const handleProfile = () => {
-      console.log('Navigate to profile');
       closeDropdown();
-      // TODO: Navigate to profile page
+      router.push({ name: ROUTE_NAMES.PROFILE });
     };
 
     const handleSettings = () => {

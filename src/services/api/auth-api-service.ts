@@ -8,12 +8,13 @@ import type {
 } from '~/interfaces/auth';
 import { AxiosResponse } from 'axios';
 import type { RegistrationPayload, ApiResponse } from '~/types/auth';
-import { 
-  FUNCTIONS_V1_AUTH_REGISTRATION, 
+import {
+  FUNCTIONS_V1_AUTH_REGISTRATION,
   FUNCTIONS_V1_AUTH_LOGIN,
-  FUNCTIONS_V1_AUTH_ME, 
-  FUNCTIONS_V1_AUTH_LOGOUT, 
-  FUNCTIONS_V1_AUTH_REFRESH 
+  FUNCTIONS_V1_AUTH_ME,
+  FUNCTIONS_V1_AUTH_LOGOUT,
+  FUNCTIONS_V1_AUTH_REFRESH,
+  FUNCTIONS_V1_AUTH_PROFILE
 } from '~/constants/url-constants';
 
 /**
@@ -157,6 +158,17 @@ export async function registerUserMultipart(payload: Record<string, any>): Promi
  */
 export async function logoutUser(): Promise<void> {
   await apiClient.post(FUNCTIONS_V1_AUTH_LOGOUT);
+}
+
+/**
+ * Update user notification settings
+ */
+export async function updateUserNotificationSettings(settings: {
+  notifications_enabled?: boolean;
+  email_notifications?: boolean;
+  sms_notifications?: boolean;
+}): Promise<void> {
+  await apiClient.patch(FUNCTIONS_V1_AUTH_PROFILE, { notification_settings: settings });
 }
 
 /**

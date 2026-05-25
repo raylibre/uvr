@@ -188,7 +188,7 @@ async function main() {
   let run       = 0;
   let passed    = 0;
   let failed    = 0;
-  let frontOk   = true;   // first run checks frontend; subsequent runs skip it
+  const frontOk   = true;   // first run checks frontend; subsequent runs skip it
 
   while (Date.now() - start < DURATION) {
     run++;

@@ -10,7 +10,7 @@ interface User {
 }
 
 export function usePermissions() {
-  const currentUser = useStorage<User | null>('currentUser', null);
+  const currentUser = useStorage<User | null>('user', null);
 
   const userRole = computed(() => currentUser.value?.role ?? UserRole.USER);
   const isVerified = computed(() => currentUser.value?.isVerified ?? false);

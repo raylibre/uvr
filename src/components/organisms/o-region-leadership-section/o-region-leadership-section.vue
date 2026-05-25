@@ -8,8 +8,8 @@
           v-for="(person, idx) in leadership"
           :key="person.id ?? idx"
           class="leader-item"
-          @click="toggle(idx)"
           :class="{ expanded: isOpen(idx) }"
+          @click="toggle(idx)"
         >
           <div class="leader-content">
             <div class="avatar">
